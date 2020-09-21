@@ -27,6 +27,7 @@ Download RPG asset :
 https://bakudas.itch.io/generic-rpg-pack
 https://pipoya.itch.io/pipoya-free-rpg-character-sprites-32x32
 and unzip it in texture folder.
+Download font and copy it in font folder (Almond_Caramel.ttf). 
 
 For production release:
 ```sh
