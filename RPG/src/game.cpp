@@ -18,17 +18,17 @@ void Game::Launch()
     //    return;
     title::load_titlemap(this->title_map, "../title_map/title_map_1.txt");
 
-    const std::string path = "../texture/";
+    const std::string path = "../texture/rpg-pack/tiles/";
     
     auto &&t1 = chrono::now();
     auto &&t2 = chrono::now();
     std::cout << chrono::duration(t1, t2).count() << std::endl;
 
-    texture::load_texture(this->textureUMap, path);
+    //texture::load_texture(this->textureUMap, path);
     //texture::load_texture(this->textureMap, path);
     texture::load_texture(this->textureList, path);
 
-    texture::load_texturemap(this->textureumap, "../texture_map/texture_map_0.csv");
+    //texture::load_texturemap(this->textureumap, "../texture_map/texture_map_0.csv");
     //texture::load_texturemap(this->texturemap, "../texture_map/texture_map_0.csv");
     texture::load_texturemap(this->texturelist, "../texture_map/texture_map_0.csv");
     // this->sound.setBuffer(buffer);
@@ -122,14 +122,14 @@ void Game::drawTitle_fn()
                     }
                 }
                 */
-                const int X = title_map[x][y];
+                const int &&X = title_map[x][y];
                 auto its = std::find_if(this->texturelist.begin(), this->texturelist.end(), [&X](const std::pair<const int, const std::string &> &p)
                 {
                     return p.first == X;
                     });
                 if (its != this->texturelist.end()) {
                     const std::string Y = its->second;
-                    auto it
+                    auto &&it
                         = std::find_if(this->textureList.begin(), this->textureList.end(), [&Y](const std::pair<const std::string, sf::Texture *> &t)
                         {
                             return t.first == Y;
@@ -137,14 +137,13 @@ void Game::drawTitle_fn()
                     if (it == this->textureList.end()) {
                         std::cout << "Key-value pair not present in map:" << Y << std::endl;
                     } else {
-                        std::cout << "Key-value pair not present in map:" << Y << std::endl;
                         title->setTexture(it->second);
                     }
                 }
 
                 title->setPosition(static_cast<float>(texture_size * y), static_cast<float>(texture_size * x));
                 title->setSize(sf::Vector2f(static_cast<float>(texture_size), static_cast<float>(texture_size)));
-                // title->setTextureRect(sf::IntRect(0, 0, (int)texture.getSize().x,
+                //title->setTextureRect(sf::IntRect(0, 0, (int)texture->getSize().x, (int)texture->getSize().y);
 #if __cplusplus <= 201402L
                 this->drawTitle.emplace_back(title);
 #elif __cplusplus >= 201703L

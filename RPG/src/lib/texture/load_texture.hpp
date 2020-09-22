@@ -58,6 +58,7 @@ void load_texture(std::unordered_map<std::string, sf::Texture *> &, const std::s
 // vector
 void load_texture(std::vector<std::pair<const std::string, sf::Texture>> &, std::string_view);
 void load_texture(std::vector<std::pair<const std::string, std::unique_ptr<sf::Texture>>> &, std::string_view);
+void load_texture(std::vector<std::pair<const std::string, sf::Texture *>> &, std::string_view, const bool &);
 void load_texture(std::vector<std::pair<const std::string, sf::Texture *>> &, std::string_view);
 
 // map
