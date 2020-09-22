@@ -8,37 +8,45 @@
 #include "load_texture.hpp"
 
 #if (__cplusplus == 201103L || __cplusplus == 201402L)
-void texture::load_texture(std::vector<sf::Texture> &_textureList, const std::string &_path)
+void texture::load_texture(std::vector<std::pair<const std::string, sf::Texture>> &_textureList, const std::string &_path)
 {
     if (fs::exists(_path) && fs::is_directory(_path)) {
+        _textureList.reserve(RESERVE_VECTOR);
         for (auto const &entry : fs::recursive_directory_iterator(_path)) {
             if (fs::is_regular_file(entry) && entry.path().extension() == ".png") {
                 sf::Texture texture;
                 if (texture.loadFromFile(entry.path().string())) {
-                    _textureList.emplace_back(texture);
+                    _textureList.emplace_back(std::make_pair(entry.path().string(), texture));
+#    ifdef DNDEBUG
                     std::cout << entry.path().string() << std::endl;
+#    endif
                 } else {
                     std::cout << "Texture not found !" << std::endl;
                 }
             }
         }
+        _textureList.shrink_to_fit();
     }
 }
 
-void texture::load_texture(std::vector<sf::Texture *> &_textureList, const std::string &_path)
+void texture::load_texture(std::vector<std::pair<const std::string, sf::Texture *>> &_textureList, const std::string &_path)
 {
     if (fs::exists(_path) && fs::is_directory(_path)) {
+        _textureList.reserve(RESERVE_VECTOR);
         for (auto const &entry : fs::recursive_directory_iterator(_path)) {
             if (fs::is_regular_file(entry) && entry.path().extension() == ".png") {
                 sf::Texture *texture = new sf::Texture();
                 if (texture->loadFromFile(entry.path().string())) {
-                    _textureList.emplace_back(texture);
+                    _textureList.emplace_back(std::make_pair(entry.path().string(), texture));
+#    ifdef DNDEBUG
                     std::cout << entry.path().string() << std::endl;
+#    endif
                 } else {
                     std::cout << "Texture not found !" << std::endl;
                 }
             }
         }
+        _textureList.shrink_to_fit();
     }
 }
 
@@ -50,7 +58,9 @@ void texture::load_texture(std::map<const std::string, sf::Texture> &_textureLis
                 sf::Texture texture;
                 if (texture.loadFromFile(entry.path().string())) {
                     _textureList.insert(std::pair<const std::string, sf::Texture>(entry.path().string(), texture));
+#    ifdef DNDEBUG
                     std::cout << entry.path().string() << std::endl;
+#    endif
                 } else {
                     std::cout << "Texture not found !" << std::endl;
                 }
@@ -67,7 +77,28 @@ void texture::load_texture(std::map<const std::string, sf::Texture *> &_textureL
                 sf::Texture *texture = new sf::Texture();
                 if (texture->loadFromFile(entry.path().string())) {
                     _textureList.insert(std::pair<const std::string, sf::Texture *>(entry.path().string(), texture));
+#    ifdef DNDEBUG
                     std::cout << entry.path().string() << std::endl;
+#    endif
+                } else {
+                    std::cout << "Texture not found !" << std::endl;
+                }
+            }
+        }
+    }
+}
+
+void texture::load_texture(std::unordered_map<std::string,sf::Texture> &_textureList, const std::string &_path)
+{
+    if (fs::exists(_path) && fs::is_directory(_path)) {
+        for (auto const &entry : fs::recursive_directory_iterator(_path)) {
+            if (fs::is_regular_file(entry) && entry.path().extension() == ".png") {
+                sf::Texture texture;
+                if (texture.loadFromFile(entry.path().string())) {
+                    _textureList.insert(std::pair<std::string, sf::Texture>(entry.path().string(), texture));
+#    ifdef DNDEBUG
+                    std::cout << entry.path().string() << std::endl;
+#    endif
                 } else {
                     std::cout << "Texture not found !" << std::endl;
                 }
@@ -97,7 +128,7 @@ void texture::load_texture(std::unordered_map<std::string, sf::Texture *> &_text
                     _textureList.insert(std::make_pair(entry.path().string(), texture));
                 }
             }
-#    ifndef DNDEBUG
+#    ifdef DNDEBUG
             std::cout << entry.path().string() << std::endl;
 #    endif
             //
@@ -107,63 +138,69 @@ void texture::load_texture(std::unordered_map<std::string, sf::Texture *> &_text
 
 #elif __cplusplus >= 201703L
 
-void texture::load_texture(std::vector<sf::Texture> &_textureList, std::string_view _path)
+void texture::load_texture(std::vector<std::pair<const std::string, sf::Texture>> &_textureList, std::string_view _path)
 {
-    for (const auto &entry : fs::directory_iterator(_path)) {
+    _textureList.reserve(RESERVE_VECTOR);
+    for (const auto &entry : fs::recursive_directory_iterator(_path)) {
         if (entry.path().extension() == ".png") {
             sf::Texture texture;
             if (texture.loadFromFile(entry.path())) {
-                _textureList.emplace_back(texture);
+                _textureList.emplace_back(std::make_pair(entry.path().string(), texture));
             } else {
                 std::cout << "Texture not found !" << std::endl;
             }
-#    ifndef DNDEBUG
+#    ifdef DNDEBUG
             std::cout << entry.path() << std::endl;
 #    endif
             //
         }
     }
+    _textureList.shrink_to_fit();
 }
 
-void texture::load_texture(std::vector<std::unique_ptr<sf::Texture>> &_textureList, std::string_view _path)
+void texture::load_texture(std::vector<std::pair<const std::string, std::unique_ptr<sf::Texture>>> &_textureList, std::string_view _path)
 {
-    for (const auto &entry : fs::directory_iterator(_path)) {
+    _textureList.reserve(RESERVE_VECTOR);
+    for (const auto &entry : fs::recursive_directory_iterator(_path)) {
         if (entry.path().extension() == ".png") {
             auto texture = std::make_unique<sf::Texture>();
             if (texture->loadFromFile(entry.path())) {
-                _textureList.emplace_back(std::move(texture));
+                _textureList.emplace_back(std::make_pair(entry.path().string(), std::move(texture)));
             } else {
                 std::cout << "Texture not found !" << std::endl;
             }
             texture.reset();
-#    ifndef DNDEBUG
+#    ifdef DNDEBUG
             std::cout << entry.path() << std::endl;
 #    endif
         }
     }
+    _textureList.shrink_to_fit();
 }
 
-void texture::load_texture(std::vector<sf::Texture *> &_textureList, std::string_view _path)
+void texture::load_texture(std::vector<std::pair<const std::string, sf::Texture *>> &_textureList, std::string_view _path)
 {
-    for (const auto &entry : fs::directory_iterator(_path)) {
+    _textureList.reserve(RESERVE_VECTOR);
+    for (const auto &entry : fs::recursive_directory_iterator(_path)) {
         if (entry.path().extension() == ".png") {
             sf::Texture *texture = new sf::Texture();
             if (texture->loadFromFile(entry.path())) {
-                _textureList.emplace_back(texture);
+                _textureList.emplace_back(std::make_pair(entry.path().string(), texture));
             } else {
                 std::cout << "Texture not found !" << std::endl;
             }
-#    ifndef DNDEBUG
+#    ifdef DNDEBUG
             std::cout << entry.path() << std::endl;
 #    endif
             //
         }
     }
+    _textureList.shrink_to_fit();
 }
 
 void texture::load_texture(std::map<const std::string, sf::Texture> &_textureList, std::string_view _path)
 {
-    for (const auto &entry : fs::directory_iterator(_path)) {
+    for (const auto &entry : fs::recursive_directory_iterator(_path)) {
         if (entry.path().extension() == ".png") {
             sf::Texture texture = sf::Texture();
             if (texture.loadFromFile(entry.path())) {
@@ -171,7 +208,7 @@ void texture::load_texture(std::map<const std::string, sf::Texture> &_textureLis
             } else {
                 std::cout << "Texture not found !" << std::endl;
             }
-#    ifndef DNDEBUG
+#    ifdef DNDEBUG
             std::cout << entry.path() << std::endl;
 #    endif
             //
@@ -181,7 +218,7 @@ void texture::load_texture(std::map<const std::string, sf::Texture> &_textureLis
 
 void texture::load_texture(std::map<const std::string, sf::Texture *> &_textureList, std::string_view _path)
 {
-    for (const auto &entry : fs::directory_iterator(_path)) {
+    for (const auto &entry : fs::recursive_directory_iterator(_path)) {
         if (entry.path().extension() == ".png") {
             sf::Texture *texture = new sf::Texture();
             if (texture->loadFromFile(entry.path())) {
@@ -189,7 +226,7 @@ void texture::load_texture(std::map<const std::string, sf::Texture *> &_textureL
             } else {
                 std::cout << "Texture not found !" << std::endl;
             }
-#    ifndef DNDEBUG
+#    ifdef DNDEBUG
             std::cout << entry.path().string() << std::endl;
 #    endif
             //
@@ -199,7 +236,7 @@ void texture::load_texture(std::map<const std::string, sf::Texture *> &_textureL
 
 void texture::load_texture(std::map<const std::string, std::unique_ptr<sf::Texture>> &_textureList, std::string_view _path)
 {
-    for (const auto &entry : fs::directory_iterator(_path)) {
+    for (const auto &entry : fs::recursive_directory_iterator(_path)) {
         if (entry.path().extension() == ".png") {
             auto texture = std::make_unique<sf::Texture>();
             if (texture->loadFromFile(entry.path())) {
@@ -220,9 +257,9 @@ void texture::load_texture(std::unordered_map<std::string, sf::Texture *> &_text
     load_texture(_textureList, _path, true);
 }
 
-void texture::load_texture(std::unordered_map<std::string, sf::Texture *> &_textureList, std::string_view _path, const bool load_texture)
+void texture::load_texture(std::unordered_map<std::string, sf::Texture *> &_textureList, std::string_view _path, const bool &load_texture)
 {
-    for (const auto &entry : fs::directory_iterator(_path)) {
+    for (const auto &entry : fs::recursive_directory_iterator(_path)) {
         if (entry.path().extension() == ".png") {
             sf::Texture *texture = new sf::Texture();
             if (load_texture == true) {
@@ -235,7 +272,25 @@ void texture::load_texture(std::unordered_map<std::string, sf::Texture *> &_text
                 _textureList.insert(std::make_pair(entry.path().string(), texture));
             }
         }
-#    ifndef DNDEBUG
+#    ifdef DNDEBUG
+        std::cout << entry.path().string() << std::endl;
+#    endif
+        //
+    }
+}
+
+void texture::load_texture(std::unordered_map<std::string, std::unique_ptr<sf::Texture>> &_textureList, std::string_view _path)
+{
+    for (const auto &entry : fs::recursive_directory_iterator(_path)) {
+        if (entry.path().extension() == ".png") {
+            sf::Texture *texture = new sf::Texture();
+            if (texture->loadFromFile(entry.path())) {
+                _textureList.insert(std::make_pair(entry.path().string(), std::move(texture)));
+            } else {
+                std::cout << "Texture not found !" << std::endl;
+            }
+        }
+#    ifdef DNDEBUG
         std::cout << entry.path().string() << std::endl;
 #    endif
         //

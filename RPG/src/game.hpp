@@ -26,7 +26,8 @@
 #include "lib/texture/load_texturemap.hpp"
 #include "lib/texture/load_titlemap.hpp"
 #include "lib/texture/sfml_screenshot.hpp"
-#include "lib/utils/date/date.hpp"
+#include "lib/time/chrono/chrono.hpp"
+#include "lib/time/date/date.hpp"
 #include "lib/utils/opengl/screen_save.hpp"
 #include "title.hpp"
 
@@ -63,12 +64,15 @@ class Game {
     std::vector<std::vector<size_t>> title_map {};
     std::vector<std::vector<size_t>> myNumbers {};
 
-    std::vector<sf::Texture *> textureList {};
+    std::vector<std::pair<const std::string, sf::Texture *>> textureList {};
     std::map<const std::string, sf::Texture *> textureMap {};
     std::unordered_map<std::string, sf::Texture *> textureUMap {};
     std::vector<sf::SoundBuffer> buffer {};
     sf::Sound sound = sf::Sound();
-    std::unordered_map<int, std::string> texturemap {};
+
+    std::map<const int, std::string> texturemap {};
+    std::unordered_map<int, std::string> textureumap {};
+    std::vector<std::pair<const int, const std::string>> texturelist {};
 
   protected:
 };

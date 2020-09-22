@@ -1,10 +1,11 @@
 cd build
 #cmake .. && make -j 12
 #Release/Debug/Coverage/MinSizeRel
-cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ..
+#-DCMAKE_BUILD_TYPE=Release
+cmake $@ -G Ninja ..
 
 ninja
-#cp -R -u -p ../texture/rpg-pack texture/rpg-pack
+#make -j 12
 ctest --output-on-failure #--extra-verbose
 
 #make install 

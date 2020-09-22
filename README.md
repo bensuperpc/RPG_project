@@ -23,22 +23,39 @@ You can see my [public repository][ben_github] on GitHub, and can see my [public
 
 #### Building for source
 You need to install SFML, OpenCV, BoostLib, OpenGL lib, before build.
+
 Download RPG asset :
 https://bakudas.itch.io/generic-rpg-pack
 https://pipoya.itch.io/pipoya-free-rpg-character-sprites-32x32
 and unzip it in texture folder.
 Download font and copy it in font folder (Almond_Caramel.ttf). 
 
-For production release:
 ```sh
 cd RPG
 ```
+
+For production release:
 ```sh
-./make.sh
+./make.sh -DCMAKE_BUILD_TYPE=Release
+```
+
+For minisize release:
+```sh
+./make.sh -DCMAKE_BUILD_TYPE=MinSizeRel
 ```
 
 For debug release:
-Just change "Release" to "Debug" in make.sh and run it.
+```sh
+./make.sh -DCMAKE_BUILD_TYPE=Release
+```
+
+For converage release:
+```sh
+./make.sh -DCMAKE_BUILD_TYPE=Coverage
+```
+```sh
+./coverage.sh
+```
 
 ### Docker
 You must install docker (and docker-compose maybe in later update)

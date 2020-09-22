@@ -17,6 +17,9 @@ else()
     message(STATUS "CMAKE_UNITY_BUILD : 0")
 endif()
 
+#set(Var1 "This is variable 1" CACHE INTERNAL "")
+#set(Var1 "This is variable 1" PARENT_SCOPE)
+
 #   ================================================
 #   ================    COMPILER    ================
 #   ================================================
@@ -24,59 +27,60 @@ endif()
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
+
 if(NOT CMAKE_C_COMPILER)
-    set(CMAKE_C_COMPILER /usr/bin/gcc)
+    set(CMAKE_C_COMPILER /usr/bin/clang)
 endif()
 if(NOT CMAKE_CXX_COMPILER)
-    set(CMAKE_CXX_COMPILER /usr/bin/g++)
+    set(CMAKE_CXX_COMPILER /usr/bin/clang++)
 endif()
 
 #=== C++ VERSION CHECK ===
-include(CheckCXXCompilerFlag)
+if(NOT CMAKE_CXX_STANDARD)
+    include(CheckCXXCompilerFlag)
 
-CHECK_CXX_COMPILER_FLAG("-std=c++20" COMPILER_SUPPORTS_CXX20)
-CHECK_CXX_COMPILER_FLAG("-std=c++17" COMPILER_SUPPORTS_CXX17)
-CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+    CHECK_CXX_COMPILER_FLAG("-std=c++20" COMPILER_SUPPORTS_CXX20)
+    CHECK_CXX_COMPILER_FLAG("-std=c++17" COMPILER_SUPPORTS_CXX17)
+    CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
+    CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 
-if(COMPILER_SUPPORTS_CXX20)
-    set(CMAKE_CXX_STANDARD 11)
-    message(STATUS "C++20: OK")
-elseif(COMPILER_SUPPORTS_CXX17)
-    set(CMAKE_CXX_STANDARD 17)
-    message(STATUS "C++17: OK")
-elseif(COMPILER_SUPPORTS_CXX14)
-    set(CMAKE_CXX_STANDARD 14)
-    message(STATUS "C++14: OK")
-elseif(COMPILER_SUPPORTS_CXX11)
-    set(CMAKE_CXX_STANDARD 11)
-    message(STATUS "C++11: OK")
-    message(WARNING "C++11 is old, please use newer compiler.")
-else()
-    message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 or above support. Please use a different C++ compiler.")
-endif()
-
-
-# Compiler-specific C++11 activation.
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    # require at least gcc 4.8
-    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 8.0)
-        message(FATAL_ERROR "GCC version must be at least 4.8!")
+    if(COMPILER_SUPPORTS_CXX20)
+        set(CMAKE_CXX_STANDARD 20)
+        message(STATUS "C++20: OK")
+    elseif(COMPILER_SUPPORTS_CXX17)
+        set(CMAKE_CXX_STANDARD 17)
+        message(STATUS "C++17: OK")
+    elseif(COMPILER_SUPPORTS_CXX14)
         set(CMAKE_CXX_STANDARD 14)
+        message(STATUS "C++14: OK")
+    elseif(COMPILER_SUPPORTS_CXX11)
+        set(CMAKE_CXX_STANDARD 11)
+        message(STATUS "C++11: OK")
+        message(WARNING "C++11 is old, please use newer compiler.")
+    else()
+        message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 or above support. Please use a different C++ compiler.")
     endif()
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    # require at least clang 3.2
-    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 8.0)
-        message(FATAL_ERROR "Clang version must be at least 3.2!")
-    endif()
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "14.0")
-      message(FATAL_ERROR "Insufficient msvc version")
-    endif()
-else()
-    message(WARNING "You are using an unsupported compiler! Compilation has only been tested with Clang and GCC.")
-endif()
 
+    # Compiler-specific C++11 activation.
+    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        # require at least gcc 4.8
+        if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 8.0)
+            message(FATAL_ERROR "GCC version must be at least 4.8!")
+            set(CMAKE_CXX_STANDARD 14)
+        endif()
+    elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        # require at least clang 3.2
+        if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 8.0)
+            message(FATAL_ERROR "Clang version must be at least 3.2!")
+        endif()
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "14.0")
+        message(FATAL_ERROR "Insufficient msvc version")
+        endif()
+    else()
+        message(WARNING "You are using an unsupported compiler! Compilation has only been tested with Clang and GCC.")
+    endif()
+endif()
 
 
 set(CMAKE_CXX_STANDARD_REQUIRED 1)
@@ -106,17 +110,17 @@ set(CMAKE_C_FLAGS_MINSIZEREL     "-Os ${OPTI_COMPILER_REL} ${SEC_COMPILER_REL}")
 set(CMAKE_C_FLAGS_RELEASE        "-O3 ${OPTI_COMPILER_REL} ${SEC_COMPILER_REL}")
 set(CMAKE_C_FLAGS_COVERAGE "${CMAKE_C_FLAGS_DEBUG} --coverage")
 
-
+#-Wold-style-cast
 set(WARNINGS_COMPILER_CXX "-Wpedantic -Wall -Wextra -Wshadow -Wstrict-overflow=5 -Wmissing-declarations -Wundef -Wstack-protector -Wno-unused-parameter -Woverloaded-virtual  -Wdisabled-optimization -Winline -Wredundant-decls -Wsign-conversion -Wformat-nonliteral -Wformat-security -Wmissing-include-dirs -Wmissing-noreturn -Wimport -Winit-self -Winvalid-pch -Wstrict-aliasing=2 -Wswitch-default -Wunreachable-code -Wunused -Wwrite-strings -Wcast-align -Wcast-qual -Wfloat-equal -Wvariadic-macros -Wpacked  -Wpadded -Wpointer-arith -Weffc++ -Wformat=2 -Wfloat-equal -Wabi=11")
 
 # Removed : -Wconversion
-#-static -lrt -pthread -Wl,--whole-archive -lpthread -Wl,--no-whole-archive -fprofile-arcs -ftest-coverage
+#-ftime-report -static -lrt -pthread -Wl,--whole-archive -lpthread -Wl,--no-whole-archive -fprofile-arcs -ftest-coverage
 
 #Add -lstdc++fs for old compiler
 set(CMAKE_CXX_FLAGS                "${WARNINGS_COMPILER_CXX} -pipe -pthread -lstdc++fs -Wl,-rpath,../lib -Wl,-rpath,../external/lib")
 set(CMAKE_CXX_FLAGS_DEBUG          "-g3 -Og -ggdb3 -v")
-set(CMAKE_CXX_FLAGS_MINSIZEREL     "-Os ${OPTI_COMPILER_REL} ${SEC_COMPILER_REL}")
-set(CMAKE_CXX_FLAGS_RELEASE        "-O3 ${OPTI_COMPILER_REL} ${SEC_COMPILER_REL}")
+set(CMAKE_CXX_FLAGS_MINSIZEREL     "-Os ${OPTI_COMPILER_REL} ${SEC_COMPILER_REL} -DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE        "-O3 ${OPTI_COMPILER_REL} ${SEC_COMPILER_REL} -DNDEBUG")
 set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_DEBUG} --coverage")
 
 set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${SEC_COMPILER_LINK_REL}")
@@ -260,17 +264,24 @@ endif()
 
 #   ================    Qt    ================
 
+#set(CMAKE_AUTOUIC ON)
 #set(CMAKE_AUTOMOC ON)
 #set(CMAKE_AUTORCC ON)
-#set(CMAKE_AUTOUIC ON)
 
-#find_package(Qt5 COMPONENTS Widgets Core Gui Multimedia QUIET)
+#find_package(Qt5 COMPONENTS Quick Widgets Core Gui Multimedia Network REQUIRED)
+#find_package(Qt5QuickCompiler)
+#qtquick_compiler_add_resources(RESOURCES example.qrc)
+#qt5_use_modules(myapp Quick Widgets Core Gui Multimedia Network)
 
-#if (QT5_FOUND)
-#    message(STATUS "QT: FOUND")
-#else()
-#    message(STATUS "QT: NOT FOUND")
-#endif()
+#find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick Multimedia REQUIRED)
+#find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick Multimedia REQUIRED)
+
+if (QT_FOUND)
+    message(STATUS "QT: FOUND")
+    #include_directories( ${QT_INCLUDES})
+else()
+    message(STATUS "QT: NOT FOUND")
+endif()
 
 #   ================    DOCTEST    ================
 find_package(doctest QUIET)
@@ -304,12 +315,15 @@ add_subdirectory(src/lib/math "lib/math")
 
 add_subdirectory(src/lib/utils "lib/utils")
 
+add_subdirectory(src/lib/time "lib/time")
+
 if(EXTERNAL_LIB)
     add_dependencies(hello ${EXTERNAL_LIB})
     add_dependencies(convert_utils ${EXTERNAL_LIB})
     add_dependencies(texture ${EXTERNAL_LIB})
     add_dependencies(math ${EXTERNAL_LIB})
     add_dependencies(utils ${EXTERNAL_LIB})
+    add_dependencies(time ${EXTERNAL_LIB})
 endif()
 
 #   =================================================
@@ -338,8 +352,10 @@ set(HEADERS
 #   ====================    LIBS    ====================
 #   ====================================================
 
+#set(MAIN_LLIBS Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Multimedia sfml-graphics sfml-window sfml-audio sfml-network sfml-system ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${OpenCV_LIBS})
 set(MAIN_LLIBS sfml-graphics sfml-window sfml-audio sfml-network sfml-system ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${OpenCV_LIBS})
-set(CUSTOM_LIBS texture convert_utils math utils)
+
+set(CUSTOM_LIBS texture convert_utils math utils time)
 
 #   ==================================================
 #   ===============    EXEC FILES    =================

@@ -5,8 +5,8 @@
 ** sfml_utils.hpp
 */
 
-#ifndef SFML_UTILS_H
-#define SFML_UTILS_H
+#ifndef SFML_UTILS_HPP
+#define SFML_UTILS_HPP
 
 #include <SFML/Graphics.hpp>
 

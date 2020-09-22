@@ -40,7 +40,7 @@ void Screen_save_gl::saveScreenshotToFile(const std::string &filename, const siz
     }
 }
 
-cv::Mat Screen_save_gl::saveScreenshotToMat(const std::string &filename, const size_t &windowWidth, const size_t &windowHeight)
+inline cv::Mat Screen_save_gl::saveScreenshotToMat(const std::string &filename, const size_t &windowWidth, const size_t &windowHeight)
 {
     cv::Mat img(windowHeight, windowWidth, CV_8UC4);
     glPixelStorei(GL_PACK_ALIGNMENT, (img.step & 3) ? 1 : 4);

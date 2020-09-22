@@ -86,6 +86,9 @@ build_docker/archlinux/*
 build_docker/manjaro/*
 !build_docker/manjaro/.gitkeep
 
+build_docker/fedora/*
+!build_docker/fedora/.gitkeep
+
 # NON DOCKER BUILD
 RPG/.vscode/*
 !RPG/build/.gitkeep
@@ -102,5 +105,3 @@ RPG/music/*
 # OTHERS
 screenshot/*
 old/*
-
-

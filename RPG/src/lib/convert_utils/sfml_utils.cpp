@@ -8,7 +8,7 @@
 #include "sfml_utils.hpp"
 
 // Convert SFML image to Mat from Opencv
-cv::Mat sfc::SFML2Mat(const sf::Image &img)
+inline cv::Mat sfc::SFML2Mat(const sf::Image &img)
 {
     cv::Size size(static_cast<int>(img.getSize().x), static_cast<int>(img.getSize().y));
 #pragma GCC diagnostic push
@@ -19,7 +19,7 @@ cv::Mat sfc::SFML2Mat(const sf::Image &img)
     return mat.clone();
 }
 
-void sfc::SFML2Mat(const sf::Image &img, cv::Mat &mat)
+inline void sfc::SFML2Mat(const sf::Image &img, cv::Mat &mat)
 {
     cv::Size size(static_cast<int>(img.getSize().x), static_cast<int>(img.getSize().y));
 #pragma GCC diagnostic push
@@ -41,7 +41,6 @@ inline sf::Image sfc::Mat2SFML(const cv::Mat &src)
     return image;
 }
 
-/*
 inline void sfc::Mat2SFML(const cv::Mat &src, sf::Image &image) {
   cv::Mat tmp;
   cv::cvtColor(src, tmp, cv::COLOR_BGR2RGBA);
@@ -49,4 +48,4 @@ inline void sfc::Mat2SFML(const cv::Mat &src, sf::Image &image) {
                static_cast<unsigned int>(tmp.rows), tmp.ptr());
   tmp.release();
 }
-*/
+

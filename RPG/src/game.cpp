@@ -13,16 +13,24 @@ Game::Game()
 
 void Game::Launch()
 {
-
     this->buffer.emplace_back(sf::SoundBuffer());
     // if (!buffer.loadFromFile("../music/mc.wav"))
     //    return;
     title::load_titlemap(this->title_map, "../title_map/title_map_1.txt");
-    texture::load_texturemap(this->texturemap, "../texture_map/texture_map_0.csv");
 
-    const std::string path = "../texture/rpg-pack/tiles/";
+    const std::string path = "../texture/";
+    
+    auto &&t1 = chrono::now();
+    auto &&t2 = chrono::now();
+    std::cout << chrono::duration(t1, t2).count() << std::endl;
+
     texture::load_texture(this->textureUMap, path);
+    //texture::load_texture(this->textureMap, path);
+    texture::load_texture(this->textureList, path);
 
+    texture::load_texturemap(this->textureumap, "../texture_map/texture_map_0.csv");
+    //texture::load_texturemap(this->texturemap, "../texture_map/texture_map_0.csv");
+    texture::load_texturemap(this->texturelist, "../texture_map/texture_map_0.csv");
     // this->sound.setBuffer(buffer);
     // this->sound.play();
     // this->sound.setLoop(true);
@@ -53,7 +61,7 @@ void Game::Launch()
     // window.setFramerateLimit(5);
 
     window.setActive(false);
-    //window.setJoystickThreshold(100.0f);
+    // window.setJoystickThreshold(100.0f);
 
     std::thread display_thread(&Game::renderingThread, this, &window);
     display_thread.join();
@@ -62,18 +70,11 @@ void Game::Launch()
 Game::~Game()
 {
 #if __cplusplus >= 201703L
+    /*
     for (auto &&elem : this->drawSprite) {
         elem.release();
         elem.reset();
-    }
-    for (auto &&elem : this->drawTitle) {
-        elem.release();
-        elem.reset();
-    }
-    for (auto &&elem : this->drawBlock) {
-        elem.release();
-        elem.reset();
-    }
+    }*/
 #else
     for (auto &&elem : this->drawSprite) {
         delete elem;
@@ -86,14 +87,8 @@ Game::~Game()
     }
 #endif
     for (auto &&elem : this->textureList) {
-        delete elem;
+        delete elem.second;
     }
-    /*
-    for (auto it = textureMap.begin(); it != textureMap.end();) {
-        std::cout << it->first << std::endl;
-        delete it->second;
-        it = textureMap.erase(it);
-    }*/
     for (const auto &element : textureMap) {
         delete element.second;
     }
@@ -102,17 +97,6 @@ Game::~Game()
     for (const auto &element : textureUMap) {
         delete element.second;
     }
-    textureUMap.clear();
-
-    drawSprite.clear();
-    drawSprite.shrink_to_fit();
-    drawTitle.clear();
-    drawTitle.shrink_to_fit();
-    drawBlock.clear();
-    drawBlock.shrink_to_fit();
-
-    textureList.clear();
-    drawBlock.shrink_to_fit();
 }
 
 void Game::drawTitle_fn()
@@ -127,13 +111,33 @@ void Game::drawTitle_fn()
                 std::unique_ptr<Title> title = std::make_unique<Title>();
 #else
 #endif
-                auto its = this->texturemap.find(title_map[x][y]);
-
-                if (its != this->texturemap.end()) {
-                    auto it = this->textureUMap.find(its->second);
+                /*
+                auto &&its = this->textureumap.find(title_map[x][y]);
+                if (its != this->textureumap.end()) {
+                    auto &&it = this->textureUMap.find(its->second);
                     if (it == this->textureUMap.end()) {
                         std::cout << "Key-value pair not present in map" << std::endl;
                     } else {
+                        title->setTexture(it->second);
+                    }
+                }
+                */
+                const int X = title_map[x][y];
+                auto its = std::find_if(this->texturelist.begin(), this->texturelist.end(), [&X](const std::pair<const int, const std::string &> &p)
+                {
+                    return p.first == X;
+                    });
+                if (its != this->texturelist.end()) {
+                    const std::string Y = its->second;
+                    auto it
+                        = std::find_if(this->textureList.begin(), this->textureList.end(), [&Y](const std::pair<const std::string, sf::Texture *> &t)
+                        {
+                            return t.first == Y;
+                        });
+                    if (it == this->textureList.end()) {
+                        std::cout << "Key-value pair not present in map:" << Y << std::endl;
+                    } else {
+                        std::cout << "Key-value pair not present in map:" << Y << std::endl;
                         title->setTexture(it->second);
                     }
                 }
@@ -213,9 +217,8 @@ void Game::renderingThread(sf::RenderWindow *window)
         std::cout << "Texture not found !" << std::endl;
     }
     texture2.setSmooth(true);
-
+    
     this->drawTitle_fn();
-
 #if __cplusplus <= 201402L
     Entity *player = new Entity();
 #elif __cplusplus >= 201703L
@@ -267,9 +270,9 @@ void Game::renderingThread(sf::RenderWindow *window)
 
         if (!this->drawSprite[0]->getGlobalBounds().intersects(this->drawSprite[1]->getGlobalBounds())) {
             const auto &&diffx = std::max(this->drawSprite[1]->getPosition().x, this->drawSprite[0]->getPosition().x)
-                                - std::min(this->drawSprite[1]->getPosition().x, this->drawSprite[0]->getPosition().x);
+                                 - std::min(this->drawSprite[1]->getPosition().x, this->drawSprite[0]->getPosition().x);
             const auto &&diffy = std::max(this->drawSprite[1]->getPosition().x, this->drawSprite[0]->getPosition().x)
-                                - std::min(this->drawSprite[1]->getPosition().x, this->drawSprite[0]->getPosition().x);
+                                 - std::min(this->drawSprite[1]->getPosition().x, this->drawSprite[0]->getPosition().x);
 
             if (this->drawSprite[1]->getPosition().x + 35.0 > this->drawSprite[0]->getPosition().x) {
                 this->drawSprite[1]->move(-1.0 * diffx * 0.020, 0.0);
@@ -387,7 +390,7 @@ void Game::renderingThread(sf::RenderWindow *window)
             }
         }
 
-        if(sf::Joystick::isConnected(0)) {
+        if (sf::Joystick::isConnected(0)) {
             const float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
             const float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
 
