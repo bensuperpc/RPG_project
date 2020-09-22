@@ -5,7 +5,9 @@ FROM $IMAGE
 RUN dnf upgrade -y --refresh
 RUN dnf install -y SFML gcc boost opencv opencv-devel cmake ninja-build gcc-c++ \
     git freeglut-devel xorg-x11-apps libudev-devel libXrandr libXrandr-devel libX11 \
-    qt5-qtbase qt5-devel && dnf autoremove -y
+    qt5-qtbase qt5-devel openal-soft && dnf autoremove -y
+RUN dnf install -y openal-soft-devel
+RUN dnf install -y vorbis-tools libvorbis
 
 ARG UNAME=testuser
 ARG UID=1000

@@ -6,7 +6,7 @@ docker run --rm -it --name rpg_builder_1 \
 rpg_builder_manjaro_unstable
 
 
-docker build -t rpg_builder_archlinux -f config_docker/Dockerfile_manjaro . --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg IMAGE=archlinux
+docker build -t rpg_builder_archlinux -f config_docker/Dockerfile_archlinux . --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg IMAGE=archlinux
 
 docker run --rm -it --name rpg_builder_2 \
 --mount type=bind,source="$(pwd)/RPG",destination=/usr/src/app,readonly \
@@ -28,10 +28,3 @@ docker run --rm -it --name rpg_builder_4 \
 --mount type=bind,source="$(pwd)/RPG",destination=/usr/src/app,readonly \
 --mount type=bind,source="$(pwd)/build_docker/debian",destination=/usr/src/app/build \
 rpg_builder_buster
-
-docker build -t rpg_builder_fedora -f config_docker/Dockerfile_fedora . --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg IMAGE=fedora:latest
-
-docker run --rm -it --name rpg_builder_5 \
---mount type=bind,source="$(pwd)/RPG",destination=/usr/src/app,readonly \
---mount type=bind,source="$(pwd)/build_docker/fedora",destination=/usr/src/app/build \
-rpg_builder_fedora
