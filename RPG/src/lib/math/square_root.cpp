@@ -11,7 +11,7 @@ float math::square_root::invsqrt(float x)
     float xhalf = 0.5f * x;
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
     int i = *(int *)&x;
-    i = 0x5f3759df - (i >> 1);
+    i = MagicNBR_32 - (i >> 1);
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
     x = *(float *)&i;
     x = x * (1.5f - xhalf * x * x);
@@ -24,7 +24,7 @@ double math::square_root::invsqrt(double x)
     double y = x;
     double x2 = y * 0.5;
     std::int64_t i = *(std::int64_t *)&y;
-    i = 0x5fe6eb50c7b537a9 - (i >> 1);
+    i = MagicNBR_64 - (i >> 1);
     y = *(double *)&i;
     y = y * (1.5 - (x2 * y * y));
     // y  = y * ( 1.5 - ( x2 * y * y ) );   // 2nd iteration, this can be removed
@@ -40,7 +40,7 @@ template <typename T, char iterations = 2> T math::square_root::invsqrt(T x)
     T y = x;
     T x2 = y * 0.5;
     Tint i = *(Tint *)&y;
-    i = (sizeof(T) == 8 ? 0x5fe6eb50c7b537a9 : 0x5f3759df) - (i >> 1);
+    i = (sizeof(T) == 8 ? MagicNBR_64 : MagicNBR_32) - (i >> 1);
     y = *(T *)&i;
     y = y * (1.5 - (x2 * y * y));
     if (iterations == 2)

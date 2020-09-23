@@ -8,10 +8,17 @@
 #ifndef SQUARE_ROOT_HPP_
 #define SQUARE_ROOT_HPP_
 
+#ifdef __FAST_MATH__
+#error "-ffast-math is broken, don't use it"
+#endif
+
 #include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <type_traits>
+
+#define MagicNBR_32 0x5f3759df
+#define MagicNBR_64 0x5fe6eb50c7b537a9
 
 namespace math
 {
@@ -27,4 +34,5 @@ template <typename T, char iterations = 2> inline T math::square_root::invsqrt(T
 } // namespace square_root
 } // namespace math
 
+// https://en.wikibooks.org/wiki/Optimizing_C%2B%2B/Code_optimization/Faster_operations
 #endif
