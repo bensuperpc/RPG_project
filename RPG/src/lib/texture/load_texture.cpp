@@ -88,7 +88,7 @@ void texture::load_texture(std::map<const std::string, sf::Texture *> &_textureL
     }
 }
 
-void texture::load_texture(std::unordered_map<std::string,sf::Texture> &_textureList, const std::string &_path)
+void texture::load_texture(std::unordered_map<std::string, sf::Texture> &_textureList, const std::string &_path)
 {
     if (fs::exists(_path) && fs::is_directory(_path)) {
         for (auto const &entry : fs::recursive_directory_iterator(_path)) {
@@ -259,6 +259,24 @@ void texture::load_texture(std::map<const std::string, std::unique_ptr<sf::Textu
             std::cout << entry.path() << std::endl;
 #    endif
         }
+    }
+}
+
+void texture::load_texture(std::unordered_map<std::string, sf::Texture> &_textureList, std::string_view _path)
+{
+    for (const auto &entry : fs::recursive_directory_iterator(_path)) {
+        if (entry.path().extension() == ".png") {
+            sf::Texture texture = sf::Texture();
+            if (texture.loadFromFile(entry.path())) {
+                _textureList.insert(std::make_pair(entry.path().string(), texture));
+            } else {
+                std::cout << "Texture not found !" << std::endl;
+            }
+        }
+#    ifdef DNDEBUG
+        std::cout << entry.path().string() << std::endl;
+#    endif
+        //
     }
 }
 

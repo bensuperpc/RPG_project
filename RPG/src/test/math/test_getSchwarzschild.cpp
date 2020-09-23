@@ -4,6 +4,8 @@
 #include "../../lib/math/constant.hpp"
 #include "../../lib/math/getSchwarzschild.hpp"
 
+namespace schwarzschild = math::schwarzschild;
+
 BOOST_AUTO_TEST_CASE(test_getSchwarzschild_1)
 {
     BOOST_CHECK_MESSAGE(static_cast<long int>(schwarzschild::getSchwarzschild<long double>(SUN_MASS)) == static_cast<long int>(2953),

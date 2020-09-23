@@ -7,6 +7,8 @@
 
 #ifndef CONSTANT_HPP_
 #define CONSTANT_HPP_
+//#define BUILD_BUG_ON(condition) ((void)sizeof(char[1 - 2*!!(condition)]))
+// BUILD_BUG_ON((sizeof(struct mystruct) % 8) != 0);
 
 #if CMAKE_CXX_EXTENSIONS == 1
 #    define O_PI 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280O

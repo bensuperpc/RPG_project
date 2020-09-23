@@ -61,3 +61,10 @@ https://stackoverflow.com/questions/54967251/how-can-i-integrate-opencv-4-0-into
 https://stackoverflow.com/questions/28395833/using-sdl2-with-cmake
 
 https://stackoverflow.com/questions/39816080/how-to-convert-sfml-image-to-opencv-mat-in-c
+
+https://stackoverflow.com/questions/301330/determine-if-type-is-a-pointer-in-a-template-function
+https://bytefreaks.net/programming-2/c/c-undefined-reference-to-templated-class-function
+https://en.cppreference.com/w/cpp/types/integer
+https://stackoverflow.com/questions/178265/what-is-the-most-hard-to-understand-piece-of-c-code-you-know
+
+https://stackoverflow.com/questions/55553003/using-stdconditional-with-non-convertible-types-raw-vs-pointer

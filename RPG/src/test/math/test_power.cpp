@@ -13,28 +13,28 @@ extern "C" {
 
 BOOST_AUTO_TEST_CASE(test_power_1)
 {
-    BOOST_CHECK_MESSAGE(power::power<uint64_t>(2, 16) == 65536, power::power<uint64_t>(2, 16) << " instead: " << 65536);
-    BOOST_CHECK_MESSAGE(power::power<int>(2, 16) == 65536, power::power<int>(2, 16) << " instead: " << 65536);
-    BOOST_CHECK_MESSAGE(power::power<uint64_t>(2, 32) == 4294967296, power::power<uint64_t>(2, 32) << " instead: " << 4294967296);
+    BOOST_CHECK_MESSAGE(math::power<uint64_t>(2, 16) == 65536, math::power<uint64_t>(2, 16) << " instead: " << 65536);
+    BOOST_CHECK_MESSAGE(math::power<int>(2, 16) == 65536, math::power<int>(2, 16) << " instead: " << 65536);
+    BOOST_CHECK_MESSAGE(math::power<uint64_t>(2, 32) == 4294967296, math::power<uint64_t>(2, 32) << " instead: " << 4294967296);
 }
 
 BOOST_AUTO_TEST_CASE(test_power_2)
 {
-    BOOST_CHECK_MESSAGE(power::power<uint64_t>(55, 0) == 1, power::power<uint64_t>(55, 0) << " instead: " << 1);
-    BOOST_CHECK_MESSAGE(power::power<uint64_t>(1200, 0) == 1, power::power<uint64_t>(1200, 0) << " instead: " << 1);
-    BOOST_CHECK_MESSAGE(power::power<int>(8000, 0) == 1, power::power<int>(8000, 0) << " instead: " << 1);
+    BOOST_CHECK_MESSAGE(math::power<uint64_t>(55, 0) == 1, math::power<uint64_t>(55, 0) << " instead: " << 1);
+    BOOST_CHECK_MESSAGE(math::power<uint64_t>(1200, 0) == 1, math::power<uint64_t>(1200, 0) << " instead: " << 1);
+    BOOST_CHECK_MESSAGE(math::power<int>(8000, 0) == 1, math::power<int>(8000, 0) << " instead: " << 1);
 }
 
 BOOST_AUTO_TEST_CASE(test_power_3)
 {
-    BOOST_CHECK_MESSAGE(power::power<uint64_t>(0, 8) == 0, power::power<uint64_t>(0, 8) << " instead: " << 0);
-    BOOST_CHECK_MESSAGE(power::power<uint64_t>(0, 120) == 0, power::power<uint64_t>(0, 120) << " instead: " << 0);
-    BOOST_CHECK_MESSAGE(power::power<int>(0, 255) == 0, power::power<int>(0, 255) << " instead: " << 0);
+    BOOST_CHECK_MESSAGE(math::power<uint64_t>(0, 8) == 0, math::power<uint64_t>(0, 8) << " instead: " << 0);
+    BOOST_CHECK_MESSAGE(math::power<uint64_t>(0, 120) == 0, math::power<uint64_t>(0, 120) << " instead: " << 0);
+    BOOST_CHECK_MESSAGE(math::power<int>(0, 255) == 0, math::power<int>(0, 255) << " instead: " << 0);
 }
 
 BOOST_AUTO_TEST_CASE(test_power_4)
 {
-    BOOST_CHECK_MESSAGE(power::power<int>(-5, 3) == -125, power::power<int>(-5, 3) << " instead: " << -125);
-    BOOST_CHECK_MESSAGE(power::power<int>(-5, 2) == 25, power::power<int>(-5, 2) << " instead: " << 25);
-    BOOST_CHECK_MESSAGE(power::power<int>(-100, 3) == -1000000, power::power<int>(-100, 3) << " instead: " << -1000000);
+    BOOST_CHECK_MESSAGE(math::power<int>(-5, 3) == -125, math::power<int>(-5, 3) << " instead: " << -125);
+    BOOST_CHECK_MESSAGE(math::power<int>(-5, 2) == 25, math::power<int>(-5, 2) << " instead: " << 25);
+    BOOST_CHECK_MESSAGE(math::power<int>(-100, 3) == -1000000, math::power<int>(-100, 3) << " instead: " << -1000000);
 }

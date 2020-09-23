@@ -45,7 +45,7 @@ if(NOT CMAKE_CXX_STANDARD)
     CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 
     if(COMPILER_SUPPORTS_CXX20)
-        set(CMAKE_CXX_STANDARD 20)
+        set(CMAKE_CXX_STANDARD 11)
         message(STATUS "C++20: OK")
     elseif(COMPILER_SUPPORTS_CXX17)
         set(CMAKE_CXX_STANDARD 17)
@@ -367,7 +367,7 @@ if(EXTERNAL_LIB)
 endif()
 
 # stdc++fs is needed for Debian
-target_link_libraries(game ${MAIN_LLIBS} ${CUSTOM_LIBS} hello stdc++fs)
+target_link_libraries(game PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} hello stdc++fs)
 
 #   ======================================================
 #   ====================    TESTS    =====================

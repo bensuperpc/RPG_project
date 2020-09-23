@@ -8,9 +8,10 @@
 #ifndef _POWER_HPP_
 #define _POWER_HPP_
 
-namespace power
+namespace math
 {
 template <typename T> T power(T, long int);
-} // namespace power
+template <typename T> bool isPowerOfTwo(T);
+} // namespace math
 #include "power_imp.hpp"
 #endif

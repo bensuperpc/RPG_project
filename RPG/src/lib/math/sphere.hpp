@@ -14,6 +14,9 @@
 #    include <numbers>
 #endif
 
+namespace math
+{
+
 namespace sphere
 {
 template <typename T> T sphereSurface(const T &r);
@@ -25,6 +28,7 @@ template <typename T> T sphereVolume_Q(const T &r);
 #endif
 
 } // namespace sphere
+} // namespace math
 #include "sphere_imp.hpp"
 
 #endif

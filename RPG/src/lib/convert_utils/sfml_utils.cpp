@@ -41,11 +41,10 @@ inline sf::Image sfc::Mat2SFML(const cv::Mat &src)
     return image;
 }
 
-inline void sfc::Mat2SFML(const cv::Mat &src, sf::Image &image) {
-  cv::Mat tmp;
-  cv::cvtColor(src, tmp, cv::COLOR_BGR2RGBA);
-  image.create(static_cast<unsigned int>(tmp.cols),
-               static_cast<unsigned int>(tmp.rows), tmp.ptr());
-  tmp.release();
+inline void sfc::Mat2SFML(const cv::Mat &src, sf::Image &image)
+{
+    cv::Mat tmp;
+    cv::cvtColor(src, tmp, cv::COLOR_BGR2RGBA);
+    image.create(static_cast<unsigned int>(tmp.cols), static_cast<unsigned int>(tmp.rows), tmp.ptr());
+    tmp.release();
 }
-

@@ -9,6 +9,10 @@ set(SRCS
 	cylinder_imp.hpp
 	power_imp.hpp
 	power.c
+	pair.cpp
+	sphere_imp.hpp
+	square_root.cpp
+	prime.cpp
 	)
 	
 set(HEADERS
@@ -19,6 +23,9 @@ set(HEADERS
 	constant.hpp
 	power.hpp
 	power.h
+	pair.hpp
+	square_root.hpp
+	prime.hpp
 	)
 
 #add_library(math_static STATIC ${SRCS} ${HEADERS})

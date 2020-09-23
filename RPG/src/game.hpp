@@ -53,10 +53,18 @@ class Game {
     std::vector<Entity *> drawSprite {};
     std::vector<Entity *> drawBlock {};
     std::vector<Title *> drawTitle {};
+
+    std::vector<std::pair<const std::string, sf::Texture *>> textureList {};
+    std::map<const std::string, sf::Texture *> textureMap {};
+    std::unordered_map<std::string, sf::Texture *> textureUMap {};
+
 #elif __cplusplus >= 201703L
     std::vector<std::unique_ptr<Entity>> drawSprite {};
     std::vector<std::unique_ptr<Entity>> drawBlock {};
     std::vector<std::unique_ptr<Title>> drawTitle {};
+    std::vector<std::pair<const std::string, std::unique_ptr<sf::Texture>>> textureList {};
+    std::map<const std::string, std::unique_ptr<sf::Texture>> textureMap {};
+    std::unordered_map<std::string, std::unique_ptr<sf::Texture>> textureUMap {};
 
 #else
 #endif
@@ -64,9 +72,6 @@ class Game {
     std::vector<std::vector<size_t>> title_map {};
     std::vector<std::vector<size_t>> myNumbers {};
 
-    std::vector<std::pair<const std::string, sf::Texture *>> textureList {};
-    std::map<const std::string, sf::Texture *> textureMap {};
-    std::unordered_map<std::string, sf::Texture *> textureUMap {};
     std::vector<sf::SoundBuffer> buffer {};
     sf::Sound sound = sf::Sound();
 

@@ -10,11 +10,13 @@
 
 #include "constant.hpp"
 
+namespace math
+{
 namespace ga
 {
 template <typename T> T getGravitationalAttraction(const T &m1, const T &m2, const T &d);
 } // namespace ga
-
+} // namespace math
 #include "getGravitationalAttraction_imp.hpp"
 
 #endif

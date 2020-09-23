@@ -16,3 +16,8 @@ long int power(long int nb, long int p)
     else
         return 1;
 }
+
+bool isPowerOfTwo(int x)
+{
+    return x && (!(x & (x - 1)));
+}

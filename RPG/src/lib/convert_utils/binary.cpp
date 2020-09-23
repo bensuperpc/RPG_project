@@ -7,16 +7,16 @@
 
 #include "binary.hpp"
 
-unsigned long long binary::make_bitSet (bool flags[], size_t size)
+unsigned long long binary::make_bitSet(bool flags[], size_t size)
 {
-    std::bitset< 8*sizeof(ULLONG_MAX) > bitSet;
+    std::bitset<8 * sizeof(ULLONG_MAX)> bitSet;
 
-    if( isLittleEndian() )
+    if (isLittleEndian())
         for (size_t i = 0; i < size; ++i)
-            bitSet.set( i, flags[size-i-1] );
+            bitSet.set(i, flags[size - i - 1]);
     else
         for (size_t i = 0; i < size; ++i)
-            bitSet.set( i, flags[i] );
+            bitSet.set(i, flags[i]);
 
     return bitSet.to_ullong();
 }
