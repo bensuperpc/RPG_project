@@ -26,8 +26,6 @@ bool math::prime::isPrime_opti_1(const long long int &a)
         if (a % i == 0)
             return false;
     }
-
-    // if the loop completed, a is prime
     return true;
 }
 
@@ -143,4 +141,9 @@ bool math::prime::isPrime_opti_7(const long long int &n)
     } else {
         return false;
     }
+}
+
+bool math::prime::isPrime_opti_8(const long long int &n)
+{
+    return (n < 4000000007) ? isPrime_opti_1(n) : isPrime_opti_5(n);
 }

@@ -117,7 +117,7 @@ set(WARNINGS_COMPILER_CXX "-Wpedantic -Wall -Wextra -Wshadow -Wstrict-overflow=5
 #-ftime-report -static -lrt -pthread -Wl,--whole-archive -lpthread -Wl,--no-whole-archive -fprofile-arcs -ftest-coverage
 
 #Add -lstdc++fs for old compiler
-set(CMAKE_CXX_FLAGS                "${WARNINGS_COMPILER_CXX} -pipe -pthread -lstdc++fs -Wl,-rpath,../lib -Wl,-rpath,../external/lib")
+set(CMAKE_CXX_FLAGS                "${WARNINGS_COMPILER_CXX} -pipe -pthread -lstdc++fs -Wl,-rpath,../lib -Wl,-rpath,../external/lib -pthread")
 set(CMAKE_CXX_FLAGS_DEBUG          "-g3 -Og -ggdb3 -v")
 set(CMAKE_CXX_FLAGS_MINSIZEREL     "-Os ${OPTI_COMPILER_REL} ${SEC_COMPILER_REL} -DNDEBUG")
 set(CMAKE_CXX_FLAGS_RELEASE        "-O3 ${OPTI_COMPILER_REL} ${SEC_COMPILER_REL} -DNDEBUG")
@@ -317,6 +317,8 @@ add_subdirectory(src/lib/utils "lib/utils")
 
 add_subdirectory(src/lib/time "lib/time")
 
+#add_subdirectory(src/lib/cpu "lib/cpu")
+
 if(EXTERNAL_LIB)
     add_dependencies(hello ${EXTERNAL_LIB})
     add_dependencies(convert_utils ${EXTERNAL_LIB})
@@ -324,6 +326,7 @@ if(EXTERNAL_LIB)
     add_dependencies(math ${EXTERNAL_LIB})
     add_dependencies(utils ${EXTERNAL_LIB})
     add_dependencies(time ${EXTERNAL_LIB})
+    #add_dependencies(cpu ${EXTERNAL_LIB})
 endif()
 
 #   =================================================
@@ -332,6 +335,8 @@ endif()
 
 #   ================    FILES    ================
 set(MAIN src/main.cpp)
+
+set(MAIN_BENCH src/main_bench.cpp)
 
 set(SRCS
     src/game.cpp
@@ -368,6 +373,12 @@ endif()
 
 # stdc++fs is needed for Debian
 target_link_libraries(game PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} hello stdc++fs)
+
+
+add_executable(bench ${MAIN_BENCH} ${SRCS} ${HEADERS})
+target_link_libraries(bench PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} hello stdc++fs)
+add_dependencies(bench ${CUSTOM_LIBS})
+
 
 #   ======================================================
 #   ====================    TESTS    =====================

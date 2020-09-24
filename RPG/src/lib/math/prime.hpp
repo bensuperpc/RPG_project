@@ -25,8 +25,15 @@ bool isPrime_opti_5(const long long int &);
 inline long long int PowerMod(long long int, long long int, long long int);
 inline long long int MultiplyMod(long long int, long long int, long long int);
 
+template <typename T> inline bool isPrime_opti_5(const T &);
+template <typename T> inline T PowerMod(T, T, T);
+template <typename T> inline T MultiplyMod(T, T, T);
+
 bool isPrime_opti_6(const long long int &);
 bool isPrime_opti_7(const long long int &);
+bool isPrime_opti_8(const long long int &);
+
+#include "prime_imp.hpp"
 } // namespace prime
 } // namespace math
 

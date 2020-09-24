@@ -9,7 +9,7 @@
 #define SQUARE_ROOT_HPP_
 
 #ifdef __FAST_MATH__
-#error "-ffast-math is broken, don't use it"
+#    error "-ffast-math is broken, don't use it"
 #endif
 
 #include <cmath>
