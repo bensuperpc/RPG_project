@@ -29,10 +29,12 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 if(NOT CMAKE_C_COMPILER)
-    set(CMAKE_C_COMPILER /usr/bin/clang)
+#    set(CMAKE_C_COMPILER /usr/bin/clang)
+    set(CMAKE_C_COMPILER /usr/bin/gcc)
 endif()
 if(NOT CMAKE_CXX_COMPILER)
-    set(CMAKE_CXX_COMPILER /usr/bin/clang++)
+#    set(CMAKE_CXX_COMPILER /usr/bin/clang++)
+    set(CMAKE_CXX_COMPILER /usr/bin/g++)
 endif()
 
 #=== C++ VERSION CHECK ===
@@ -319,6 +321,10 @@ add_subdirectory(src/lib/time "lib/time")
 
 #add_subdirectory(src/lib/cpu "lib/cpu")
 
+add_subdirectory(src/lib/vector "lib/vector")
+
+add_subdirectory(src/lib/thread "lib/thread")
+
 if(EXTERNAL_LIB)
     add_dependencies(hello ${EXTERNAL_LIB})
     add_dependencies(convert_utils ${EXTERNAL_LIB})
@@ -327,6 +333,8 @@ if(EXTERNAL_LIB)
     add_dependencies(utils ${EXTERNAL_LIB})
     add_dependencies(time ${EXTERNAL_LIB})
     #add_dependencies(cpu ${EXTERNAL_LIB})
+    add_dependencies(vector ${EXTERNAL_LIB})
+    add_dependencies(thread ${EXTERNAL_LIB})
 endif()
 
 #   =================================================
@@ -360,7 +368,7 @@ set(HEADERS
 #set(MAIN_LLIBS Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Multimedia sfml-graphics sfml-window sfml-audio sfml-network sfml-system ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${OpenCV_LIBS})
 set(MAIN_LLIBS sfml-graphics sfml-window sfml-audio sfml-network sfml-system ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${OpenCV_LIBS})
 
-set(CUSTOM_LIBS texture convert_utils math utils time)
+set(CUSTOM_LIBS texture convert_utils math utils time vector thread)
 
 #   ==================================================
 #   ===============    EXEC FILES    =================

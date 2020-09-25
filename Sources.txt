@@ -15,10 +15,12 @@ https://www.opencv-srf.com/2011/11/mouse-events.html
 https://answers.opencv.org/question/170527/how-to-get-the-pixel-value-by-clicking-on-image/
 https://stackoverflow.com/questions/27035672/cv-extract-differences-between-two-images
 https://gist.github.com/raulqf/a3caa97db3f8760af33266a1475d0e5e
+https://www.geeksforgeeks.org/ways-copy-vector-c/
 https://docs.opencv.org/master/dd/d3d/tutorial_gpu_basics_similarity.html
 https://nrsyed.com/2018/02/12/get-pixel-rgb-value-from-webcam-video-in-opencv-c-and-python/
 https://stackoverflow.com/questions/24195926/opencv-write-webcam-output-to-avi-file
 https://stackoverflow.com/questions/5026965/how-to-convert-an-opencv-cvmat-to-qimage
+https://stackoverflow.com/questions/10150468/how-to-redirect-cin-and-cout-to-files
 https://stackoverflow.com/questions/17127762/cvmat-to-qimage-and-back/17137998
 https://www.raspberrypi.org/forums/viewtopic.php?t=202035
 https://forum.qt.io/topic/84097/qimagewriter-and-exif/3
@@ -68,3 +70,9 @@ https://en.cppreference.com/w/cpp/types/integer
 https://stackoverflow.com/questions/178265/what-is-the-most-hard-to-understand-piece-of-c-code-you-know
 
 https://stackoverflow.com/questions/55553003/using-stdconditional-with-non-convertible-types-raw-vs-pointer
+https://stackoverflow.com/questions/10150468/how-to-redirect-cin-and-cout-to-files
+
+
+https://github.com/zserik/ThreadPool
+https://github.com/progschj/ThreadPool
+https://github.com/aphenriques/thread

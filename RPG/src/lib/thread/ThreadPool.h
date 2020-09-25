@@ -28,9 +28,14 @@ class ThreadPool {
     // the task queue
     std::queue<std::function<void()>> tasks {};
 
+#if __cplusplus >= 201703L
     // synchronization
     std::mutex queue_mutex = std::mutex();
     std::condition_variable condition = std::condition_variable();
+#else
+    std::mutex queue_mutex;
+    std::condition_variable condition;
+#endif
     bool stop;
 };
 
