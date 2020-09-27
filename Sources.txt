@@ -31,7 +31,7 @@ https://www.learnopencv.com/object-tracking-using-opencv-cpp-python/
 https://www.modernescpp.com/index.php/no-new-new
 
 https://blog.kowalczyk.info/article/j/guide-to-predefined-macros-in-c-compilers-gcc-clang-msvc-etc..html
-
+https://github.com/emilk/ram_bench
 
 https://answers.opencv.org/question/184025/detecting-change-in-previous-and-current-image-frame/
 https://stackoverflow.com/questions/8449378/finding-contours-in-opencv
@@ -76,3 +76,7 @@ https://stackoverflow.com/questions/10150468/how-to-redirect-cin-and-cout-to-fil
 https://github.com/zserik/ThreadPool
 https://github.com/progschj/ThreadPool
 https://github.com/aphenriques/thread
+
+https://stackoverflow.com/questions/2901694/how-to-detect-the-number-of-physical-processors-cores-on-windows-mac-and-linu
+https://stackoverflow.com/questions/21369381/measuring-cache-latencies
+https://stackoverflow.com/questions/13772567/how-to-get-the-cpu-cycle-count-in-x86-64-from-c

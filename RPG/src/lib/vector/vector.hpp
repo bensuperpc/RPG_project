@@ -2,7 +2,7 @@
 ** BENSUPERPC PROJECT, 2020
 ** Math
 ** Source: https://stackoverflow.com/questions/178265/what-is-the-most-hard-to-understand-piece-of-c-code-you-know https://cs.uwaterloo.ca/~m32rober/rsqrt.pdf
-** cpu.cpp
+** vector.hpp
 */
 
 #ifndef VECTOR_HPP_
@@ -26,6 +26,10 @@ void fill_matrix_2(std::vector<std::vector<int>> &, int, int);
 
 void cache_unfriendly_copy(std::vector<std::vector<int>> &, std::vector<std::vector<int>> &);
 void cache_friendly_copy(std::vector<std::vector<int>> &, std::vector<std::vector<int>> &);
+
+template <typename T> double everage(const T &vec);
+
+#    include "vector_imp.hpp"
 
 } // namespace vector
 #endif

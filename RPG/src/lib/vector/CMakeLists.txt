@@ -8,6 +8,7 @@ set(SRCS
 	
 set(HEADERS
 	vector.hpp
+	vector_imp.hpp
 	)
 
 #add_library(math_static STATIC ${SRCS} ${HEADERS})

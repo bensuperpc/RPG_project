@@ -91,7 +91,8 @@ if(NOT CMAKE_CXX_EXTENSIONS)
 endif()
 
 #=== OPTIMIZATION FLAGS ===
-set(OPTI_COMPILER_REL "-march=native -DNDEBUG -s -flto -ffunction-sections -fdata-sections -Wl,--gc-sections -Wl,--strip-all")
+#-mavx2 -flto
+set(OPTI_COMPILER_REL "-march=native -s -ffunction-sections -fdata-sections -Wl,--gc-sections -Wl,--strip-all")
 
 #=== SECURITY RELEASE FLAGS ===
 
@@ -114,6 +115,8 @@ set(CMAKE_C_FLAGS_COVERAGE "${CMAKE_C_FLAGS_DEBUG} --coverage")
 
 #-Wold-style-cast
 set(WARNINGS_COMPILER_CXX "-Wpedantic -Wall -Wextra -Wshadow -Wstrict-overflow=5 -Wmissing-declarations -Wundef -Wstack-protector -Wno-unused-parameter -Woverloaded-virtual  -Wdisabled-optimization -Winline -Wredundant-decls -Wsign-conversion -Wformat-nonliteral -Wformat-security -Wmissing-include-dirs -Wmissing-noreturn -Wimport -Winit-self -Winvalid-pch -Wstrict-aliasing=2 -Wswitch-default -Wunreachable-code -Wunused -Wwrite-strings -Wcast-align -Wcast-qual -Wfloat-equal -Wvariadic-macros -Wpacked  -Wpadded -Wpointer-arith -Weffc++ -Wformat=2 -Wfloat-equal -Wabi=11")
+#-Wdouble-promotion -fstack-usage
+set(WARNINGS_COMPILER_CXX "${WARNINGS_COMPILER_CXX} -Wduplicated-branches -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wnull-dereference -Wuseless-cast")
 
 # Removed : -Wconversion
 #-ftime-report -static -lrt -pthread -Wl,--whole-archive -lpthread -Wl,--no-whole-archive -fprofile-arcs -ftest-coverage
@@ -319,7 +322,7 @@ add_subdirectory(src/lib/utils "lib/utils")
 
 add_subdirectory(src/lib/time "lib/time")
 
-#add_subdirectory(src/lib/cpu "lib/cpu")
+add_subdirectory(src/lib/cpu "lib/cpu")
 
 add_subdirectory(src/lib/vector "lib/vector")
 
@@ -332,7 +335,7 @@ if(EXTERNAL_LIB)
     add_dependencies(math ${EXTERNAL_LIB})
     add_dependencies(utils ${EXTERNAL_LIB})
     add_dependencies(time ${EXTERNAL_LIB})
-    #add_dependencies(cpu ${EXTERNAL_LIB})
+    add_dependencies(cpu ${EXTERNAL_LIB})
     add_dependencies(vector ${EXTERNAL_LIB})
     add_dependencies(thread ${EXTERNAL_LIB})
 endif()
@@ -368,7 +371,7 @@ set(HEADERS
 #set(MAIN_LLIBS Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Multimedia sfml-graphics sfml-window sfml-audio sfml-network sfml-system ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${OpenCV_LIBS})
 set(MAIN_LLIBS sfml-graphics sfml-window sfml-audio sfml-network sfml-system ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${OpenCV_LIBS})
 
-set(CUSTOM_LIBS texture convert_utils math utils time vector thread)
+set(CUSTOM_LIBS texture convert_utils math utils time cpu vector thread)
 
 #   ==================================================
 #   ===============    EXEC FILES    =================

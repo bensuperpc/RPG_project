@@ -145,5 +145,5 @@ bool math::prime::isPrime_opti_7(const long long int &n)
 
 bool math::prime::isPrime_opti_8(const long long int &n)
 {
-    return (n < 4000000007) ? isPrime_opti_1(n) : isPrime_opti_5(n);
+    return (n < 4000000007) ? isPrime_opti_3(n) : isPrime_opti_5(n);
 }

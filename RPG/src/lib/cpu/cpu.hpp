@@ -11,16 +11,25 @@
 #include <iostream>
 #include <string>
 
+#ifdef _WIN32
+#    include <intrin.h>
+#else
+#    include <x86intrin.h>
+#endif
+
 using namespace std;
 
 namespace cpu
 {
 #pragma GCC diagnostic ignored "-Wundef"
 #if (__i386__ || _M_IX86 || __x86_64__ || _M_AMD64)
-void cpuID(unsigned i, unsigned regs[4]);
+
+uint64_t rdtsc();
 
 #endif
 } // namespace cpu
 
 // https://stackoverflow.com/questions/2901694/how-to-detect-the-number-of-physical-processors-cores-on-windows-mac-and-linu
+// https://stackoverflow.com/questions/21369381/measuring-cache-latencies
+// https://stackoverflow.com/questions/13772567/how-to-get-the-cpu-cycle-count-in-x86-64-from-c
 #endif
