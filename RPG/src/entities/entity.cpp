@@ -71,6 +71,11 @@ double Entity::distanceX(const Entity *ent)
     return std::max(this->getPosition().x, ent->getPosition().x) - std::min(this->getPosition().x, ent->getPosition().x);
 }
 
+std::pair<double, double> Entity::distance(const Entity *ent)
+{
+    return std::pair<double, double>(this->distanceX(ent), this->distanceY(ent));
+}
+
 double Entity::distanceY(const std::unique_ptr<Entity> &ent)
 {
     return std::max(this->getPosition().y, ent->getPosition().y) - std::min(this->getPosition().y, ent->getPosition().y);
@@ -84,11 +89,6 @@ double Entity::distanceX(const std::unique_ptr<Entity> &ent)
 double Entity::distanceY(const Entity *ent)
 {
     return std::max(this->getPosition().y, ent->getPosition().y) - std::min(this->getPosition().y, ent->getPosition().y);
-}
-
-std::pair<double, double> Entity::distance(const Entity *ent)
-{
-    return std::pair<double, double>(this->distanceX(ent), this->distanceY(ent));
 }
 
 std::pair<double, double> Entity::distance(const std::unique_ptr<Entity> &ent)

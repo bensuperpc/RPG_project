@@ -413,7 +413,7 @@ void Game::renderingThread(sf::RenderWindow *window)
             view3.rotate(5);
             window->setView(view3);
         }
-        if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right))) {
+        if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right))) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
                 std::cout << "Left" << std::endl;
                 // riseFactor *= 2.f;
@@ -435,7 +435,7 @@ void Game::renderingThread(sf::RenderWindow *window)
                 window->setView(view);
             }
         }
-        if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::Down))) {
+        if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::Down))) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                 std::cout << "Up" << std::endl;
                 // distortionFactor *= 2.f;

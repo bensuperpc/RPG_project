@@ -48,6 +48,12 @@ class Entity : public virtual sf::RectangleShape {
   private:
     // Life, attack and def
     double life = 0.0;
+    double mana = 0.0;
+    double strength = 0.0;
+    double speed = 0.0;
+    double food = 0.0;
+
+
     double melee_attack = 0.0;
     double magic_attack = 0.0;
     double magic_defence = 0.0;

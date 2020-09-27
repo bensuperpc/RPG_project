@@ -353,20 +353,28 @@ set(SRCS
     src/game.cpp
     src/texture/title.cpp
     src/entities/player.cpp
+    src/entities/pnj.cpp
     src/entities/entity.cpp
+    src/entities/boss.cpp
     src/items/item.cpp
     src/items/weapon.cpp
     src/items/sword.cpp
+    src/items/bow.cpp
+    src/items/wand.cpp
     )
 
 set(HEADERS
     src/game.hpp
     src/texture/title.hpp
     src/entities/player.hpp
+    src/entities/pnj.hpp
     src/entities/entity.hpp
+    src/entities/boss.hpp
     src/items/item.hpp
     src/items/weapon.hpp
     src/items/sword.hpp
+    src/items/bow.hpp
+    src/items/wand.hpp
     )
 
 
