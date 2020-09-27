@@ -20,10 +20,6 @@ void Game::Launch()
 
     const std::string path = "../texture/rpg-pack/tiles/";
 
-    auto &&t1 = chrono::now();
-    auto &&t2 = chrono::now();
-    std::cout << chrono::duration(t1, t2).count() << std::endl;
-
     texture::load_texture(this->textureUMap, path);
     // texture::load_texture(this->textureMap, path);
     // texture::load_texture(this->textureList, path);
@@ -62,7 +58,7 @@ void Game::Launch()
                             sf::Style::Fullscreen);
     */
 
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML Benoit", sf::Style::Default, settings);
+    sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML Benoit", sf::Style::Default, settings);
 
     window.setVerticalSyncEnabled(true);
     glEnable(GL_TEXTURE_2D);
@@ -193,23 +189,18 @@ void Game::renderingThread(sf::RenderWindow *window)
         return;
     }
 
-    // It is important to set repeated to true to enable scrolling upwards
     distortionMap.setRepeated(true);
-    // Setting smooth to true lets us use small maps even on larger images
     distortionMap.setSmooth(true);
 
-    // Set texture to the shader
     shader.setUniform("currentTexture", sf::Shader::CurrentTexture);
     shader.setUniform("distortionMapTexture", distortionMap);
 
-    // Shader parameters
-    float distortionFactor = .04f;
+    float distortionFactor = .05f;
     float riseFactor = .3f;
 
-    // activate the window's context
     window->setActive(true);
     sf::View view1(sf::Vector2f(150, 150), sf::Vector2f(1920, 1080));
-    view1.zoom(0.5f);
+    view1.zoom(DEFAULT_ZOOM);
     window->setView(view1);
 
     sf::Font font;
@@ -245,6 +236,7 @@ void Game::renderingThread(sf::RenderWindow *window)
     // sf::RectangleShape rectangle(sf::Vector2f(50, 50));
     player->setTexture(&texture);
     player->setTextureRect(sf::IntRect(0, 0, 32, 32));
+    player->setMeleeAttack(1.0f);
     player->setOutlineThickness(1);
     player->setOutlineColor(sf::Color(255, 0, 0));
     this->drawSprite.emplace_back(std::move(player));
@@ -281,18 +273,16 @@ void Game::renderingThread(sf::RenderWindow *window)
 
     // the rendering loop
     while (window->isOpen()) {
-        window->clear(sf::Color::Black);
+        window->clear(DEFAULT_BACKGROUND);
 
         if (!this->drawSprite[0]->getGlobalBounds().intersects(this->drawSprite[1]->getGlobalBounds())) {
-            const auto &&diffx = std::max(this->drawSprite[1]->getPosition().x, this->drawSprite[0]->getPosition().x)
-                                 - std::min(this->drawSprite[1]->getPosition().x, this->drawSprite[0]->getPosition().x);
-            const auto &&diffy = std::max(this->drawSprite[1]->getPosition().x, this->drawSprite[0]->getPosition().x)
-                                 - std::min(this->drawSprite[1]->getPosition().x, this->drawSprite[0]->getPosition().x);
+            const auto &&diffx = this->drawSprite[1]->distanceX(this->drawSprite[0]);
+            const auto &&diffy = this->drawSprite[1]->distanceY(this->drawSprite[0]);
 
             if (this->drawSprite[1]->getPosition().x + 35.0 > this->drawSprite[0]->getPosition().x) {
-                this->drawSprite[1]->move(-1.0 * diffx * 0.020, 0.0);
+                this->drawSprite[1]->move(-1.0 * diffx * 0.025, 0.0);
             } else {
-                this->drawSprite[1]->move(1.0 * diffx * 0.020, 0.0);
+                this->drawSprite[1]->move(1.0 * diffx * 0.025, 0.0);
             }
             if (this->drawSprite[1]->getPosition().y + 35.0 > this->drawSprite[0]->getPosition().y) {
                 this->drawSprite[1]->move(0.0, -1.0 * diffy * 0.020);
@@ -330,15 +320,12 @@ void Game::renderingThread(sf::RenderWindow *window)
             window->draw(*elem, &shader);
         for (auto &&elem : this->drawBlock)
             window->draw(*elem);
-        window->draw(text);
         for (auto &&elem : this->drawSprite)
             window->draw(*elem);
-
         sf::Event event;
         while (window->pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window->close();
-
             if (event.type == sf::Event::Resized) {
                 this->windowSizeX = sf::VideoMode::getDesktopMode().width;
                 this->windowSizeY = sf::VideoMode::getDesktopMode().height;
@@ -389,7 +376,6 @@ void Game::renderingThread(sf::RenderWindow *window)
                     std::cout << "new position: " << event.joystickMove.position << std::endl;
                 }
             }
-            /*
             if (event.joystickMove.axis == sf::Joystick::X || event.joystickMove.axis == sf::Joystick::Y) {
                 const float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
                 const float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
@@ -397,14 +383,13 @@ void Game::renderingThread(sf::RenderWindow *window)
                 sf::View view = window->getView();
                 view.move(x / 12.0, y / 12.0);
                 window->setView(view);
-            }*/
+            }
             if (event.type == sf::Event::JoystickButtonPressed) {
                 std::cout << "joystick button pressed!" << std::endl;
                 std::cout << "joystick id: " << event.joystickButton.joystickId << std::endl;
                 std::cout << "button: " << event.joystickButton.button << std::endl;
             }
         }
-
         if (sf::Joystick::isConnected(0)) {
             const float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
             const float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
@@ -414,13 +399,12 @@ void Game::renderingThread(sf::RenderWindow *window)
             view.move(x / 12.0, y / 12.0);
             window->setView(view);
         }
-
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::F2)) {
             Screen_save_gl::saveScreenshotToFile("../screenshot/screenshot_" + date::get_date() + ".png", window->getSize().x, window->getSize().y);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::F5)) {
             sf::View view2(window->getView().getCenter(), sf::Vector2f(1280, 720));
-            view2.zoom(0.5f);
+            view2.zoom(DEFAULT_ZOOM);
             window->setView(view2);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::F10)) {
@@ -429,10 +413,10 @@ void Game::renderingThread(sf::RenderWindow *window)
             view3.rotate(5);
             window->setView(view3);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            std::cout << "Left" << std::endl;
-            // riseFactor *= 2.f;
-            if (this->drawSprite[0]->moveInWindow(this->windowSizeX, this->windowSizeY, -5.0, 0.0)) {
+        if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right))) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+                std::cout << "Left" << std::endl;
+                // riseFactor *= 2.f;
                 this->drawSprite[0]->move(-7.0, 0.0);
                 this->drawSprite[0]->setTexture(&texture);
                 this->drawSprite[0]->setTextureRect(sf::IntRect(0, 32, 32, 32));
@@ -440,11 +424,9 @@ void Game::renderingThread(sf::RenderWindow *window)
                 view.move(-7.0, 0.0);
                 window->setView(view);
             }
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            std::cout << "Right " << std::endl;
-            // riseFactor /= 2.f;
-            if (this->drawSprite[0]->moveInWindow(this->windowSizeX, this->windowSizeY, 5.0, 0.0)) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+                std::cout << "Right " << std::endl;
+                // riseFactor /= 2.f;
                 this->drawSprite[0]->move(7.0, 0.0);
                 this->drawSprite[0]->setTexture(&texture);
                 this->drawSprite[0]->setTextureRect(sf::IntRect(0, 64, 32, 32));
@@ -453,10 +435,10 @@ void Game::renderingThread(sf::RenderWindow *window)
                 window->setView(view);
             }
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            std::cout << "Up" << std::endl;
-            // distortionFactor *= 2.f;
-            if (this->drawSprite[0]->moveInWindow(this->windowSizeX, this->windowSizeY, 0.0, -5.0)) {
+        if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::Down))) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+                std::cout << "Up" << std::endl;
+                // distortionFactor *= 2.f;
                 this->drawSprite[0]->move(0.0, -7.0);
                 this->drawSprite[0]->setTexture(&texture);
                 this->drawSprite[0]->setTextureRect(sf::IntRect(0, 96, 32, 32));
@@ -464,12 +446,10 @@ void Game::renderingThread(sf::RenderWindow *window)
                 view.move(0.0, -7.0);
                 window->setView(view);
             }
-        }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            std::cout << "Down" << std::endl;
-            // distortionFactor /= 2.f;
-            if (this->drawSprite[0]->moveInWindow(this->windowSizeX, this->windowSizeY, 0.0, 5.0)) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+                std::cout << "Down" << std::endl;
+                // distortionFactor /= 2.f;
                 this->drawSprite[0]->move(0.0, 7.0);
                 this->drawSprite[0]->setTexture(&texture);
                 this->drawSprite[0]->setTextureRect(sf::IntRect(0, 0, 32, 32));

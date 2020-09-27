@@ -16,6 +16,7 @@ class Player : public virtual Entity {
   public:
     Player();
     ~Player();
+    Player operator<<(const Player &);
 
   private:
   protected:

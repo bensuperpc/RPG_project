@@ -57,8 +57,18 @@ struct Processor1
 
 // https://bigprimes.org/
 // https://stackoverflow.com/questions/41749792/can-i-have-a-stdvector-of-template-function-pointers
+
 int main()
 {
+    std::ios_base::sync_with_stdio(false);
+
+    for (int64_t i = 0; i < 3815136756226794067; i++) {
+        if (math::prime::isPrime_opti_8(i)) {
+            std::cout << i << std::endl;
+        }
+    }
+
+    /*
     // std::vector<std::vector<std::future<std::pair<std::string, long double>>>> results {};
     std::vector<std::pair<std::string, std::vector<std::future<long double>>>> results {};
 
@@ -74,9 +84,10 @@ int main()
         {"isPrime_opti_2", &math::prime::isPrime_opti_2}, {"isPrime_opti_3", &math::prime::isPrime_opti_3}, {"isPrime_opti_4", &math::prime::isPrime_opti_4},
         {"isPrime_opti_5", &math::prime::isPrime_opti_5}, //{"isPrime_opti_5T", &math::prime::isPrime_opti_5<long long int>},
         {"isPrime_opti_6", &math::prime::isPrime_opti_6}, {"isPrime_opti_8(3&5)", &math::prime::isPrime_opti_8}};
-   
 
-    //const std::vector<long long int> prime_nbrs = {116677907, 138689389, 254980819, 260517689, 309428993, 383281957, 396682753, 403562587, 468763033, 487323973, 576933671, 615231907, 618071749, 656203337, 721276979, 714607867, 721753423, 806622203, 959244661, 965160901};
+
+    //const std::vector<long long int> prime_nbrs = {116677907, 138689389, 254980819, 260517689, 309428993, 383281957, 396682753, 403562587, 468763033,
+487323973, 576933671, 615231907, 618071749, 656203337, 721276979, 714607867, 721753423, 806622203, 959244661, 965160901};
 
     // Generate poolthreading
     results.reserve(pointer_map.size());
@@ -134,6 +145,7 @@ int main()
 
     std::cin.rdbuf(cinbuf);
     std::cout.rdbuf(coutbuf);
+    */
     /*
      std::vector<std::pair<std::string, std::vector<std::future<long double>>>> results2 {};
  #if __cplusplus >= 201703L

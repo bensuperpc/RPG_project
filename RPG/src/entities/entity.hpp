@@ -17,19 +17,43 @@ class Entity : public virtual sf::RectangleShape {
     ~Entity();
     // virtual bool canMove() = 0;
     // virtual bool canMove() = 0;
-    // void SetTexture(const sf::Texture* texture);
+    // sf::Texture *texture = nullptr;
 
-    bool isOutWindow(sf::RenderWindow *);
-    bool isInWindow(sf::RenderWindow *);
+    double getLife();
+    void setLife(double *);
 
-    bool moveInWindow(unsigned int &, unsigned int &, const float &, const float &);
+    double getMeleeAttack();
+    void setMeleeAttack(double *);
+    void setMeleeAttack(const double &);
 
-    int64_t getLife();
-    // void setLife(int64_t&);
-    void setLife(int64_t *);
+    double getMagicAttack();
+    void setMagicAttack(double *);
+
+    double getMagicDef();
+    void setMagicDef(double *);
+
+    double getMeleeDef();
+    void setMeleeDef(double *);
+
+    std::pair<double, double> distance(const Entity *);
+
+    double distanceX(const Entity *);
+    double distanceY(const Entity *);
+
+    std::pair<double, double> distance(const std::unique_ptr<Entity> &);
+
+    double distanceX(const std::unique_ptr<Entity> &);
+    double distanceY(const std::unique_ptr<Entity> &);
 
   private:
-    int64_t life = 0;
+    // Life, attack and def
+    double life = 0.0;
+    double melee_attack = 0.0;
+    double magic_attack = 0.0;
+    double magic_defence = 0.0;
+    double melee_defence = 0.0;
+    // inventory
+    std::vector<size_t> inventory {};
 
   protected:
 };

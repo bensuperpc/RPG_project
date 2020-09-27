@@ -14,3 +14,9 @@ Player::Player()
 Player::~Player()
 {
 }
+
+Player Player::operator<<(const Player &player)
+{
+    Player p = Player();
+    return p;
+}

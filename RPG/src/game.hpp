@@ -29,11 +29,16 @@
 #include "lib/time/chrono/chrono.hpp"
 #include "lib/time/date/date.hpp"
 #include "lib/utils/opengl/screen_save.hpp"
-#include "title.hpp"
+#include "texture/title.hpp"
 
 #if __cplusplus >= 201703L
 #    include <string_view>
 #endif
+
+// Default settings
+#define DEFAULT_ZOOM 0.75f
+
+#define DEFAULT_BACKGROUND sf::Color::Black
 
 //#include <boost/multiprecision/float128.hpp>
 

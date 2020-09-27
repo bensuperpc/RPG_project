@@ -7,51 +7,93 @@
 
 #include <SFML/Window.hpp>
 #include <iostream>
-#include "src/entities/entity.hpp"
+#include "entity.hpp"
 
 Entity::Entity()
 {
 }
 
-int64_t Entity::getLife()
+double Entity::getLife()
 {
     return life;
 }
 
-void Entity::setLife(int64_t *_life)
+void Entity::setLife(double *_life)
 {
     this->life = *_life;
 }
 
-bool Entity::isOutWindow(sf::RenderWindow *window)
+double Entity::getMeleeAttack()
 {
-    return !this->isInWindow(window);
+    return this->melee_attack;
 }
 
-bool Entity::isInWindow(sf::RenderWindow *window)
+void Entity::setMeleeAttack(double *_melee_attack)
 {
-    return true; // this->moveInWindow(4, 4 , 0.0, 0.0);
+    this->melee_attack = *_melee_attack;
 }
 
-bool Entity::moveInWindow(unsigned int &sizeX, unsigned int &sizeY, const float &moveX, const float &moveY)
+void Entity::setMeleeAttack(const double &_melee_attack)
 {
-    const float &x1 = this->getPosition().x;
-    const float &y1 = this->getPosition().y;
-    const float &x2 = this->getLocalBounds().width;
-    const float &y2 = this->getLocalBounds().height;
+    this->melee_attack = _melee_attack;
+}
 
-    std::cout << "PosX:" << x1 << std::endl;
-    std::cout << "PosY:" << y1 << std::endl;
-    if (x1 + moveX < 0.0 || (x1 + x2 + moveX) > sizeX) {
-        std::cout << "Is out" << std::endl;
-        return true;
-    }
-    if (y1 + moveY < 0.0 || (y1 + y2 + moveY) > sizeY) {
-        std::cout << "Is out" << std::endl;
-        return true;
-    }
-    std::cout << "Is in" << std::endl;
-    return true;
+double Entity::getMagicAttack()
+{
+    return this->magic_attack;
+}
+void Entity::setMagicAttack(double *_magic_attack)
+{
+    this->magic_attack = *_magic_attack;
+}
+
+double Entity::getMagicDef()
+{
+    return this->magic_defence;
+}
+
+void Entity::setMagicDef(double *_magic_defence)
+{
+    this->magic_defence = *_magic_defence;
+}
+
+double Entity::getMeleeDef()
+{
+    return this->melee_defence;
+}
+void Entity::setMeleeDef(double *_melee_defence)
+{
+    this->melee_defence = *_melee_defence;
+}
+
+double Entity::distanceX(const Entity *ent)
+{
+    return std::max(this->getPosition().x, ent->getPosition().x) - std::min(this->getPosition().x, ent->getPosition().x);
+}
+
+double Entity::distanceY(const std::unique_ptr<Entity> &ent)
+{
+    return std::max(this->getPosition().y, ent->getPosition().y) - std::min(this->getPosition().y, ent->getPosition().y);
+}
+
+double Entity::distanceX(const std::unique_ptr<Entity> &ent)
+{
+    return std::max(this->getPosition().x, ent->getPosition().x) - std::min(this->getPosition().x, ent->getPosition().x);
+}
+
+double Entity::distanceY(const Entity *ent)
+{
+    return std::max(this->getPosition().y, ent->getPosition().y) - std::min(this->getPosition().y, ent->getPosition().y);
+}
+
+std::pair<double, double> Entity::distance(const Entity *ent)
+{
+    return std::pair<double, double>(this->distanceX(ent), this->distanceY(ent));
+}
+
+std::pair<double, double> Entity::distance(const std::unique_ptr<Entity> &ent)
+{
+    return std::pair<double, double>(this->distanceX(ent), this->distanceY(ent));
 }
 
 Entity::~Entity()

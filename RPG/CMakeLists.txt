@@ -351,16 +351,22 @@ set(MAIN_BENCH src/main_bench.cpp)
 
 set(SRCS
     src/game.cpp
-    src/title.cpp
+    src/texture/title.cpp
     src/entities/player.cpp
     src/entities/entity.cpp
+    src/items/item.cpp
+    src/items/weapon.cpp
+    src/items/sword.cpp
     )
 
 set(HEADERS
     src/game.hpp
-    src/title.hpp
+    src/texture/title.hpp
     src/entities/player.hpp
     src/entities/entity.hpp
+    src/items/item.hpp
+    src/items/weapon.hpp
+    src/items/sword.hpp
     )
 
 
