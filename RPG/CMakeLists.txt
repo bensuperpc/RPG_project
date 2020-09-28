@@ -347,7 +347,12 @@ endif()
 #   ================    FILES    ================
 set(MAIN src/main.cpp)
 
-set(MAIN_BENCH src/main_bench.cpp)
+set(BENCH_ISPRIME src/bench/bench_isprime.cpp)
+
+set(BENCH_VECTOR src/bench/bench_vector.cpp)
+
+set(BENCH_DIGITS_COUNT src/bench/bench_digits_count.cpp)
+
 
 set(SRCS
     src/game.cpp
@@ -400,9 +405,19 @@ endif()
 target_link_libraries(game PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} hello stdc++fs)
 
 
-add_executable(bench ${MAIN_BENCH} ${SRCS} ${HEADERS})
-target_link_libraries(bench PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} hello stdc++fs)
-add_dependencies(bench ${CUSTOM_LIBS})
+add_executable(bench_isprime ${BENCH_ISPRIME} ${SRCS} ${HEADERS})
+target_link_libraries(bench_isprime PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} hello stdc++fs)
+add_dependencies(bench_isprime ${CUSTOM_LIBS})
+
+add_executable(bench_vector ${BENCH_ISPRIME} ${SRCS} ${HEADERS})
+target_link_libraries(bench_vector PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} hello stdc++fs)
+add_dependencies(bench_vector ${CUSTOM_LIBS})
+
+add_executable(bench_digits_count ${BENCH_DIGITS_COUNT} ${SRCS} ${HEADERS})
+target_link_libraries(bench_digits_count PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} hello stdc++fs)
+add_dependencies(bench_digits_count ${CUSTOM_LIBS})
+
+
 
 
 #   ======================================================

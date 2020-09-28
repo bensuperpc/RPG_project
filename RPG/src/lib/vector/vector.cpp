@@ -12,6 +12,11 @@ void vector::fill_row(std::vector<int> &row)
     std::generate(row.begin(), row.end(), []() { return rand() % 100; });
 }
 
+void vector::fill_rowull(std::vector<uint64_t> &row)
+{
+    std::generate(row.begin(), row.end(), []() { return rand()%(18446744073709551615-0 + 1) + 0; });
+}
+
 void vector::fill_matrix_1(std::vector<std::vector<int>> &mat)
 {
     std::for_each(mat.begin(), mat.end(), fill_row);

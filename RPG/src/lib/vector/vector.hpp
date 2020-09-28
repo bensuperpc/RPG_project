@@ -20,6 +20,8 @@ std::vector<std::vector<int>> generate_matrix(size_t, size_t);
 std::vector<std::vector<int>> generate_matrix(size_t, size_t, int);
 void print_2d(std::vector<std::vector<int>> &);
 void fill_row(std::vector<int> &);
+void fill_rowull(std::vector<uint64_t> &);
+
 void fill_matrix_1(std::vector<std::vector<int>> &);
 void fill_matrix_2(std::vector<std::vector<int>> &);
 void fill_matrix_2(std::vector<std::vector<int>> &, int, int);

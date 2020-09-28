@@ -11,7 +11,7 @@
 #include "weapon.hpp"
 
 #ifndef _WAND_HPP_
-#define _WAND_HPP_
+#    define _WAND_HPP_
 
 class Wand : public virtual Weapon {
   public:

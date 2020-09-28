@@ -27,6 +27,8 @@ set(HEADERS
 	square_root.hpp
 	prime.hpp
 	prime_imp.hpp
+	count_digits_imp.hpp
+	count_digits.hpp
 	)
 
 #add_library(math_static STATIC ${SRCS} ${HEADERS})

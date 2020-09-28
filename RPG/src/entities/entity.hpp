@@ -53,7 +53,6 @@ class Entity : public virtual sf::RectangleShape {
     double speed = 0.0;
     double food = 0.0;
 
-
     double melee_attack = 0.0;
     double magic_attack = 0.0;
     double magic_defence = 0.0;

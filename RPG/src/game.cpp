@@ -276,18 +276,20 @@ void Game::renderingThread(sf::RenderWindow *window)
         window->clear(DEFAULT_BACKGROUND);
 
         if (!this->drawSprite[0]->getGlobalBounds().intersects(this->drawSprite[1]->getGlobalBounds())) {
-            const auto &&diffx = this->drawSprite[1]->distanceX(this->drawSprite[0]);
-            const auto &&diffy = this->drawSprite[1]->distanceY(this->drawSprite[0]);
 
-            if (this->drawSprite[1]->getPosition().x + 35.0 > this->drawSprite[0]->getPosition().x) {
-                this->drawSprite[1]->move(-1.0 * diffx * 0.025, 0.0);
+            auto Sprite = this->drawSprite[1].get();
+            const auto &&diffx = Sprite->distanceX(this->drawSprite[0]);
+            const auto &&diffy = Sprite->distanceY(this->drawSprite[0]);
+
+            if (Sprite->getPosition().x + 35.0 > this->drawSprite[0]->getPosition().x) {
+                Sprite->move(-1.0 * diffx * 0.025, 0.0);
             } else {
-                this->drawSprite[1]->move(1.0 * diffx * 0.025, 0.0);
+                Sprite->move(1.0 * diffx * 0.025, 0.0);
             }
-            if (this->drawSprite[1]->getPosition().y + 35.0 > this->drawSprite[0]->getPosition().y) {
-                this->drawSprite[1]->move(0.0, -1.0 * diffy * 0.020);
+            if (Sprite->getPosition().y + 35.0 > this->drawSprite[0]->getPosition().y) {
+                Sprite->move(0.0, -1.0 * diffy * 0.020);
             } else {
-                this->drawSprite[1]->move(0.0, 1.0 * diffy * 0.020);
+                Sprite->move(0.0, 1.0 * diffy * 0.020);
             }
         }
 
@@ -322,6 +324,7 @@ void Game::renderingThread(sf::RenderWindow *window)
             window->draw(*elem);
         for (auto &&elem : this->drawSprite)
             window->draw(*elem);
+
         sf::Event event;
         while (window->pollEvent(event)) {
             if (event.type == sf::Event::Closed)
