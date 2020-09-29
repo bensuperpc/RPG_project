@@ -52,7 +52,7 @@ int main()
     std::vector<uint64_t> prime_nbrs = std::vector<uint64_t>(1000);
 
     vector::fill_rowull(prime_nbrs);
-    std::sort(prime_nbrs.begin(), prime_nbrs.end()); 
+    std::sort(prime_nbrs.begin(), prime_nbrs.end());
 
     const std::vector<std::pair<const std::string, uint64_t (*)(uint64_t)>> pointer_map {{"count_digits_1", &math::count_digits::count_digits_1<uint64_t>},
         {"count_digits_2", &math::count_digits::count_digits_2<uint64_t>}, {"count_digits_3", &math::count_digits::count_digits_3<uint64_t>},

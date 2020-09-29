@@ -349,7 +349,9 @@ set(MAIN src/main.cpp)
 
 set(BENCH_ISPRIME src/bench/bench_isprime.cpp)
 
-set(BENCH_VECTOR src/bench/bench_vector.cpp)
+set(BENCH_VECTOR_COPY src/bench/bench_vector_copy.cpp)
+
+set(BENCH_VECTOR_SORT src/bench/bench_vector_sort.cpp)
 
 set(BENCH_DIGITS_COUNT src/bench/bench_digits_count.cpp)
 
@@ -409,9 +411,13 @@ add_executable(bench_isprime ${BENCH_ISPRIME} ${SRCS} ${HEADERS})
 target_link_libraries(bench_isprime PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} hello stdc++fs)
 add_dependencies(bench_isprime ${CUSTOM_LIBS})
 
-add_executable(bench_vector ${BENCH_ISPRIME} ${SRCS} ${HEADERS})
-target_link_libraries(bench_vector PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} hello stdc++fs)
-add_dependencies(bench_vector ${CUSTOM_LIBS})
+add_executable(bench_vector_copy ${BENCH_VECTOR_COPY} ${SRCS} ${HEADERS})
+target_link_libraries(bench_vector_copy PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} hello stdc++fs)
+add_dependencies(bench_vector_copy ${CUSTOM_LIBS})
+
+add_executable(bench_vector_sort ${BENCH_VECTOR_SORT} ${SRCS} ${HEADERS})
+target_link_libraries(bench_vector_sort PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} hello stdc++fs)
+add_dependencies(bench_vector_sort ${CUSTOM_LIBS})
 
 add_executable(bench_digits_count ${BENCH_DIGITS_COUNT} ${SRCS} ${HEADERS})
 target_link_libraries(bench_digits_count PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} hello stdc++fs)

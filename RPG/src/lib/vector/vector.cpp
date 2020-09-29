@@ -14,7 +14,7 @@ void vector::fill_row(std::vector<int> &row)
 
 void vector::fill_rowull(std::vector<uint64_t> &row)
 {
-    std::generate(row.begin(), row.end(), []() { return rand()%(18446744073709551615-0 + 1) + 0; });
+    std::generate(row.begin(), row.end(), []() { return rand() % (18446744073709551615 - 0 + 1) + 0; });
 }
 
 void vector::fill_matrix_1(std::vector<std::vector<int>> &mat)
@@ -71,23 +71,4 @@ std::vector<std::vector<int>> vector::generate_matrix(size_t x, size_t y, int z)
 {
     std::vector<std::vector<int>> matrix(x, std::vector<int>(y, z));
     return matrix;
-}
-
-void vector::cache_unfriendly_copy(std::vector<std::vector<int>> &mat1, std::vector<std::vector<int>> &mat2)
-{
-    for (unsigned int x = 0; x < mat1[0].size(); ++x) {
-
-        for (unsigned int y = 0; y < mat1.size(); ++y) {
-            mat1[y][x] = mat2[y][x];
-        }
-    }
-}
-
-void vector::cache_friendly_copy(std::vector<std::vector<int>> &mat1, std::vector<std::vector<int>> &mat2)
-{
-    for (unsigned int y = 0; y < mat1.size(); ++y) {
-        for (unsigned int x = 0; x < mat1[0].size(); ++x) {
-            mat1[y][x] = mat2[y][x];
-        }
-    }
 }

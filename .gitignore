@@ -105,5 +105,6 @@ RPG/music/*
 # OTHERS
 screenshot/*
 old/*
+log/*
 
 *.vscode

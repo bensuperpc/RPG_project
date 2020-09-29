@@ -26,31 +26,42 @@ void fill_matrix_1(std::vector<std::vector<int>> &);
 void fill_matrix_2(std::vector<std::vector<int>> &);
 void fill_matrix_2(std::vector<std::vector<int>> &, int, int);
 
-void cache_unfriendly_copy(std::vector<std::vector<int>> &, std::vector<std::vector<int>> &);
-void cache_friendly_copy(std::vector<std::vector<int>> &, std::vector<std::vector<int>> &);
-
 template <typename T> double everage(const T &vec);
+template <typename T> void rnd_fill(std::vector<T> &, const T, const T, const uint64_t);
+template <typename T> void rnd_fill(std::vector<T> &, const T, const T);
+template <typename T> void rnd_fill(std::vector<T> &);
+
+template <typename T> std::vector<std::vector<T>> generate_matrix(size_t x, size_t y, T z);
+template <typename T> std::vector<std::vector<T>> generate_matrix(size_t x, size_t y);
+
+// Bench part
+template <typename T> void cache_unfriendly_copy(std::vector<std::vector<T>> &, std::vector<std::vector<T>> &);
+template <typename T> void cache_friendly_copy(std::vector<std::vector<T>> &, std::vector<std::vector<T>> &);
+
+template <typename T> void assignment_copy(std::vector<std::vector<T>> &, std::vector<std::vector<T>> &);
+template <typename T> void std_copy(std::vector<std::vector<T>> &, std::vector<std::vector<T>> &);
+template <typename T> void vector_assign_copy(std::vector<std::vector<T>> &, std::vector<std::vector<T>> &);
+
+template <typename T> int comp(const void *, const void *);
+template <typename T> void sort_qsort(std::vector<T> &);
+template <typename T> void sort_sort(std::vector<T> &);
+template <typename T> void sort_stable_sort(std::vector<T> &);
+template <typename T> void sort_bubble(std::vector<T> &);
+//template <typename T> void sort_bucket(std::vector<T> &);
+// need tests
+template <typename T> void sort_radix(std::vector<T> &vec);
+
+template <typename T> void sort_cocktail(std::vector<T> &);
+template <typename T> void sort_gnome(std::vector<T> &vec);
+template <typename T> void sort_insertion(std::vector<T> &);
+template <typename T> void sort_shell(std::vector<T> &);
+
+template <typename T> void sort_bogo(std::vector<T> &);
+template <typename T> void shuffle(std::vector<T> &, size_t &);
+template <typename T> bool isSorted(std::vector<T> &, size_t &);
 
 #    include "vector_imp.hpp"
 
 } // namespace vector
 #endif
 // https://stackoverflow.com/questions/22312959/how-to-fill-a-vector-with-a-range
-/*
-auto && Mat = vector::generate_matrix(10000, 10000, 0);
-auto && Mat2 = vector::generate_matrix(10000, 10000, 5);
-t1 = chrono::now();
-Mat = Mat2;
-t2 = chrono::now();
-std::cout << chrono::duration(t1, t2).count() << std::endl;
-
-t1 = chrono::now();
-std::copy(Mat.begin(), Mat.end(), std::back_inserter(Mat2));
-t2 = chrono::now();
-std::cout << chrono::duration(t1, t2).count() << std::endl;
-
-t1 = chrono::now();
-Mat2.assign(Mat.begin(), Mat.end());
-t2 = chrono::now();
-std::cout << chrono::duration(t1, t2).count() << std::endl;
-*/
