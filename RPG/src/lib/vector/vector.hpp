@@ -14,6 +14,8 @@
 #    include <random>
 #    include <vector>
 
+namespace my
+{
 namespace vector
 {
 std::vector<std::vector<int>> generate_matrix(size_t, size_t);
@@ -36,6 +38,8 @@ template <typename T> std::vector<std::vector<T>> generate_matrix(size_t x, size
 
 // Bench part
 template <typename T> void cache_unfriendly_copy(std::vector<std::vector<T>> &, std::vector<std::vector<T>> &);
+template <typename T> void cache_unfriendly_copy(std::vector<T> &, std::vector<T> &);
+template <typename T> void cache_friendly_copy(std::vector<T> &, std::vector<T> &);
 template <typename T> void cache_friendly_copy(std::vector<std::vector<T>> &, std::vector<std::vector<T>> &);
 
 template <typename T> void assignment_copy(std::vector<std::vector<T>> &, std::vector<std::vector<T>> &);
@@ -47,8 +51,8 @@ template <typename T> void sort_qsort(std::vector<T> &);
 template <typename T> void sort_sort(std::vector<T> &);
 template <typename T> void sort_stable_sort(std::vector<T> &);
 template <typename T> void sort_bubble(std::vector<T> &);
-//template <typename T> void sort_bucket(std::vector<T> &);
-// need tests
+template <typename T> void sort_bucket(std::vector<T> &);
+
 template <typename T> void sort_radix(std::vector<T> &vec);
 
 template <typename T> void sort_cocktail(std::vector<T> &);
@@ -63,5 +67,6 @@ template <typename T> bool isSorted(std::vector<T> &, size_t &);
 #    include "vector_imp.hpp"
 
 } // namespace vector
+} // namespace my
 #endif
 // https://stackoverflow.com/questions/22312959/how-to-fill-a-vector-with-a-range

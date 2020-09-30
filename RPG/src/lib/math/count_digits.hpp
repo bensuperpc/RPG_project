@@ -10,6 +10,8 @@
 
 #include <bits/stdc++.h>
 
+namespace my
+{
 namespace math
 {
 
@@ -21,6 +23,7 @@ template <typename T> T count_digits_3(T);
 template <typename T> T count_digits_4(T);
 } // namespace count_digits
 } // namespace math
+} // namespace my
 #include "count_digits_imp.hpp"
 
 #endif

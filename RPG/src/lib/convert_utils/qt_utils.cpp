@@ -7,7 +7,7 @@
 
 #include "qt_utils.hpp"
 
-inline QImage qt_utils::Mat2QImage(cv::Mat const &src)
+inline QImage my::qt_utils::Mat2QImage(cv::Mat const &src)
 {
     cv::Mat temp;
     cvtColor(src, temp, cv::COLOR_RGB2BGR);
@@ -16,7 +16,7 @@ inline QImage qt_utils::Mat2QImage(cv::Mat const &src)
     return dest;
 }
 
-inline void qt_utils::Mat2QImage(cv::Mat const &src, QImage &dst)
+inline void my::qt_utils::Mat2QImage(cv::Mat const &src, QImage &dst)
 {
     cv::Mat temp;
     cvtColor(src, temp, cv::COLOR_RGB2BGR);
@@ -26,7 +26,7 @@ inline void qt_utils::Mat2QImage(cv::Mat const &src, QImage &dst)
     delete dest;
 }
 
-inline cv::Mat qt_utils::QImage2Mat(QImage const &src)
+inline cv::Mat my::qt_utils::QImage2Mat(QImage const &src)
 {
     // utilisez "cv::Mat &&" pour eviter les copies inutiles
     cv::Mat tmp(src.height(), src.width(), CV_8UC3, (uchar *)src.bits(), static_cast<uint32_t>(src.bytesPerLine()));
@@ -35,7 +35,7 @@ inline cv::Mat qt_utils::QImage2Mat(QImage const &src)
     return result;
 }
 
-inline void qt_utils::QImage2Mat(QImage const &src, cv::Mat &dst)
+inline void my::qt_utils::QImage2Mat(QImage const &src, cv::Mat &dst)
 {
     cv::Mat tmp(src.height(), src.width(), CV_8UC3, (uchar *)src.bits(), static_cast<uint32_t>(src.bytesPerLine()));
     cvtColor(tmp, dst, cv::COLOR_RGB2BGR);

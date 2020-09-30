@@ -44,10 +44,12 @@ class my_chrono {
   protected:
 };
 
+namespace my
+{
 namespace chrono
 {
 Clock::time_point now();
 std::chrono::duration<long double> duration(Clock::time_point &, Clock::time_point &);
 } // namespace chrono
-
+} // namespace my
 #endif

@@ -7,12 +7,25 @@
 
 #include "binary.hpp"
 
-template <typename T> T binary::bitArrayToInt_big(bool ar[], size_t ar_size)
+template <typename T> T my::binary::bitArrayToInt_big(const bool *ar[], size_t ar_size)
 {
     T ret {};
 
     for (size_t i = 0; i < ar_size; ++i) {
-        T s {ar[i]};
+        T s {*ar[i]};
+        s <<= i;
+        ret |= s;
+    }
+
+    return ret;
+}
+
+template <typename T> T my::binary::bitArrayToInt_big(const std::vector<bool> &vec, size_t ar_size)
+{
+    T ret {};
+
+    for (size_t i = 0; i < ar_size; ++i) {
+        T s {vec[i]};
         s <<= i;
         ret |= s;
     }

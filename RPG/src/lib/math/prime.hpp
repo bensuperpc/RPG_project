@@ -10,9 +10,10 @@
 
 #include <cmath>
 
+namespace my
+{
 namespace math
 {
-
 namespace prime
 {
 bool isPrime_opti_0(const long long int &);
@@ -36,7 +37,7 @@ bool isPrime_opti_8(const long long int &);
 #include "prime_imp.hpp"
 } // namespace prime
 } // namespace math
-
+} // namespace my
 // THANK https://www.geeksforgeeks.org/c-program-to-check-prime-number/
 // THANK https://stackoverflow.com/questions/4424374/determining-if-a-number-is-prime
 #endif

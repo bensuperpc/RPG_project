@@ -13,6 +13,8 @@
 #if __cplusplus == 202002L
 #    include <numbers>
 #endif
+namespace my
+{
 
 namespace math
 {
@@ -29,6 +31,7 @@ template <typename T> T sphereVolume_Q(const T &r);
 
 } // namespace sphere
 } // namespace math
+} // namespace my
 #include "sphere_imp.hpp"
 
 #endif

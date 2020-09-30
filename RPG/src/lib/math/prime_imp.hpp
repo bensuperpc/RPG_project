@@ -7,7 +7,7 @@
 
 #include "prime.hpp"
 
-template <typename T> inline T math::prime::PowerMod(T a, T n, T mod)
+template <typename T> inline T my::math::prime::PowerMod(T a, T n, T mod)
 { // computes a^n % mod
     T r = 1;
     while (n) {
@@ -18,7 +18,7 @@ template <typename T> inline T math::prime::PowerMod(T a, T n, T mod)
     return r;
 }
 
-template <typename T> inline T math::prime::MultiplyMod(T a, T b, T mod)
+template <typename T> inline T my::math::prime::MultiplyMod(T a, T b, T mod)
 { // computes a * b % mod
     T r = 0;
     a %= mod, b %= mod;
@@ -31,7 +31,7 @@ template <typename T> inline T math::prime::MultiplyMod(T a, T b, T mod)
 }
 
 // Thank https://github.com/niklasb/tcr/blob/master/zahlentheorie/NumberTheory.cpp
-template <typename T> bool math::prime::isPrime_opti_5(const T &n)
+template <typename T> bool my::math::prime::isPrime_opti_5(const T &n)
 { // determines if n is a prime number
     const T pn = 9, p[] = {2, 3, 5, 7, 11, 13, 17, 19, 23};
     for (T i = 0; i < pn; ++i)

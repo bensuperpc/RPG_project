@@ -25,6 +25,8 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #pragma GCC diagnostic pop
 
+namespace my
+{
 namespace sfc
 {
 cv::Mat SFML2Mat(const sf::Image &);
@@ -33,5 +35,5 @@ void SFML2Mat(const sf::Image &, cv::Mat &);
 sf::Image Mat2SFML(const cv::Mat &);
 void Mat2SFML(const cv::Mat &, sf::Image &);
 } // namespace sfc
-
+}
 #endif

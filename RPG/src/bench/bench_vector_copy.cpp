@@ -24,16 +24,16 @@ struct Processor
 {
     long double operator()(std::function<void(std::vector<std::vector<uint64_t>> &, std::vector<std::vector<uint64_t>> &)> elem_fn, size_t size)
     {
-        auto &&Mat1 = vector::generate_matrix<uint64_t>(size, size, 0);
-        auto &&Mat2 = vector::generate_matrix<uint64_t>(size, size, 42);
-        auto &&t1 = chrono::now();
+        auto &&Mat1 = my::vector::generate_matrix<uint64_t>(size, size, 0);
+        auto &&Mat2 = my::vector::generate_matrix<uint64_t>(size, size, 42);
+        auto &&t1 = my::chrono::now();
         (elem_fn)(Mat1, Mat2);
-        auto &&t2 = chrono::now();
+        auto &&t2 = my::chrono::now();
         Mat1.clear();
         Mat1.shrink_to_fit();
         Mat2.clear();
         Mat2.shrink_to_fit();
-        return chrono::duration(t1, t2).count();
+        return my::chrono::duration(t1, t2).count();
     }
 };
 
@@ -52,9 +52,9 @@ int main()
     std::vector<uint64_t> nbrs_nbrs(6000);
     std::iota(nbrs_nbrs.begin(), nbrs_nbrs.end(), 1);
     const std::vector<std::pair<const std::string, void (*)(std::vector<std::vector<uint64_t>> &, std::vector<std::vector<uint64_t>> &)>> pointer_fn_map {
-        {"cache_friendly_loop_copy", &vector::cache_friendly_copy<uint64_t>}, {"cache_unfriendly_loop_copy", &vector::cache_unfriendly_copy<uint64_t>},
-        {"std_assignment_copy", &vector::assignment_copy<uint64_t>}, {"std_copy", &vector::std_copy<uint64_t>},
-        {"vector_assign_copy", &vector::vector_assign_copy<uint64_t>}};
+        {"cache_friendly_loop_copy", &my::vector::cache_friendly_copy<uint64_t>}, {"cache_unfriendly_loop_copy", &my::vector::cache_unfriendly_copy<uint64_t>},
+        {"std_assignment_copy", &my::vector::assignment_copy<uint64_t>}, {"std_copy", &my::vector::std_copy<uint64_t>},
+        {"vector_assign_copy", &my::vector::vector_assign_copy<uint64_t>}};
     results2.reserve(pointer_fn_map.size());
 
     for (auto &elem_fn : pointer_fn_map) {
@@ -67,7 +67,7 @@ int main()
     }
     std::ios_base::sync_with_stdio(false);
     std::cout << "Pool threading: OK" << std::endl;
-    // std::this_thread::sleep_for(std::chrono::milliseconds(20000));
+    // std::this_thread::sleep_for(std::my::math::milliseconds(20000));
     // Get result
     std::cout << std::setprecision(3) << std::fixed;
     size_t count = 0;

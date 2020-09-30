@@ -7,7 +7,7 @@
 
 #include "power.hpp"
 
-template <typename T> T math::power(T nb, long int p)
+template <typename T> T my::math::power(T nb, long int p)
 {
     if (p < 0)
         return (0);
@@ -17,7 +17,7 @@ template <typename T> T math::power(T nb, long int p)
         return 1;
 }
 
-template <typename T> bool math::isPowerOfTwo(T x)
+template <typename T> bool my::math::isPowerOfTwo(T x)
 {
     return x && (!(x & (x - 1)));
 }

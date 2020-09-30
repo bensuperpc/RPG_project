@@ -4,7 +4,7 @@
 #include "../../lib/math/constant.hpp"
 #include "../../lib/math/getSchwarzschild.hpp"
 
-namespace schwarzschild = math::schwarzschild;
+namespace schwarzschild = my::math::schwarzschild;
 
 BOOST_AUTO_TEST_CASE(test_getSchwarzschild_1)
 {

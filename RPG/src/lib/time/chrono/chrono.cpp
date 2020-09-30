@@ -56,12 +56,12 @@ my_chrono::~my_chrono()
 {
 }
 
-Clock::time_point chrono::now()
+Clock::time_point my::chrono::now()
 {
     return Clock::now();
 }
 
-std::chrono::duration<long double> chrono::duration(Clock::time_point &t1, Clock::time_point &t2)
+std::chrono::duration<long double> my::chrono::duration(Clock::time_point &t1, Clock::time_point &t2)
 {
     return std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
 }

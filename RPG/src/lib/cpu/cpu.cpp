@@ -16,7 +16,7 @@ uint64_t rdtsc()
 }
 #    else
 
-uint64_t cpu::rdtsc()
+uint64_t my::cpu::rdtsc()
 {
     /*unsigned int lo,hi;
     __asm__ __volatile__ ("rdtsc" : "=a" (lo), "=d" (hi));

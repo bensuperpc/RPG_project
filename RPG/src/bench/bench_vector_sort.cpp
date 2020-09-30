@@ -27,14 +27,14 @@ struct Processor
         // Generate vector with X elements
         auto &&Mat = std::vector<uint64_t>(size, 0);
         // Fill vector with RND nimbers
-        vector::rnd_fill<uint64_t>(Mat);
+        my::vector::rnd_fill<uint64_t>(Mat);
 
-        auto &&t1 = chrono::now();
+        auto &&t1 = my::chrono::now();
         (elem_fn)(Mat);
-        auto &&t2 = chrono::now();
+        auto &&t2 = my::chrono::now();
         Mat.clear();
         Mat.shrink_to_fit();
-        return chrono::duration(t1, t2).count();
+        return my::chrono::duration(t1, t2).count();
     }
 };
 
@@ -49,13 +49,13 @@ int main()
 
     std::vector<uint64_t> nbrs_nbrs(3000);
     std::iota(nbrs_nbrs.begin(), nbrs_nbrs.end(), 1);
-    /**/
-    //CRASH {"sort_cocktail", &vector::sort_cocktail<uint64_t>}
-    //{"sort_bucket", &vector::sort_bucket<uint64_t>}
-    const std::vector<std::pair<const std::string, void (*)(std::vector<uint64_t> &)>> pointer_fn_map {
-        {"sort_qsort", &vector::sort_qsort<uint64_t>},{"sort_sort", &vector::sort_sort<uint64_t>}, {"sort_stable_sort", &vector::sort_stable_sort<uint64_t>},
-        {"sort_bubble", &vector::sort_bubble<uint64_t>}, {"sort_gnome", &vector::sort_gnome<uint64_t>}, {"sort_insertion", &vector::sort_insertion<uint64_t>},
-        {"sort_shell", &vector::sort_shell<uint64_t>}, {"sort_bogo", &vector::sort_bogo<uint64_t>}};
+    // CRASH {"sort_cocktail", &my::vector::sort_cocktail<uint64_t>}
+    //{"sort_bucket", &my::vector::sort_bucket<uint64_t>}
+    const std::vector<std::pair<const std::string, std::function<void(std::vector<uint64_t> &)>>> pointer_fn_map {
+        {"sort_qsort", &my::vector::sort_qsort<uint64_t>}, {"sort_sort", &my::vector::sort_sort<uint64_t>},
+        {"sort_stable_sort", &my::vector::sort_stable_sort<uint64_t>}, {"sort_bubble", &my::vector::sort_bubble<uint64_t>},
+        {"sort_gnome", &my::vector::sort_gnome<uint64_t>}, {"sort_insertion", &my::vector::sort_insertion<uint64_t>},
+        {"sort_shell", &my::vector::sort_shell<uint64_t>}, {"sort_bogo", &my::vector::sort_bogo<uint64_t>}};
 
     results2.reserve(pointer_fn_map.size());
 
@@ -69,7 +69,7 @@ int main()
     }
     std::ios_base::sync_with_stdio(false);
     std::cout << "Pool threading: OK" << std::endl;
-    // std::this_thread::sleep_for(std::chrono::milliseconds(20000));
+    // std::this_thread::sleep_for(std::my::math::milliseconds(20000));
     // Get result
     std::cout << std::setprecision(3) << std::fixed;
     size_t count = 0;

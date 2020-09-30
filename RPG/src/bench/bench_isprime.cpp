@@ -25,13 +25,13 @@ struct Processor
     // long double operator()(bool(*elem_fn)(const long long int &), long long int prime_nbr)
     long double operator()(std::function<bool(const long long int &)> elem_fn, long long int prime_nbr)
     {
-        auto &&t1 = chrono::now();
+        auto &&t1 = my::chrono::now();
         if ((elem_fn)(prime_nbr) != true) {
             std::cout << "ERROR, is prime NBR: " << prime_nbr << std::endl;
         }
-        auto &&t2 = chrono::now();
-        return chrono::duration(t1, t2).count();
-        // std::this_thread::sleep_for(std::chrono::seconds(1));
+        auto &&t2 = my::chrono::now();
+        return my::chrono::duration(t1, t2).count();
+        // std::this_thread::sleep_for(std::my::math::seconds(1));
     }
 };
 
@@ -51,10 +51,11 @@ int main()
     const std::vector<long long int> prime_nbrs
         = {7, 29, 151, 4219, 40829, 251857, 4000037, 40000003, 400000009, 400000009, 4000000007, 40000000003, 400000000019, 999999999989, 4312512644831,
             67280421310721, 369822932657561, 1323784290040759, 67428322156073819, 979025471535264563, 3815136756226794067};
-    const std::vector<std::pair<const std::string, bool (*)(const long long int &)>> pointer_map {{"isPrime_opti_1", &math::prime::isPrime_opti_1},
-        {"isPrime_opti_2", &math::prime::isPrime_opti_2}, {"isPrime_opti_3", &math::prime::isPrime_opti_3}, {"isPrime_opti_4", &math::prime::isPrime_opti_4},
-        {"isPrime_opti_5", &math::prime::isPrime_opti_5}, //{"isPrime_opti_5T", &math::prime::isPrime_opti_5<long long int>},
-        {"isPrime_opti_6", &math::prime::isPrime_opti_6}, {"isPrime_opti_8(3&5)", &math::prime::isPrime_opti_8}};
+    const std::vector<std::pair<const std::string, bool (*)(const long long int &)>> pointer_map {{"isPrime_opti_1", &my::math::prime::isPrime_opti_1},
+        {"isPrime_opti_2", &my::math::prime::isPrime_opti_2}, {"isPrime_opti_3", &my::math::prime::isPrime_opti_3},
+        {"isPrime_opti_4", &my::math::prime::isPrime_opti_4},
+        {"isPrime_opti_5", &my::math::prime::isPrime_opti_5}, //{"isPrime_opti_5T", &my::math::prime::isPrime_opti_5<long long int>},
+        {"isPrime_opti_6", &my::math::prime::isPrime_opti_6}, {"isPrime_opti_8(3&5)", &my::math::prime::isPrime_opti_8}};
 
     // Generate poolthreading
     results.reserve(pointer_map.size());
@@ -124,7 +125,7 @@ int main()
         results.emplace_back(
             pool.enqueue([i] {
                 std::cout << "hello " << i << std::endl;
-                std::this_thread::sleep_for(std::chrono::seconds(1));
+                std::this_thread::sleep_for(std::my::math::seconds(1));
                 std::cout << "world " << i << std::endl;
                 return i*i;
             })

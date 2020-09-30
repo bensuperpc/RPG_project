@@ -1,22 +1,23 @@
 https://bakudas.itch.io/generic-rpg-pack
 https://pipoya.itch.io/pipoya-free-rpg-character-sprites-32x32
-https://www.lucidarme.me/sfml-shader-effet-chaleur/
 https://dillinger.io/
+https://www.lucidarme.me/sfml-shader-effet-chaleur/
+
 https://stackoverflow.com/questions/43260990/cmake-linking-against-a-library-linked-to-qt5
 https://scm.gforge.inria.fr/anonscm/svn/gratin/trunk/cmake/FindQt5.cmake
 https://stackoverflow.com/questions/49201207/sfml-libraries-not-found
 
 https://stackoverflow.com/questions/19858134/how-to-share-variables-between-different-cmake-files
-
+https://stackoverflow.com/questions/27035672/cv-extract-differences-between-two-images
+https://gist.github.com/raulqf/a3caa97db3f8760af33266a1475d0e5e
+https://www.geeksforgeeks.org/ways-copy-vector-c/
+https://docs.opencv.org/master/dd/d3d/tutorial_gpu_basics_similarity.html
 https://stackoverflow.com/questions/612097/how-can-i-get-the-list-of-files-in-a-directory-using-c-or-c
 https://stackoverflow.com/questions/6319146/c11-introduced-a-standardized-memory-model-what-does-it-mean-and-how-is-it-g?rq=1
 https://stackoverflow.com/questions/28529458/how-to-launch-custom-opencl-kernel-in-opencv-3-0-0-ocl
 https://www.opencv-srf.com/2011/11/mouse-events.html
 https://answers.opencv.org/question/170527/how-to-get-the-pixel-value-by-clicking-on-image/
-https://stackoverflow.com/questions/27035672/cv-extract-differences-between-two-images
-https://gist.github.com/raulqf/a3caa97db3f8760af33266a1475d0e5e
-https://www.geeksforgeeks.org/ways-copy-vector-c/
-https://docs.opencv.org/master/dd/d3d/tutorial_gpu_basics_similarity.html
+
 https://nrsyed.com/2018/02/12/get-pixel-rgb-value-from-webcam-video-in-opencv-c-and-python/
 https://stackoverflow.com/questions/24195926/opencv-write-webcam-output-to-avi-file
 https://stackoverflow.com/questions/5026965/how-to-convert-an-opencv-cvmat-to-qimage
@@ -80,3 +81,5 @@ https://github.com/aphenriques/thread
 https://stackoverflow.com/questions/2901694/how-to-detect-the-number-of-physical-processors-cores-on-windows-mac-and-linu
 https://stackoverflow.com/questions/21369381/measuring-cache-latencies
 https://stackoverflow.com/questions/13772567/how-to-get-the-cpu-cycle-count-in-x86-64-from-c
+
+https://www.geeksforgeeks.org/using-namespace-std-considered-bad-practice/

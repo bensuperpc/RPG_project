@@ -8,7 +8,7 @@
 #include "load_texturemap.hpp"
 
 #if __cplusplus <= 201402L
-void texture::load_texturemap(std::map<int, std::string> &texture_map, const std::string &file)
+void my::texture::load_texturemap(std::map<int, std::string> &texture_map, const std::string &file)
 {
     std::string index = "";
     std::string path = "";
@@ -25,7 +25,7 @@ void texture::load_texturemap(std::map<int, std::string> &texture_map, const std
     myfile.close();
 }
 
-void texture::load_texturemap(std::map<int, std::string *> &texture_map, const std::string &file)
+void my::texture::load_texturemap(std::map<int, std::string *> &texture_map, const std::string &file)
 {
     std::string index = "";
     std::string path = "";
@@ -43,7 +43,7 @@ void texture::load_texturemap(std::map<int, std::string *> &texture_map, const s
     myfile.close();
 }
 
-void texture::load_texturemap(std::unordered_map<int, std::string> &texture_map, const std::string &file)
+void my::texture::load_texturemap(std::unordered_map<int, std::string> &texture_map, const std::string &file)
 {
     std::string index = "";
     std::string path = "";
@@ -60,7 +60,7 @@ void texture::load_texturemap(std::unordered_map<int, std::string> &texture_map,
     myfile.close();
 }
 
-void texture::load_texturemap(std::unordered_map<int, std::string *> &texture_map, const std::string &file)
+void my::texture::load_texturemap(std::unordered_map<int, std::string *> &texture_map, const std::string &file)
 {
     std::string index = "";
     std::string path = "";
@@ -78,7 +78,7 @@ void texture::load_texturemap(std::unordered_map<int, std::string *> &texture_ma
     myfile.close();
 }
 
-void texture::load_texturemap(std::vector<std::pair<const int, const std::string>> &texture_map, const std::string &file)
+void my::texture::load_texturemap(std::vector<std::pair<const int, const std::string>> &texture_map, const std::string &file)
 {
     std::string index = "";
     std::string path = "";
@@ -97,7 +97,7 @@ void texture::load_texturemap(std::vector<std::pair<const int, const std::string
     myfile.close();
 }
 
-void texture::load_texturemap(std::vector<std::pair<const int, std::string *>> &texture_map, const std::string &file)
+void my::texture::load_texturemap(std::vector<std::pair<const int, std::string *>> &texture_map, const std::string &file)
 {
     std::string index = "";
     std::string path = "";
@@ -119,7 +119,7 @@ void texture::load_texturemap(std::vector<std::pair<const int, std::string *>> &
 
 #elif __cplusplus >= 201703L
 
-template <typename T> void texture::load_texturemap(std::unordered_map<int, T> &texture_map, const std::string &file)
+template <typename T> void my::texture::load_texturemap(std::unordered_map<int, T> &texture_map, const std::string &file)
 {
     // typedef typename std::conditional<std::is_pointer<T>::value == true, std::string *, std::string>::type Ts;
     std::string index = "";
@@ -141,10 +141,10 @@ template <typename T> void texture::load_texturemap(std::unordered_map<int, T> &
     }
     myfile.close();
 }
-template void texture::load_texturemap<std::string>(std::unordered_map<int, std::string> &texture_map, const std::string &file);
-template void texture::load_texturemap<std::string *>(std::unordered_map<int, std::string *> &texture_map, const std::string &file);
+template void my::texture::load_texturemap<std::string>(std::unordered_map<int, std::string> &texture_map, const std::string &file);
+template void my::texture::load_texturemap<std::string *>(std::unordered_map<int, std::string *> &texture_map, const std::string &file);
 
-template <typename T> void texture::load_texturemap(std::map<int, T> &texture_map, const std::string &file)
+template <typename T> void my::texture::load_texturemap(std::map<int, T> &texture_map, const std::string &file)
 {
     // typedef typename std::conditional<std::is_pointer<T>::value == true, std::string *, std::string>::type Ts;
     std::string index = "";
@@ -166,10 +166,10 @@ template <typename T> void texture::load_texturemap(std::map<int, T> &texture_ma
     }
     myfile.close();
 }
-template void texture::load_texturemap<std::string>(std::map<int, std::string> &texture_map, const std::string &file);
-template void texture::load_texturemap<std::string *>(std::map<int, std::string *> &texture_map, const std::string &file);
+template void my::texture::load_texturemap<std::string>(std::map<int, std::string> &texture_map, const std::string &file);
+template void my::texture::load_texturemap<std::string *>(std::map<int, std::string *> &texture_map, const std::string &file);
 
-template <typename T> void texture::load_texturemap(std::vector<std::pair<const int, T>> &texture_map, const std::string &file)
+template <typename T> void my::texture::load_texturemap(std::vector<std::pair<const int, T>> &texture_map, const std::string &file)
 {
     // typedef typename std::conditional<std::is_pointer<T>::value == true, std::string *, std::string>::type Ts;
     std::string index = "";
@@ -193,7 +193,7 @@ template <typename T> void texture::load_texturemap(std::vector<std::pair<const 
     }
     myfile.close();
 }
-template void texture::load_texturemap<std::string>(std::vector<std::pair<const int, std::string>> &texture_map, const std::string &file);
-template void texture::load_texturemap<std::string *>(std::vector<std::pair<const int, std::string *>> &texture_map, const std::string &file);
+template void my::texture::load_texturemap<std::string>(std::vector<std::pair<const int, std::string>> &texture_map, const std::string &file);
+template void my::texture::load_texturemap<std::string *>(std::vector<std::pair<const int, std::string *>> &texture_map, const std::string &file);
 #else
 #endif

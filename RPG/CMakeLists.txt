@@ -140,6 +140,9 @@ set(CMAKE_SHARED_LINKER_FLAGS_COVERAGE "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} --cov
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+#set(PROJECT_BINARY_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+#set(CTEST_BINARY_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 
 #   ================    COMPILER DEF    ================
 
@@ -448,7 +451,7 @@ if(EXTERNAL_LIB)
     add_dependencies(${TEST_GA} ${EXTERNAL_LIB})
 endif()
 target_link_libraries(${TEST_GA} ${Boost_LIBRARIES})
-add_test(NAME ${TEST_GA} COMMAND ${CMAKE_COMMAND} --build . --target ${TEST_GA})
+add_test(NAME ${TEST_GA} COMMAND ${TEST_GA})
 
 #Test sphere
 set(TEST_SPHERE test_sphere)
@@ -457,7 +460,7 @@ if(EXTERNAL_LIB)
     add_dependencies(${TEST_SPHERE} ${EXTERNAL_LIB})
 endif()
 target_link_libraries(${TEST_SPHERE} ${Boost_LIBRARIES} quadmath)
-add_test(NAME ${TEST_SPHERE} COMMAND ${CMAKE_COMMAND} --build . --target ${TEST_SPHERE})
+add_test(NAME ${TEST_SPHERE} COMMAND ${TEST_SPHERE})
 
 #Test cylinder
 set(TEST_CYLINDER test_cylinder)
@@ -466,7 +469,25 @@ if(EXTERNAL_LIB)
     add_dependencies(${TEST_CYLINDER} ${EXTERNAL_LIB})
 endif()
 target_link_libraries(${TEST_CYLINDER} ${Boost_LIBRARIES})
-add_test(NAME ${TEST_CYLINDER} COMMAND ${CMAKE_COMMAND} --build . --target ${TEST_CYLINDER})
+add_test(NAME ${TEST_CYLINDER} COMMAND ${TEST_CYLINDER})
+
+#Test vector sort
+set(TEST_VECTOR_SORT test_vector_sort)
+add_executable(${TEST_VECTOR_SORT} src/test/vector/test_vector_sort.cpp)
+if(EXTERNAL_LIB)
+    add_dependencies(${TEST_VECTOR_SORT} ${EXTERNAL_LIB})
+endif()
+target_link_libraries(${TEST_VECTOR_SORT} ${Boost_LIBRARIES} vector)
+add_test(NAME ${TEST_VECTOR_SORT} COMMAND ${TEST_VECTOR_SORT})
+
+#Test vector copy
+set(TEST_VECTOR_COPY test_vector_copy)
+add_executable(${TEST_VECTOR_COPY} src/test/vector/test_vector_copy.cpp)
+if(EXTERNAL_LIB)
+    add_dependencies(${TEST_VECTOR_COPY} ${EXTERNAL_LIB})
+endif()
+target_link_libraries(${TEST_VECTOR_COPY} ${Boost_LIBRARIES} vector)
+add_test(NAME ${TEST_VECTOR_COPY} COMMAND ${TEST_VECTOR_COPY})
 
 #Test power
 set(TEST_POWER test_power)
@@ -475,7 +496,8 @@ if(EXTERNAL_LIB)
     add_dependencies(${TEST_POWER} ${EXTERNAL_LIB})
 endif()
 target_link_libraries(${TEST_POWER} ${Boost_LIBRARIES})
-add_test(NAME ${TEST_POWER} COMMAND ${CMAKE_COMMAND} --build . --target ${TEST_POWER})
+add_test(NAME ${TEST_POWER} COMMAND ${TEST_POWER})
+#add_test(NAME ${TEST_POWER} COMMAND ${CMAKE_COMMAND} --build . --target ${TEST_POWER})
 
 #add_custom_command(
 #     TARGET test_power

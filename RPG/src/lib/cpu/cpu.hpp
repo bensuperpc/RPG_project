@@ -19,6 +19,8 @@
 
 using namespace std;
 
+namespace my
+{
 namespace cpu
 {
 #pragma GCC diagnostic ignored "-Wundef"
@@ -29,6 +31,7 @@ uint64_t rdtsc();
 #endif
 } // namespace cpu
 
+} // namespace my
 // https://stackoverflow.com/questions/2901694/how-to-detect-the-number-of-physical-processors-cores-on-windows-mac-and-linu
 // https://stackoverflow.com/questions/21369381/measuring-cache-latencies
 // https://stackoverflow.com/questions/13772567/how-to-get-the-cpu-cycle-count-in-x86-64-from-c

@@ -12,19 +12,19 @@ template <typename T> double everage(const T &vec)
     return double(accumulate(vec.begin(), vec.end(), 0.0)) / double(vec.size());
 }
 
-template <typename T> std::vector<std::vector<T>> vector::generate_matrix(size_t x, size_t y)
+template <typename T> std::vector<std::vector<T>> my::vector::generate_matrix(size_t x, size_t y)
 {
     std::vector<std::vector<T>> matrix(x, std::vector<T>(y, 0));
     return matrix;
 }
 
-template <typename T> std::vector<std::vector<T>> vector::generate_matrix(size_t x, size_t y, T z)
+template <typename T> std::vector<std::vector<T>> my::vector::generate_matrix(size_t x, size_t y, T z)
 {
     std::vector<std::vector<T>> matrix(x, std::vector<T>(y, z));
     return matrix;
 }
 
-template <typename T> void vector::rnd_fill(std::vector<T> &V, const T lower, const T upper, const uint64_t seed)
+template <typename T> void my::vector::rnd_fill(std::vector<T> &V, const T lower, const T upper, const uint64_t seed)
 {
     // std::random_device seed;
     std::default_random_engine eng(seed);
@@ -34,7 +34,7 @@ template <typename T> void vector::rnd_fill(std::vector<T> &V, const T lower, co
     }
 }
 
-template <typename T> void vector::rnd_fill(std::vector<T> &V, const T lower, const T upper)
+template <typename T> void my::vector::rnd_fill(std::vector<T> &V, const T lower, const T upper)
 {
     std::random_device r;
     std::seed_seq seed2 {r(), r(), r(), r(), r(), r(), r(), r()};
@@ -45,19 +45,19 @@ template <typename T> void vector::rnd_fill(std::vector<T> &V, const T lower, co
     }
 }
 
-template <typename T> void vector::rnd_fill(std::vector<T> &V)
+template <typename T> void my::vector::rnd_fill(std::vector<T> &V)
 {
     std::random_device r;
     std::seed_seq seed2 {r(), r(), r(), r(), r(), r(), r(), r()};
     std::mt19937_64 e2(seed2);
-    //std::normal_distribution<T> distr(double(std::numeric_limits<T>::min()), double(std::numeric_limits<T>::max()));
-    std::normal_distribution<double>distr(0.0, 100000.0);
+    // std::normal_distribution<T> distr(double(std::numeric_limits<T>::min()), double(std::numeric_limits<T>::max()));
+    std::normal_distribution<double> distr(0.0, 100000.0);
     for (auto &elem : V) {
         elem = T(distr(e2));
     }
 }
 
-template <typename T> void vector::cache_unfriendly_copy(std::vector<std::vector<T>> &mat1, std::vector<std::vector<T>> &mat2)
+template <typename T> void my::vector::cache_unfriendly_copy(std::vector<std::vector<T>> &mat1, std::vector<std::vector<T>> &mat2)
 {
     for (uint64_t x = 0; x < mat1[0].size(); ++x) {
 
@@ -67,7 +67,14 @@ template <typename T> void vector::cache_unfriendly_copy(std::vector<std::vector
     }
 }
 
-template <typename T> void vector::cache_friendly_copy(std::vector<std::vector<T>> &mat1, std::vector<std::vector<T>> &mat2)
+template <typename T> void my::vector::cache_unfriendly_copy(std::vector<T> &mat1, std::vector<T> &mat2)
+{
+    for (uint64_t x = 0; x < mat1.size(); ++x) {
+        mat1[x] = mat2[x];
+    }
+}
+
+template <typename T> void my::vector::cache_friendly_copy(std::vector<std::vector<T>> &mat1, std::vector<std::vector<T>> &mat2)
 {
     for (uint64_t y = 0; y < mat1.size(); ++y) {
         for (uint64_t x = 0; x < mat1[0].size(); ++x) {
@@ -76,24 +83,31 @@ template <typename T> void vector::cache_friendly_copy(std::vector<std::vector<T
     }
 }
 
-template <typename T> void vector::assignment_copy(std::vector<std::vector<T>> &mat1, std::vector<std::vector<T>> &mat2)
+template <typename T> void my::vector::cache_friendly_copy(std::vector<T> &mat1, std::vector<T> &mat2)
+{
+    for (uint64_t x = 0; x < mat1.size(); ++x) {
+        mat1[x] = mat2[x];
+    }
+}
+
+template <typename T> void my::vector::assignment_copy(std::vector<std::vector<T>> &mat1, std::vector<std::vector<T>> &mat2)
 {
     mat1 = mat2;
 }
 
-template <typename T> void vector::std_copy(std::vector<std::vector<T>> &mat1, std::vector<std::vector<T>> &mat2)
+template <typename T> void my::vector::std_copy(std::vector<std::vector<T>> &mat1, std::vector<std::vector<T>> &mat2)
 {
     std::copy(mat2.begin(), mat2.end(), std::back_inserter(mat1));
 }
 
-template <typename T> void vector::vector_assign_copy(std::vector<std::vector<T>> &mat1, std::vector<std::vector<T>> &mat2)
+template <typename T> void my::vector::vector_assign_copy(std::vector<std::vector<T>> &mat1, std::vector<std::vector<T>> &mat2)
 {
     mat1.assign(mat2.begin(), mat2.end());
 }
 
 // https://www.geeksforgeeks.org/sorting-algorithms/
 
-template <typename T> int vector::comp(const void *a, const void *b)
+template <typename T> int my::vector::comp(const void *a, const void *b)
 {
     /*
     T aux = *a - *b;
@@ -104,31 +118,32 @@ template <typename T> int vector::comp(const void *a, const void *b)
     }
     return 0;
     */
-   return ( *(T*)a - *(T*)b );
+#pragma GCC diagnostic ignored "-Wcast-qual"
+    return (*(T *)a - *(T *)b);
 }
 
-template <typename T> void vector::sort_sort(std::vector<T> &vec)
+template <typename T> void my::vector::sort_sort(std::vector<T> &vec)
 {
     std::sort(std::begin(vec), std::end(vec));
 }
 
-template <typename T> void vector::sort_stable_sort(std::vector<T> &vec)
+template <typename T> void my::vector::sort_stable_sort(std::vector<T> &vec)
 {
     std::stable_sort(std::begin(vec), std::end(vec));
 }
 
-template <typename T> void vector::sort_qsort(std::vector<T> &vec)
+template <typename T> void my::vector::sort_qsort(std::vector<T> &vec)
 {
-    std::qsort(&vec[0], vec.size(), sizeof(T), vector::comp<T>);
+    std::qsort(&vec[0], vec.size(), sizeof(T), my::vector::comp<T>);
 }
 
-template <typename T> void vector::sort_bubble(std::vector<T> &vec)
+template <typename T> void my::vector::sort_bubble(std::vector<T> &vec)
 {
     bool swapped = true;
-    for (unsigned j = 1; swapped && j < vec.size(); ++j) {
+    for (uint64_t j = 1; swapped && j < vec.size(); ++j) {
         swapped = false;
-        for (unsigned i = 0; i < vec.size() - j; ++i) {
-            if (vec[i] < vec[i + 1]) {
+        for (uint64_t i = 0; i < vec.size() - j; ++i) {
+            if (vec[i] > vec[i + 1]) {
                 swapped = true;
                 std::swap(vec[i], vec[i + 1]);
             }
@@ -138,29 +153,25 @@ template <typename T> void vector::sort_bubble(std::vector<T> &vec)
     }
 }
 
-template<typename T> void sort_bucket(std::vector<T>& vec) {
-	std::vector<std::vector<T>> bucket;
+template <typename T> void my::vector::sort_bucket(std::vector<T> &vec)
+{
+    std::vector<std::vector<T>> bucket;
     const auto &&len = vec.size();
-	bucket.reserve(len);
-    std::cout << "OK1" << std::endl;
-	//buckets
-	for(auto& i : vec) {
-		T index = len*i;
-		bucket[index].emplace_back(i);
-	}
-    std::cout << "OK2" << std::endl;
-	//Sorting each bucket
-	std::for_each(bucket.begin(),bucket.end(),[](std::vector<T>& elem) {
-			std::sort(elem.begin(),elem.end());
-			});
-	long long int index = -1;
-	for(long long int i = -1 ; i < len;++i)
-		for(long long int j = -1; j < bucket[i].size(); ++j)
-			vec[index++] = bucket[i][j];
+    bucket.reserve(len);
+    // buckets
+    for (auto &i : vec) {
+        T index = len * i;
+        bucket[index].emplace_back(i);
+    }
+    // Sorting each bucket
+    std::for_each(bucket.begin(), bucket.end(), [](std::vector<T> &elem) { std::sort(elem.begin(), elem.end()); });
+    int64_t index = -1;
+    for (int64_t i = -1; i < len; ++i)
+        for (int64_t j = -1; j < bucket[i].size(); ++j)
+            vec[index++] = bucket[i][j];
 }
 
-// NEED test
-template <typename T> void vector::sort_radix(std::vector<T> &vec)
+template <typename T> void my::vector::sort_radix(std::vector<T> &vec)
 {
     size_t radix = 1;
     auto max = std::max_element(vec.begin(), vec.end());
@@ -176,7 +187,8 @@ template <typename T> void vector::sort_radix(std::vector<T> &vec)
         radix *= 10;
     }
 }
-template <typename T> void vector::sort_cocktail(std::vector<T> &vec)
+
+template <typename T> void my::vector::sort_cocktail(std::vector<T> &vec)
 {
     const auto &&n = vec.size();
     bool swapped = true;
@@ -204,7 +216,7 @@ template <typename T> void vector::sort_cocktail(std::vector<T> &vec)
     }
 }
 
-template <typename T> void vector::sort_gnome(std::vector<T> &vec)
+template <typename T> void my::vector::sort_gnome(std::vector<T> &vec)
 {
     T index = 0;
     const auto &&n = vec.size();
@@ -222,7 +234,7 @@ template <typename T> void vector::sort_gnome(std::vector<T> &vec)
     return;
 }
 
-template <typename T> void vector::sort_insertion(std::vector<T> &vec)
+template <typename T> void my::vector::sort_insertion(std::vector<T> &vec)
 {
     for (auto it = vec.begin(); it != vec.end(); it++) {
         auto const insertion_point = std::upper_bound(vec.begin(), it, *it);
@@ -230,7 +242,7 @@ template <typename T> void vector::sort_insertion(std::vector<T> &vec)
     }
 }
 
-template <typename T> void vector::sort_shell(std::vector<T> &vec)
+template <typename T> void my::vector::sort_shell(std::vector<T> &vec)
 {
     const auto &&n = vec.size();
     for (T gap = n / 2; gap > 0; gap /= 2) {
@@ -244,23 +256,30 @@ template <typename T> void vector::sort_shell(std::vector<T> &vec)
     }
 }
 
-template <typename T> bool vector::isSorted(std::vector<T> &vec, size_t &n) 
+template <typename T> bool my::vector::isSorted(std::vector<T> &vec, size_t &n)
 {
-    while ( --n > 1 ) 
-        if (vec[n] < vec[n-1]) 
-            return false; 
-    return true; 
-} 
-  
-template <typename T> void vector::shuffle(std::vector<T> &vec, size_t &n) 
-{ 
-    for (int i=0; i < n; i++) 
-        std::swap(vec[i], vec[T(rand())%n]); 
-} 
-  
-template <typename T> void vector::sort_bogo(std::vector<T> &vec) 
+    while (--n > 1)
+        if (vec[n] < vec[n - 1])
+            return false;
+    return true;
+}
+
+template <typename T> void my::vector::shuffle(std::vector<T> &vec, size_t &n)
+{
+    // for (uint64_t i=0; i < n; i++)
+    //    std::swap(vec[i], vec[T(rand())%n]);
+    T i, t, temp;
+    for (i = 0; i < n; i++) {
+        t = vec[i];
+        temp = rand() % n;
+        vec[i] = vec[temp];
+        vec[temp] = t;
+    }
+}
+
+template <typename T> void my::vector::sort_bogo(std::vector<T> &vec)
 {
     auto &&n = vec.size();
-    while (!isSorted(vec, n)) 
-        shuffle(vec, n); 
-} 
+    while (!isSorted(vec, n))
+        shuffle(vec, n);
+}

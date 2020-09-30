@@ -7,7 +7,7 @@
 
 #include "prime.hpp"
 
-bool math::prime::isPrime_opti_0(const long long int &n)
+bool my::math::prime::isPrime_opti_0(const long long int &n)
 {
     if (n <= 1)
         return false;
@@ -18,7 +18,7 @@ bool math::prime::isPrime_opti_0(const long long int &n)
     return true;
 }
 
-bool math::prime::isPrime_opti_1(const long long int &a)
+bool my::math::prime::isPrime_opti_1(const long long int &a)
 {
     long long int b = std::sqrt(a);
 
@@ -29,7 +29,7 @@ bool math::prime::isPrime_opti_1(const long long int &a)
     return true;
 }
 
-bool math::prime::isPrime_opti_2(const long long int &n)
+bool my::math::prime::isPrime_opti_2(const long long int &n)
 {
     // Corner cases
     if (n <= 1)
@@ -47,7 +47,7 @@ bool math::prime::isPrime_opti_2(const long long int &n)
     return true;
 }
 
-bool math::prime::isPrime_opti_3(const long long int &number)
+bool my::math::prime::isPrime_opti_3(const long long int &number)
 {
     if (((!(number & 1)) && number != 2) || (number < 2) || (number % 3 == 0 && number != 3))
         return (false);
@@ -58,7 +58,7 @@ bool math::prime::isPrime_opti_3(const long long int &number)
     return true;
 }
 
-bool math::prime::isPrime_opti_4(const long long int &number)
+bool my::math::prime::isPrime_opti_4(const long long int &number)
 {
     if (((!(number & 1)) && number != 2) || (number < 2) || (number % 3 == 0 && number != 3))
         return (false);
@@ -68,7 +68,7 @@ bool math::prime::isPrime_opti_4(const long long int &number)
     return true;
 }
 
-inline long long int math::prime::PowerMod(long long int a, long long int n, long long int mod)
+inline long long int my::math::prime::PowerMod(long long int a, long long int n, long long int mod)
 { // computes a^n % mod
     long long int r = 1;
     while (n) {
@@ -79,7 +79,7 @@ inline long long int math::prime::PowerMod(long long int a, long long int n, lon
     return r;
 }
 
-inline long long int math::prime::MultiplyMod(long long int a, long long int b, long long int mod)
+inline long long int my::math::prime::MultiplyMod(long long int a, long long int b, long long int mod)
 { // computes a * b % mod
     long long int r = 0;
     a %= mod, b %= mod;
@@ -92,7 +92,7 @@ inline long long int math::prime::MultiplyMod(long long int a, long long int b, 
 }
 
 // Thank https://github.com/niklasb/tcr/blob/master/zahlentheorie/NumberTheory.cpp
-bool math::prime::isPrime_opti_5(const long long int &n)
+bool my::math::prime::isPrime_opti_5(const long long int &n)
 { // determines if n is a prime number
     const long long int pn = 9, p[] = {2, 3, 5, 7, 11, 13, 17, 19, 23};
     for (long long int i = 0; i < pn; ++i)
@@ -119,7 +119,7 @@ bool math::prime::isPrime_opti_5(const long long int &n)
     return 1;
 }
 
-bool math::prime::isPrime_opti_6(const long long int &number)
+bool my::math::prime::isPrime_opti_6(const long long int &number)
 {
     if (((!(number & 1)) && number != 2) || (number < 2) || (number % 3 == 0 && number != 3))
         return (false);
@@ -130,7 +130,7 @@ bool math::prime::isPrime_opti_6(const long long int &number)
     return true;
 }
 
-bool math::prime::isPrime_opti_7(const long long int &n)
+bool my::math::prime::isPrime_opti_7(const long long int &n)
 {
     long long int divider = 2;
     while (n % divider != 0) {
@@ -143,7 +143,7 @@ bool math::prime::isPrime_opti_7(const long long int &n)
     }
 }
 
-bool math::prime::isPrime_opti_8(const long long int &n)
+bool my::math::prime::isPrime_opti_8(const long long int &n)
 {
     return (n < 4000000007) ? isPrime_opti_3(n) : isPrime_opti_5(n);
 }

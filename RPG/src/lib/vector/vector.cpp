@@ -7,22 +7,22 @@
 
 #include "vector.hpp"
 
-void vector::fill_row(std::vector<int> &row)
+void my::vector::fill_row(std::vector<int> &row)
 {
     std::generate(row.begin(), row.end(), []() { return rand() % 100; });
 }
 
-void vector::fill_rowull(std::vector<uint64_t> &row)
+void my::vector::fill_rowull(std::vector<uint64_t> &row)
 {
     std::generate(row.begin(), row.end(), []() { return rand() % (18446744073709551615 - 0 + 1) + 0; });
 }
 
-void vector::fill_matrix_1(std::vector<std::vector<int>> &mat)
+void my::vector::fill_matrix_1(std::vector<std::vector<int>> &mat)
 {
     std::for_each(mat.begin(), mat.end(), fill_row);
 }
 
-void vector::fill_matrix_2(std::vector<std::vector<int>> &Matrix)
+void my::vector::fill_matrix_2(std::vector<std::vector<int>> &Matrix)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -36,7 +36,7 @@ void vector::fill_matrix_2(std::vector<std::vector<int>> &Matrix)
     }
 }
 
-void vector::fill_matrix_2(std::vector<std::vector<int>> &Matrix, int min, int max)
+void my::vector::fill_matrix_2(std::vector<std::vector<int>> &Matrix, int min, int max)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -50,7 +50,7 @@ void vector::fill_matrix_2(std::vector<std::vector<int>> &Matrix, int min, int m
     }
 }
 
-void vector::print_2d(std::vector<std::vector<int>> &mat)
+void my::vector::print_2d(std::vector<std::vector<int>> &mat)
 {
     for (const auto &y : mat) {
         for (const auto &x : y) {
@@ -61,13 +61,13 @@ void vector::print_2d(std::vector<std::vector<int>> &mat)
     std::cout << std::endl;
 }
 
-std::vector<std::vector<int>> vector::generate_matrix(size_t x, size_t y)
+std::vector<std::vector<int>> my::vector::generate_matrix(size_t x, size_t y)
 {
     std::vector<std::vector<int>> matrix(x, std::vector<int>(y, 0));
     return matrix;
 }
 
-std::vector<std::vector<int>> vector::generate_matrix(size_t x, size_t y, int z)
+std::vector<std::vector<int>> my::vector::generate_matrix(size_t x, size_t y, int z)
 {
     std::vector<std::vector<int>> matrix(x, std::vector<int>(y, z));
     return matrix;

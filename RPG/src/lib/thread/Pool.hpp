@@ -8,6 +8,7 @@
 
 namespace thread
 {
+#        pragma GCC diagnostic ignored "-Wpadded"
 class Pool {
   public:
     Pool(std::size_t numberOfThreads);

@@ -26,13 +26,13 @@ struct Processor
     long double __attribute__((optimize("O1"))) operator()(std::function<uint64_t(uint64_t)> elem_fn, uint64_t prime_nbr)
     {
         auto nbrs = (elem_fn)(prime_nbr);
-        auto &&t1 = chrono::now();
+        auto &&t1 = my::chrono::now();
         for (uint64_t i = 0; i < 50000; i++) {
             nbrs = (elem_fn)(prime_nbr);
         }
-        auto &&t2 = chrono::now();
-        return chrono::duration(t1, t2).count() / 50000.0;
-        // std::this_thread::sleep_for(std::chrono::seconds(1));
+        auto &&t2 = my::chrono::now();
+        return my::chrono::duration(t1, t2).count() / 50000.0;
+        // std::this_thread::sleep_for(std::my::chrono::seconds(1));
     }
 };
 
@@ -51,12 +51,12 @@ int main()
 #endif
     std::vector<uint64_t> prime_nbrs = std::vector<uint64_t>(1000);
 
-    vector::fill_rowull(prime_nbrs);
+    my::vector::fill_rowull(prime_nbrs);
     std::sort(prime_nbrs.begin(), prime_nbrs.end());
 
-    const std::vector<std::pair<const std::string, uint64_t (*)(uint64_t)>> pointer_map {{"count_digits_1", &math::count_digits::count_digits_1<uint64_t>},
-        {"count_digits_2", &math::count_digits::count_digits_2<uint64_t>}, {"count_digits_3", &math::count_digits::count_digits_3<uint64_t>},
-        {"count_digits_4", &math::count_digits::count_digits_4<uint64_t>}};
+    const std::vector<std::pair<const std::string, uint64_t (*)(uint64_t)>> pointer_map {{"count_digits_1", &my::math::count_digits::count_digits_1<uint64_t>},
+        {"count_digits_2", &my::math::count_digits::count_digits_2<uint64_t>}, {"count_digits_3", &my::math::count_digits::count_digits_3<uint64_t>},
+        {"count_digits_4", &my::math::count_digits::count_digits_4<uint64_t>}};
 
     // Generate poolthreading
     results.reserve(pointer_map.size());

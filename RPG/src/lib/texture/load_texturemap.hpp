@@ -19,6 +19,8 @@
 #include <unordered_map>
 #include <vector>
 
+namespace my
+{
 namespace texture
 {
 #if __cplusplus <= 201402L
@@ -42,6 +44,6 @@ template <typename T> void load_texturemap(std::vector<std::pair<const int, T>> 
 #endif
 
 } // namespace texture
-
+} // namespace my
 // THANK https://stackoverflow.com/questions/55553003/using-stdconditional-with-non-convertible-types-raw-vs-pointer
 #endif

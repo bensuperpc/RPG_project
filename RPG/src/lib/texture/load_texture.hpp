@@ -37,6 +37,8 @@ namespace fs = std::filesystem;
 
 #define RESERVE_VECTOR 500
 
+namespace my
+{
 namespace texture
 {
 // Thank https://stackoverflow.com/a/21265197/10152334
@@ -79,5 +81,5 @@ void load_texture(std::unordered_map<std::string, std::unique_ptr<sf::Texture>> 
 #endif
 
 } // namespace texture
-
+} // namespace my
 #endif

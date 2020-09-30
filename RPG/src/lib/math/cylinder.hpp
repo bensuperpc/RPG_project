@@ -14,6 +14,8 @@
 #    include <numbers>
 #endif
 
+namespace my
+{
 namespace math
 {
 
@@ -23,6 +25,7 @@ template <typename T> T cylinderSurface(const T &, const T &);
 template <typename T> T cylinderVolume(const T &, const T &);
 } // namespace cylinder
 } // namespace math
+} // namespace my
 #include "cylinder_imp.hpp"
 
 #endif

@@ -20,19 +20,19 @@ void Game::Launch()
 
     const std::string path = "../texture/rpg-pack/tiles/";
 
-    texture::load_texture(this->textureUMap, path);
-    // texture::load_texture(this->textureMap, path);
-    // texture::load_texture(this->textureList, path);
+    my::texture::load_texture(this->textureUMap, path);
+    // my::texture::load_texture(this->textureMap, path);
+    // my::texture::load_texture(this->textureList, path);
 
 #if __cplusplus <= 201402L
-    texture::load_texturemap(this->textureumap, "../texture_map/texture_map_0.csv");
-    // texture::load_texturemap(this->texturemap, "../texture_map/texture_map_0.csv");
-    // texture::load_texturemap(this->texturelist, "../texture_map/texture_map_0.csv");
+    my::texture::load_texturemap(this->textureumap, "../texture_map/texture_map_0.csv");
+    // my::texture::load_texturemap(this->texturemap, "../texture_map/texture_map_0.csv");
+    // my::texture::load_texturemap(this->texturelist, "../texture_map/texture_map_0.csv");
 
 #elif __cplusplus >= 201703L
-    texture::load_texturemap<std::string>(this->textureumap, "../texture_map/texture_map_0.csv");
-    // texture::load_texturemap<std::string>(this->texturemap, "../texture_map/texture_map_0.csv");
-    // texture::load_texturemap<std::string>(this->texturelist, "../texture_map/texture_map_0.csv");
+    my::texture::load_texturemap<std::string>(this->textureumap, "../texture_map/texture_map_0.csv");
+    // my::texture::load_texturemap<std::string>(this->texturemap, "../texture_map/texture_map_0.csv");
+    // my::texture::load_texturemap<std::string>(this->texturelist, "../texture_map/texture_map_0.csv");
 #else
 #endif
 

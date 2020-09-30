@@ -10,6 +10,8 @@
 
 #include <math.h>
 #include "constant.hpp"
+namespace my
+{
 namespace math
 {
 namespace schwarzschild
@@ -17,6 +19,7 @@ namespace schwarzschild
 template <typename T> T getSchwarzschild(const T &masse);
 } // namespace schwarzschild
 } // namespace math
+} // namespace my
 #include "getSchwarzschild_imp.hpp"
 
 #endif
