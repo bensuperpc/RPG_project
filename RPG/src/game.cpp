@@ -403,7 +403,7 @@ void Game::renderingThread(sf::RenderWindow *window)
             window->setView(view);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::F2)) {
-            Screen_save_gl::saveScreenshotToFile("../screenshot/screenshot_" + date::get_date() + ".png", window->getSize().x, window->getSize().y);
+            Screen_save_gl::saveScreenshotToFile("../screenshot/screenshot_" + my::date::get_date() + ".png", window->getSize().x, window->getSize().y);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::F5)) {
             sf::View view2(window->getView().getCenter(), sf::Vector2f(1280, 720));

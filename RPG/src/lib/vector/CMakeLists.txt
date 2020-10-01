@@ -4,11 +4,13 @@ project(vector C CXX)
 
 set(SRCS
 	vector.cpp
+	vector_avx.cpp
 	)
 	
 set(HEADERS
 	vector.hpp
 	vector_imp.hpp
+	vector_avx.hpp
 	)
 
 #add_library(math_static STATIC ${SRCS} ${HEADERS})

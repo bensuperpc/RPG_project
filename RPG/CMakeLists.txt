@@ -244,6 +244,17 @@ if (OPENCV_FOUND)
     message(STATUS "OPENCV: FOUND")
 else()
     message(STATUS "OPENCV: NOT FOUND")
+    if(NOT EXTERNAL_LIB)
+        set(EXTERNAL_LIB "")
+    endif()
+    string(APPEND EXTERNAL_LIB "opencv_lib")
+    ExternalProject_Add(opencv_lib
+        GIT_REPOSITORY https://github.com/opencv/opencv.git
+        GIT_TAG 4.4.0
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
+        #CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
+    )
 endif()
 
 
