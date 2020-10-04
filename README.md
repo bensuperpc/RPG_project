@@ -24,6 +24,18 @@ You can see my [public repository][ben_github] on GitHub, and can see my [public
 #### Building for source
 You need to install SFML, OpenCV, BoostLib, OpenGL lib, before build.
 
+```sh
+git clone https://github.com/Bensuperpc/RPG_project.git
+```
+
+```sh
+git submodule init
+```
+
+```sh
+git submodule update
+```
+
 Download RPG asset :
 https://bakudas.itch.io/generic-rpg-pack
 https://pipoya.itch.io/pipoya-free-rpg-character-sprites-32x32
