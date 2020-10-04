@@ -29,6 +29,7 @@ namespace opencv_utils
 cv::Mat cropimgrect(const cv::Mat &, const cv::Rect &);
 void cropimgrect(const cv::Mat &, cv::Mat &, const cv::Rect &);
 void imgdiff_prev(cv::Mat &, cv::Mat &, cv::Mat &);
+void imgdiff_prev(cv::Mat &, cv::Mat &, cv::Mat &, int &);
 double getSimilarity(const cv::Mat &, const cv::Mat &);
 } // namespace opencv_utils
 

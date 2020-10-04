@@ -13,6 +13,7 @@ set(SRCS
 	sphere_imp.hpp
 	square_root.cpp
 	prime.cpp
+	float.cpp
 	)
 	
 set(HEADERS
@@ -29,6 +30,7 @@ set(HEADERS
 	prime_imp.hpp
 	count_digits_imp.hpp
 	count_digits.hpp
+	float.hpp
 	)
 
 #add_library(math_static STATIC ${SRCS} ${HEADERS})

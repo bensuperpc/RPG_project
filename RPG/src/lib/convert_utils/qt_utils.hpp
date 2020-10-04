@@ -28,5 +28,5 @@ void Mat2QImage(cv::Mat const &, QImage &);
 cv::Mat QImage2Mat(QImage const &src);
 void QImage2Mat(QImage const &, cv::Mat &);
 } // namespace qt_utils
-}
+} // namespace my
 #endif

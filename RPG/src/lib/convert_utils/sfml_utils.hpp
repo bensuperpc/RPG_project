@@ -35,5 +35,5 @@ void SFML2Mat(const sf::Image &, cv::Mat &);
 sf::Image Mat2SFML(const cv::Mat &);
 void Mat2SFML(const cv::Mat &, sf::Image &);
 } // namespace sfc
-}
+} // namespace my
 #endif

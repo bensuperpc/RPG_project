@@ -24,10 +24,6 @@ endif()
 #   ================    COMPILER    ================
 #   ================================================
 
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release)
-endif()
-
 if(NOT CMAKE_C_COMPILER)
 #    set(CMAKE_C_COMPILER /usr/bin/clang)
     set(CMAKE_C_COMPILER /usr/bin/gcc)
@@ -108,9 +104,9 @@ set(SEC_COMPILER_LINK_REL "-fPIC -Wl,-z,now -Wl,-z,relro")
 
 set(WARNINGS_COMPILER_C "-Wall -Wpedantic -Wextra -Wstrict-prototypes -Wmissing-prototypes -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wstrict-overflow=5 -Wswitch-default -Wunreachable-code -Wcast-align")
 set(CMAKE_C_FLAGS                "${WARNINGS_COMPILER_C} -std=c99 -pipe")
-set(CMAKE_C_FLAGS_DEBUG          "-g3 -Og -ggdb3 -v")
-set(CMAKE_C_FLAGS_MINSIZEREL     "-Os ${OPTI_COMPILER_REL} ${SEC_COMPILER_REL}")
 set(CMAKE_C_FLAGS_RELEASE        "-O3 ${OPTI_COMPILER_REL} ${SEC_COMPILER_REL}")
+set(CMAKE_C_FLAGS_MINSIZEREL     "-Os ${OPTI_COMPILER_REL} ${SEC_COMPILER_REL}")
+set(CMAKE_C_FLAGS_DEBUG          "-g3 -Og -ggdb3 -v")
 set(CMAKE_C_FLAGS_COVERAGE "${CMAKE_C_FLAGS_DEBUG} --coverage")
 
 #-Wold-style-cast
@@ -123,9 +119,9 @@ set(WARNINGS_COMPILER_CXX "${WARNINGS_COMPILER_CXX} -Wduplicated-branches -Wdupl
 
 #Add -lstdc++fs for old compiler
 set(CMAKE_CXX_FLAGS                "${WARNINGS_COMPILER_CXX} -pipe -pthread -lstdc++fs -Wl,-rpath,../lib -Wl,-rpath,../external/lib -pthread")
-set(CMAKE_CXX_FLAGS_DEBUG          "-g3 -Og -ggdb3 -v")
 set(CMAKE_CXX_FLAGS_MINSIZEREL     "-Os ${OPTI_COMPILER_REL} ${SEC_COMPILER_REL} -DNDEBUG")
 set(CMAKE_CXX_FLAGS_RELEASE        "-O3 ${OPTI_COMPILER_REL} ${SEC_COMPILER_REL} -DNDEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG          "-g3 -Og -ggdb3 -v")
 set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_DEBUG} --coverage")
 
 set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${SEC_COMPILER_LINK_REL}")
@@ -143,7 +139,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 #set(PROJECT_BINARY_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 #set(CTEST_BINARY_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 #   ================    COMPILER DEF    ================
 
 
@@ -170,14 +166,6 @@ include(ExternalProject)
 set(EXTERNAL_INSTALL_LOCATION ${CMAKE_BINARY_DIR}/external)
 
 #ExternalProject_Add(opencv_lib
-#    GIT_REPOSITORY https://github.com/opencv/opencv
-#    GIT_TAG 4.4.0
-#    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
-    #CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-#    CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
-#)
-
-#ExternalProject_Add(opencv_lib
 #    GIT_REPOSITORY https://github.com/boostorg/boost
 #    GIT_TAG 4.4.0
 #    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
@@ -194,13 +182,6 @@ set(EXTERNAL_INSTALL_LOCATION ${CMAKE_BINARY_DIR}/external)
 set(SFML_ROOT "C:\\Project Files (x86)\\SFML")
 
 find_package(SFML 2.5 COMPONENTS graphics audio network system QUIET)
-#if(NOT SFML_FOUND)
-    #<list(APPEND CMAKE_MODULE_PATH "/usr/share/SFML/cmake/Modules")
-    #find_package(SFML 2.5 COMPONENTS graphics audio network system)
-    #set(CMAKE_PREFIX_PATH "/usr/share/SFML")
-    #message(STATUS ${CMAKE_PREFIX_PATH})
-#endif()
-#find_package(SFML 2.4 COMPONENTS graphics audio network system)
 
 if(SFML_FOUND)
     message(STATUS "SFML: FOUND")
@@ -437,6 +418,10 @@ add_executable(bench_digits_count ${BENCH_DIGITS_COUNT} ${SRCS} ${HEADERS})
 target_link_libraries(bench_digits_count PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} hello stdc++fs)
 add_dependencies(bench_digits_count ${CUSTOM_LIBS})
 
+add_executable(diff_img src/main_img_diff.cpp)
+target_link_libraries(diff_img PRIVATE ${OpenCV_LIBS} utils)
+add_dependencies(diff_img utils)
+
 
 
 
@@ -530,6 +515,7 @@ configure_file(title_map/title_map_0.txt ${CMAKE_BINARY_DIR}/title_map/title_map
 configure_file(title_map/title_map_1.txt ${CMAKE_BINARY_DIR}/title_map/title_map_1.txt COPYONLY)
 configure_file(texture_map/texture_map_0.csv ${CMAKE_BINARY_DIR}/texture_map/texture_map_0.csv COPYONLY)
 configure_file(shaders/example_001.frag ${CMAKE_BINARY_DIR}/shaders/example_001.frag COPYONLY)
+configure_file(shaders/example_002.frag ${CMAKE_BINARY_DIR}/shaders/example_002.frag COPYONLY)
 configure_file(shaders/distortion_map.png ${CMAKE_BINARY_DIR}/shaders/distortion_map.png COPYONLY)
 configure_file(texture/sample.png ${CMAKE_BINARY_DIR}/texture/sample.png COPYONLY)
 configure_file(music/mc.wav ${CMAKE_BINARY_DIR}/music/mc.wav COPYONLY)

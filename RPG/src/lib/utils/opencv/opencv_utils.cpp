@@ -7,7 +7,7 @@
 
 #include "opencv_utils.hpp"
 
-inline cv::Mat opencv_utils::cropimgrect(const cv::Mat &src, const cv::Rect &rect)
+cv::Mat opencv_utils::cropimgrect(const cv::Mat &src, const cv::Rect &rect)
 {
     cv::Mat croppedRef(src, rect);
     cv::Mat cropped;
@@ -15,40 +15,42 @@ inline cv::Mat opencv_utils::cropimgrect(const cv::Mat &src, const cv::Rect &rec
     return cropped;
 }
 
-inline void opencv_utils::cropimgrect(const cv::Mat &src, cv::Mat &des, const cv::Rect &rect)
+void opencv_utils::cropimgrect(const cv::Mat &src, cv::Mat &des, const cv::Rect &rect)
 {
     cv::Mat croppedRef(src, rect);
     cv::Mat cropped;
     croppedRef.copyTo(des);
 }
 
-inline void opencv_utils::imgdiff_prev(cv::Mat &inimg1, cv::Mat &inimg2, cv::Mat &outputimg)
+void opencv_utils::imgdiff_prev(cv::Mat &img1, cv::Mat &img2, cv::Mat &out)
 {
-    int th = 10;
-    if (inimg1.empty() || inimg2.empty())
+    int th = 10;  // 0
+    imgdiff_prev(img1, img2, out, th);
+}
+
+void opencv_utils::imgdiff_prev(cv::Mat &img1, cv::Mat &img2, cv::Mat &out, int &th)
+{
+    if (img1.empty() || img2.empty())
         throw "imgdiff_prev: Empty image(s)";
-    if (inimg1.rows != inimg2.rows || inimg1.cols != inimg2.cols)
+    if (img1.rows != img2.rows || img1.cols != img2.cols)
         throw "imgdiff_prev: Image doesn't have same size";
-    // calc de diff
     cv::Mat diff;
-    absdiff(inimg1, inimg2, diff);
+    absdiff(img1, img2, diff);
 
-    // Diff min
-    cv::Mat mask(inimg1.size(), CV_8UC1);
-
-    for (int j = 0; j < diff.rows; ++j) {
-        for (int i = 0; i < diff.cols; ++i) {
-            cv::Vec3b pix = diff.at<cv::Vec3b>(j, i);
-            int val = (pix[0] + pix[1] + pix[2]);
-            if (val > th) {
-                mask.at<unsigned char>(j, i) = 255;
+    cv::Mat mask(img1.size(), CV_8UC1);
+    for(size_t j=0; j<diff.rows; ++j) {
+        for(size_t i=0; i<diff.cols; ++i){
+            cv::Vec3b pix = diff.at<cv::Vec3b>(j,i);
+            long long int val = (pix[0] + pix[1] + pix[2]);
+            if(val>th){
+                mask.at<unsigned char>(j,i) = 255;
             }
         }
     }
-    bitwise_and(inimg1, inimg1, outputimg, mask);
+    bitwise_and(img2, img2, out, mask);
 }
 
-inline double opencv_utils::getSimilarity(const cv::Mat &A, const cv::Mat &B)
+double opencv_utils::getSimilarity(const cv::Mat &A, const cv::Mat &B)
 {
     cv::Mat diff;
     cv::absdiff(A, B, diff);

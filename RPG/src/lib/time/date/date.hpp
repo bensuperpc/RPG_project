@@ -17,12 +17,12 @@ namespace my
 {
 namespace date
 {
-const std::string weekday[7] = {"Saturday","Sunday","Monday","Tuesday", "Wednesday","Thursday","Friday"};
+const std::string weekday[7] = {"Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 std::string zellersAlgorithm(int &, int &, int &);
 std::string get_date();
 } // namespace date
-}
+} // namespace my
 // THANKS https://stackoverflow.com/a/16358111/10152334
-//https://stackoverflow.com/questions/15127615/determining-day-of-the-week-using-zellers-congruence
+// https://stackoverflow.com/questions/15127615/determining-day-of-the-week-using-zellers-congruence
 
 #endif

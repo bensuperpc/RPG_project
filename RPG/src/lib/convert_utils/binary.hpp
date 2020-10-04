@@ -72,13 +72,13 @@ namespace my
 {
 namespace binary
 {
-unsigned long long make_bitSet(bool*[], size_t);
+unsigned long long make_bitSet(bool *[], size_t);
 int bitArrayToInt32_big(const bool *[], int);
 template <typename T> T bitArrayToInt_big(const bool *ar[], size_t ar_size);
 template <typename T> T bitArrayToInt_big(const std::vector<bool> &, size_t);
 
 } // namespace binary
-}
+} // namespace my
 #include "binary_imp.hpp"
 
 #endif

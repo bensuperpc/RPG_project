@@ -181,6 +181,12 @@ void Game::renderingThread(sf::RenderWindow *window)
         std::cerr << "Error while shaders" << std::endl;
         return;
     }
+    /*
+    sf::Shader shader2;
+    if (!shader2.loadFromFile("../shaders/example_002.frag", sf::Shader::Fragment)) {
+        std::cerr << "Error while shaders" << std::endl;
+        return;
+    }*/
 
     sf::Texture distortionMap;
 
@@ -194,6 +200,10 @@ void Game::renderingThread(sf::RenderWindow *window)
 
     shader.setUniform("currentTexture", sf::Shader::CurrentTexture);
     shader.setUniform("distortionMapTexture", distortionMap);
+
+    //sf::Vector2<float> res = sf::Vector2<float>(1280, 720);
+    //shader2.setUniform("resolution", res);
+    //shader2.setUniform("currentTexture", sf::Shader::CurrentTexture);
 
     float distortionFactor = .05f;
     float riseFactor = .3f;
@@ -467,6 +477,7 @@ void Game::renderingThread(sf::RenderWindow *window)
         // window->pushGLStates();
         // window->resetGLStates();
         shader.setUniform("time", timer.getElapsedTime().asSeconds());
+        //shader2.setUniform("time", timer.getElapsedTime().asSeconds());
         shader.setUniform("distortionFactor", distortionFactor);
         shader.setUniform("riseFactor", riseFactor);
         window->display();
