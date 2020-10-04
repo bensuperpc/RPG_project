@@ -1,0 +1,3 @@
+[submodule "BenLib"]
+	path = RPG/src/lib
+	url = https://github.com/Bensuperpc/BenLib.git
