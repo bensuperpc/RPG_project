@@ -313,7 +313,11 @@ add_subdirectory(src/lib/texture "lib/texture")
 
 add_subdirectory(src/lib/math "lib/math")
 
-add_subdirectory(src/lib/utils "lib/utils")
+add_subdirectory(src/lib/utils/opencv "lib/utils/opencv")
+
+add_subdirectory(src/lib/utils/opengl "lib/utils/opengl")
+
+#add_subdirectory(src/lib/utils/sfml "lib/utils/sfml")
 
 add_subdirectory(src/lib/time "lib/time")
 
@@ -328,7 +332,9 @@ if(EXTERNAL_LIB)
     add_dependencies(convert_utils ${EXTERNAL_LIB})
     add_dependencies(texture ${EXTERNAL_LIB})
     add_dependencies(math ${EXTERNAL_LIB})
-    add_dependencies(utils ${EXTERNAL_LIB})
+    add_dependencies(utils_opencv ${EXTERNAL_LIB})
+    add_dependencies(utils_opengl ${EXTERNAL_LIB})
+#   add_dependencies(utils_sfml ${EXTERNAL_LIB})
     add_dependencies(time ${EXTERNAL_LIB})
     add_dependencies(cpu ${EXTERNAL_LIB})
     add_dependencies(vector ${EXTERNAL_LIB})
@@ -387,7 +393,7 @@ set(HEADERS
 #set(MAIN_LLIBS Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Multimedia sfml-graphics sfml-window sfml-audio sfml-network sfml-system ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${OpenCV_LIBS})
 set(MAIN_LLIBS sfml-graphics sfml-window sfml-audio sfml-network sfml-system ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${OpenCV_LIBS})
 
-set(CUSTOM_LIBS texture convert_utils math utils time cpu vector thread)
+set(CUSTOM_LIBS texture convert_utils math utils_opencv utils_opengl time cpu vector thread)
 
 #   ==================================================
 #   ===============    EXEC FILES    =================
@@ -419,8 +425,8 @@ target_link_libraries(bench_digits_count PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} he
 add_dependencies(bench_digits_count ${CUSTOM_LIBS})
 
 add_executable(diff_img src/main_img_diff.cpp)
-target_link_libraries(diff_img PRIVATE ${OpenCV_LIBS} utils)
-add_dependencies(diff_img utils)
+target_link_libraries(diff_img PRIVATE ${OpenCV_LIBS} utils_opencv)
+add_dependencies(diff_img utils_opencv)
 
 
 
