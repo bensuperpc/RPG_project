@@ -13,9 +13,25 @@ Game::Game()
 
 void Game::Launch()
 {
+    /*
+    sf::Music music;
+    if (music.openFromFile("../music/Supertask_Orchestra_version.ogg"))
+    {
+        std::cout << "OK" << std::endl;
+    } else {
+        std::cout << "KO" << std::endl;
+    }
+    music.play();
+    //music.setLoop(true);
+    while (sound.getStatus() == sf::Sound::Playing)
+    {
+    }*/
+    /*
     this->buffer.emplace_back(sf::SoundBuffer());
-    // if (!buffer.loadFromFile("../music/mc.wav"))
-    //    return;
+     if (!buffer.loadFromFile("../music/Supertask_Orchestra_version.ogg"))
+        return;
+    */
+
     title::load_titlemap(this->title_map, "../title_map/title_map_1.txt");
 
     const std::string path = "../texture/rpg-pack/tiles/";
@@ -44,7 +60,6 @@ void Game::Launch()
     settings.antialiasingLevel = 8;
     settings.depthBits = 24;
     settings.stencilBits = 8;
-    settings.antialiasingLevel = 4;
     settings.majorVersion = 3;
     settings.minorVersion = 0;
 
@@ -57,7 +72,6 @@ void Game::Launch()
                             "SFML part 5",
                             sf::Style::Fullscreen);
     */
-
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML Benoit", sf::Style::Default, settings);
 
     window.setVerticalSyncEnabled(true);
@@ -81,6 +95,9 @@ Game::~Game()
         elem.reset();
     }*/
 #else
+    for (auto &&elem : this->drawPlayer) {
+        delete elem;
+    }
     for (auto &&elem : this->drawSprite) {
         delete elem;
     }
@@ -174,17 +191,17 @@ void Game::renderingThread(sf::RenderWindow *window)
 {
     sf::Clock timer;
     if (!sf::Shader::isAvailable()) {
-        std::cerr << "Shader are not available" << std::endl;
+        std::cout << "Shader are not available" << std::endl;
     }
     sf::Shader shader;
     if (!shader.loadFromFile("../shaders/example_001.frag", sf::Shader::Fragment)) {
-        std::cerr << "Error while shaders" << std::endl;
+        std::cout << "Error while shaders" << std::endl;
         return;
     }
     /*
     sf::Shader shader2;
     if (!shader2.loadFromFile("../shaders/example_002.frag", sf::Shader::Fragment)) {
-        std::cerr << "Error while shaders" << std::endl;
+        std::cout << "Error while shaders" << std::endl;
         return;
     }*/
 
@@ -299,10 +316,10 @@ void Game::renderingThread(sf::RenderWindow *window)
             auto Sprite = this->drawSprite[0];
 #elif __cplusplus >= 201703L
             auto Sprite = this->drawSprite[0].get();
-            const auto &&diffx = Sprite->distanceX(this->drawPlayer[0]);
-            const auto &&diffy = Sprite->distanceY(this->drawPlayer[0]);
 #else
 #endif
+            const auto &&diffx = Sprite->distanceX(this->drawPlayer[0]);
+            const auto &&diffy = Sprite->distanceY(this->drawPlayer[0]);
             if (Sprite->getPosition().x + 35.0 > this->drawPlayer[0]->getPosition().x) {
                 Sprite->move(-1.0 * diffx * 0.025 * this->speed, 0.0);
             } else {
@@ -320,9 +337,9 @@ void Game::renderingThread(sf::RenderWindow *window)
                 std::cout << "Boom" << std::endl;
 #endif
 #if __cplusplus <= 201402L
-                auto = this->drawBlock[0];
+                auto ent = this->drawBlock[0];
 #elif __cplusplus >= 201703L
-                auto *ent = this->drawBlock[0].get();
+                auto ent = this->drawBlock[0].get();
 #else
 #endif
                 ent->setFillColor(sf::Color(255, 255, 255));
@@ -361,8 +378,11 @@ void Game::renderingThread(sf::RenderWindow *window)
                 glViewport(0, 0, (int)event.size.width, (int)event.size.height);
             }
 
-            if (event.type == sf::Event::LostFocus)
+            if (event.type == sf::Event::LostFocus) {
+#ifdef DNDEBUG
                 std::cout << "LostFocus" << std::endl;
+#endif
+            }
 
             if (event.type == sf::Event::GainedFocus) {
 #ifdef DNDEBUG
@@ -421,9 +441,9 @@ void Game::renderingThread(sf::RenderWindow *window)
             if (event.joystickMove.axis == sf::Joystick::X || event.joystickMove.axis == sf::Joystick::Y) {
                 const float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
                 const float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
-                this->drawPlayer[0]->move((x / 7.0) * this->speed, (y / 7.0) * this->speed);
+                this->drawPlayer[0]->move((x / 12.0) * this->speed/1.25, (y / 12.0) * this->speed/1.25);
                 sf::View view = window->getView();
-                view.move((x / 7.0) * this->speed, (y / 7.0) * this->speed);
+                view.move((x / 12.0) * this->speed / 1.25, (y / 12.0) * this->speed/1.25);
                 window->setView(view);
             }
             if (event.type == sf::Event::JoystickButtonPressed) {
@@ -434,14 +454,17 @@ void Game::renderingThread(sf::RenderWindow *window)
 #endif
             }
         }
-        if (sf::Joystick::isConnected(0)) {
-            const float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
-            const float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
+        for (size_t i = 0; i < this->drawPlayer.size(); i++)
+        {
+            if (sf::Joystick::isConnected(i)) {
+                const float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+                const float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
 
-            this->drawPlayer[0]->move((x / 12.0), (y / 12.0));
-            sf::View view = window->getView();
-            view.move(x / 12.0, y / 12.0);
-            window->setView(view);
+                this->drawPlayer[i]->move((x / 12.0), (y / 12.0));
+                sf::View view = window->getView();
+                view.move(x / 12.0, y / 12.0);
+                window->setView(view);
+            }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::F2)) {
             Screen_save_gl::saveScreenshotToFile("../screenshot/screenshot_" + my::date::get_date() + ".png", window->getSize().x, window->getSize().y);

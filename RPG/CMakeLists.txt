@@ -1,7 +1,7 @@
 
 
 cmake_minimum_required (VERSION 3.13)
-project(BenLib VERSION 0.0.2 LANGUAGES CXX C)
+project(RPG VERSION 0.0.4 LANGUAGES CXX C)
 
 #   ==================================================
 #   ================    CMAKE CONF    ================
@@ -483,10 +483,10 @@ if(EXTERNAL_LIB)
 endif()
 
 # stdc++fs is needed for Debian
-target_link_libraries(game PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} hello stdc++fs)
+target_link_libraries(game PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} stdc++fs)
 
 add_executable(bench_isprime ${BENCH_ISPRIME})
-target_link_libraries(bench_isprime PRIVATE thread vector math time hello stdc++fs)
+target_link_libraries(bench_isprime PRIVATE thread vector math time stdc++fs)
 add_dependencies(bench_isprime ${CUSTOM_LIBS})
 
 add_executable(bench_vector_copy ${BENCH_VECTOR_COPY})
@@ -673,8 +673,8 @@ configure_file(shaders/example_001.frag ${CMAKE_BINARY_DIR}/shaders/example_001.
 configure_file(shaders/example_002.frag ${CMAKE_BINARY_DIR}/shaders/example_002.frag COPYONLY)
 configure_file(shaders/distortion_map.png ${CMAKE_BINARY_DIR}/shaders/distortion_map.png COPYONLY)
 configure_file(texture/sample.png ${CMAKE_BINARY_DIR}/texture/sample.png COPYONLY)
+configure_file(music/Supertask_Orchestra_version.ogg ${CMAKE_BINARY_DIR}/music/Supertask_Orchestra_version.ogg COPYONLY)
 configure_file(music/mc.wav ${CMAKE_BINARY_DIR}/music/mc.wav COPYONLY)
-
 
 add_custom_command(
     TARGET game
