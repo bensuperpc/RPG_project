@@ -223,11 +223,11 @@ void Game::renderingThread(sf::RenderWindow *window)
     //
     //  LoadTectures
     //
-    sf::Texture texture;
-    if (!texture.loadFromFile("../texture/PIPOYA FREE RPG Character Sprites 32x32/Female/Female 01-1.png")) {
+    sf::Texture playerTexture;
+    if (!playerTexture.loadFromFile("../texture/PIPOYA FREE RPG Character Sprites 32x32/Female/Female 01-1.png")) {
         std::cout << "Texture not found !" << std::endl;
     }
-    texture.setSmooth(true);
+    playerTexture.setSmooth(true);
 
     sf::Texture texture2;
     if (!texture2.loadFromFile("../texture/rpg-pack/mobs/boss_bee.png")) {
@@ -247,12 +247,12 @@ void Game::renderingThread(sf::RenderWindow *window)
     player->setPosition(125.0, 125.0);
     player->setSize(sf::Vector2f(32, 32));
     // sf::RectangleShape rectangle(sf::Vector2f(50, 50));
-    player->setTexture(&texture);
+    player->setTexture(&playerTexture);
     player->setTextureRect(sf::IntRect(0, 0, 32, 32));
     player->setMeleeAttack(1.0f);
     player->setOutlineThickness(1);
     player->setOutlineColor(sf::Color(255, 0, 0));
-    this->drawSprite.emplace_back(std::move(player));
+    this->drawPlayer.emplace_back(std::move(player));
     // player.release();
 
 #if __cplusplus <= 201402L
@@ -268,7 +268,7 @@ void Game::renderingThread(sf::RenderWindow *window)
     // enemy->setTextureRect(sf::IntRect(0, 0, 32, 32));
     enemy->setOutlineThickness(1);
     enemy->setOutlineColor(sf::Color(255, 0, 0));
-    this->drawPlayer.emplace_back(std::move(enemy));
+    this->drawSprite.emplace_back(std::move(enemy));
     // enemy.release();
 
 #if __cplusplus <= 201402L
@@ -304,14 +304,14 @@ void Game::renderingThread(sf::RenderWindow *window)
 #else
 #endif
             if (Sprite->getPosition().x + 35.0 > this->drawPlayer[0]->getPosition().x) {
-                Sprite->move(-1.0 * diffx * 0.025, 0.0);
+                Sprite->move(-1.0 * diffx * 0.025 * this->speed, 0.0);
             } else {
-                Sprite->move(1.0 * diffx * 0.025, 0.0);
+                Sprite->move(1.0 * diffx * 0.025 * this->speed, 0.0);
             }
             if (Sprite->getPosition().y + 35.0 > this->drawPlayer[0]->getPosition().y) {
-                Sprite->move(0.0, -1.0 * diffy * 0.020);
+                Sprite->move(0.0, -1.0 * diffy * 0.025 * this->speed);
             } else {
-                Sprite->move(0.0, 1.0 * diffy * 0.020);
+                Sprite->move(0.0, 1.0 * diffy * 0.025 * this->speed);
             }
         }
         for (auto &elem : this->drawPlayer) {
@@ -342,13 +342,13 @@ void Game::renderingThread(sf::RenderWindow *window)
         }
 
         // Draw all Entities/Items ect...
-        for (auto &&elem : this->drawTitle)
+        for (auto &elem : this->drawTitle)
             window->draw(*elem, &shader);
-        for (auto &&elem : this->drawBlock)
+        for (auto &elem : this->drawBlock)
             window->draw(*elem);
-        for (auto &&elem : this->drawSprite)
+        for (auto &elem : this->drawSprite)
             window->draw(*elem);
-        for (auto &&elem : this->drawPlayer)
+        for (auto &elem : this->drawPlayer)
             window->draw(*elem);
 
         sf::Event event;
@@ -464,7 +464,7 @@ void Game::renderingThread(sf::RenderWindow *window)
 #endif
                 // riseFactor *= 2.f;
                 this->drawPlayer[0]->move(-7.0 * this->speed, 0.0);
-                this->drawPlayer[0]->setTexture(&texture);
+                this->drawPlayer[0]->setTexture(&playerTexture);
                 this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 32, 32, 32));
                 sf::View view = window->getView();
                 view.move(-7.0 * this->speed, 0.0);
@@ -476,7 +476,7 @@ void Game::renderingThread(sf::RenderWindow *window)
 #endif
                 // riseFactor /= 2.f;
                 this->drawPlayer[0]->move(7.0 * this->speed, 0.0);
-                this->drawPlayer[0]->setTexture(&texture);
+                this->drawPlayer[0]->setTexture(&playerTexture);
                 this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 64, 32, 32));
                 sf::View view = window->getView();
                 view.move(7.0 * this->speed, 0.0);
@@ -490,7 +490,7 @@ void Game::renderingThread(sf::RenderWindow *window)
 #endif
                 // distortionFactor *= 2.f;
                 this->drawPlayer[0]->move(0.0, -7.0 * this->speed);
-                this->drawPlayer[0]->setTexture(&texture);
+                this->drawPlayer[0]->setTexture(&playerTexture);
                 this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 96, 32, 32));
                 sf::View view = window->getView();
                 view.move(0.0, -7.0 * this->speed);
@@ -503,7 +503,7 @@ void Game::renderingThread(sf::RenderWindow *window)
 #endif
                 // distortionFactor /= 2.f;
                 this->drawPlayer[0]->move(0.0, 7.0 * this->speed);
-                this->drawPlayer[0]->setTexture(&texture);
+                this->drawPlayer[0]->setTexture(&playerTexture);
                 this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 0, 32, 32));
                 sf::View view = window->getView();
                 view.move(0.0, 7.0 * this->speed);
