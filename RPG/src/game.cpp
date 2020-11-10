@@ -201,9 +201,9 @@ void Game::renderingThread(sf::RenderWindow *window)
     shader.setUniform("currentTexture", sf::Shader::CurrentTexture);
     shader.setUniform("distortionMapTexture", distortionMap);
 
-    //sf::Vector2<float> res = sf::Vector2<float>(1280, 720);
-    //shader2.setUniform("resolution", res);
-    //shader2.setUniform("currentTexture", sf::Shader::CurrentTexture);
+    // sf::Vector2<float> res = sf::Vector2<float>(1280, 720);
+    // shader2.setUniform("resolution", res);
+    // shader2.setUniform("currentTexture", sf::Shader::CurrentTexture);
 
     float distortionFactor = .05f;
     float riseFactor = .3f;
@@ -280,9 +280,15 @@ void Game::renderingThread(sf::RenderWindow *window)
     this->drawBlock.emplace_back(std::move(shape2));
     // shape2.release();
     // this->drawSprite.emplace_back(std::make_unique(player));
-
+    sf::Clock clock;
     // the rendering loop
     while (window->isOpen()) {
+        sf::Time frameTime = clock.restart();
+        float framerate = 1 / (frameTime.asMilliseconds() * 0.001);
+        this->speed = 120.0 / framerate;
+#ifdef DNDEBUG
+        std::cout << framerate << std::endl;
+#endif
         window->clear(DEFAULT_BACKGROUND);
 
         if (!this->drawSprite[0]->getGlobalBounds().intersects(this->drawSprite[1]->getGlobalBounds())) {
@@ -348,10 +354,7 @@ void Game::renderingThread(sf::RenderWindow *window)
             if (event.type == sf::Event::LostFocus)
                 std::cout << "LostFocus" << std::endl;
 
-            if (event.type == sf::Event::GainedFocus)
-                std::cout << "GainedFocus" << std::endl;
-
-            if (event.type == sf::Event::MouseWheelMoved) {
+            if (event.type == sf::Event::GainedFocus) {
                 std::cout << "wheel movement: " << event.mouseWheel.delta << std::endl;
                 sf::View view2(window->getView().getCenter(), sf::Vector2f(1280, 720));
                 if (event.mouseWheel.delta > 0) {
@@ -430,21 +433,21 @@ void Game::renderingThread(sf::RenderWindow *window)
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
                 std::cout << "Left" << std::endl;
                 // riseFactor *= 2.f;
-                this->drawSprite[0]->move(-7.0, 0.0);
+                this->drawSprite[0]->move(-7.0 * this->speed, 0.0);
                 this->drawSprite[0]->setTexture(&texture);
                 this->drawSprite[0]->setTextureRect(sf::IntRect(0, 32, 32, 32));
                 sf::View view = window->getView();
-                view.move(-7.0, 0.0);
+                view.move(-7.0 * this->speed, 0.0);
                 window->setView(view);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
                 std::cout << "Right " << std::endl;
                 // riseFactor /= 2.f;
-                this->drawSprite[0]->move(7.0, 0.0);
+                this->drawSprite[0]->move(7.0 * this->speed, 0.0);
                 this->drawSprite[0]->setTexture(&texture);
                 this->drawSprite[0]->setTextureRect(sf::IntRect(0, 64, 32, 32));
                 sf::View view = window->getView();
-                view.move(7.0, 0.0);
+                view.move(7.0 * this->speed, 0.0);
                 window->setView(view);
             }
         }
@@ -452,22 +455,22 @@ void Game::renderingThread(sf::RenderWindow *window)
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                 std::cout << "Up" << std::endl;
                 // distortionFactor *= 2.f;
-                this->drawSprite[0]->move(0.0, -7.0);
+                this->drawSprite[0]->move(0.0, -7.0 * this->speed);
                 this->drawSprite[0]->setTexture(&texture);
                 this->drawSprite[0]->setTextureRect(sf::IntRect(0, 96, 32, 32));
                 sf::View view = window->getView();
-                view.move(0.0, -7.0);
+                view.move(0.0, -7.0 * this->speed);
                 window->setView(view);
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
                 std::cout << "Down" << std::endl;
                 // distortionFactor /= 2.f;
-                this->drawSprite[0]->move(0.0, 7.0);
+                this->drawSprite[0]->move(0.0, 7.0 * this->speed);
                 this->drawSprite[0]->setTexture(&texture);
                 this->drawSprite[0]->setTextureRect(sf::IntRect(0, 0, 32, 32));
                 sf::View view = window->getView();
-                view.move(0.0, 7.0);
+                view.move(0.0, 7.0 * this->speed);
                 window->setView(view);
             }
         }
@@ -477,7 +480,7 @@ void Game::renderingThread(sf::RenderWindow *window)
         // window->pushGLStates();
         // window->resetGLStates();
         shader.setUniform("time", timer.getElapsedTime().asSeconds());
-        //shader2.setUniform("time", timer.getElapsedTime().asSeconds());
+        // shader2.setUniform("time", timer.getElapsedTime().asSeconds());
         shader.setUniform("distortionFactor", distortionFactor);
         shader.setUniform("riseFactor", riseFactor);
         window->display();

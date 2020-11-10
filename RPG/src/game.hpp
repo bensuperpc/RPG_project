@@ -19,17 +19,17 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include "convert_utils/sfml_utils.hpp"
 #include "entities/entity.hpp"
 #include "entities/player.hpp"
-#include "convert_utils/sfml_utils.hpp"
 #include "texture/load_texture.hpp"
 #include "texture/load_texturemap.hpp"
 #include "texture/load_titlemap.hpp"
 #include "texture/sfml_screenshot.hpp"
+#include "texture/title.hpp"
 #include "time/chrono/chrono.hpp"
 #include "time/date/date.hpp"
 #include "utils/opengl/screen_save.hpp"
-#include "texture/title.hpp"
 
 #if __cplusplus >= 201703L
 #    include <string_view>
@@ -47,6 +47,7 @@ class Game {
     Game();
     void Launch();
     ~Game();
+    float speed = 1.0;
 
   private:
     void load_texture(std::vector<sf::Texture> &, std::string &);
