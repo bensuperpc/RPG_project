@@ -35,8 +35,8 @@
 #include <tuple>
 #include <vector>
 #include "game.hpp"
-#include "lib/math/prime.hpp"
-#include "lib/time/chrono/chrono.hpp"
+#include "math/prime.hpp"
+#include "time/chrono/chrono.hpp"
 
 int main(int argc, char *argv[], char *envp[])
 {

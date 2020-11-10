@@ -6,7 +6,7 @@
 */
 
 #include <iostream>
-#include "lib/utils/opencv/opencv_utils.hpp"
+#include "utils/opencv/opencv_utils.hpp"
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 

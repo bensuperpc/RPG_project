@@ -21,14 +21,14 @@
 #include <vector>
 #include "entities/entity.hpp"
 #include "entities/player.hpp"
-#include "lib/convert_utils/sfml_utils.hpp"
-#include "lib/texture/load_texture.hpp"
-#include "lib/texture/load_texturemap.hpp"
-#include "lib/texture/load_titlemap.hpp"
-#include "lib/texture/sfml_screenshot.hpp"
-#include "lib/time/chrono/chrono.hpp"
-#include "lib/time/date/date.hpp"
-#include "lib/utils/opengl/screen_save.hpp"
+#include "convert_utils/sfml_utils.hpp"
+#include "texture/load_texture.hpp"
+#include "texture/load_texturemap.hpp"
+#include "texture/load_titlemap.hpp"
+#include "texture/sfml_screenshot.hpp"
+#include "time/chrono/chrono.hpp"
+#include "time/date/date.hpp"
+#include "utils/opengl/screen_save.hpp"
 #include "texture/title.hpp"
 
 #if __cplusplus >= 201703L
