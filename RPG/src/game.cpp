@@ -220,9 +220,10 @@ void Game::renderingThread(sf::RenderWindow *window)
     text.setCharacterSize(30);
     text.setStyle(sf::Text::Bold | sf::Text::Underlined);
     text.setFillColor(sf::Color::Blue);
-
+    //
+    //  LoadTectures
+    //
     sf::Texture texture;
-    // if (!texture.loadFromFile("../texture/rpg-pack/mobs/boss_bee.png")) {
     if (!texture.loadFromFile("../texture/PIPOYA FREE RPG Character Sprites 32x32/Female/Female 01-1.png")) {
         std::cout << "Texture not found !" << std::endl;
     }
@@ -234,7 +235,9 @@ void Game::renderingThread(sf::RenderWindow *window)
     }
     texture2.setSmooth(true);
 
+
     this->drawTitle_fn();
+
 #if __cplusplus <= 201402L
     Entity *player = new Entity();
 #elif __cplusplus >= 201703L
@@ -265,7 +268,7 @@ void Game::renderingThread(sf::RenderWindow *window)
     // enemy->setTextureRect(sf::IntRect(0, 0, 32, 32));
     enemy->setOutlineThickness(1);
     enemy->setOutlineColor(sf::Color(255, 0, 0));
-    this->drawSprite.emplace_back(std::move(enemy));
+    this->drawPlayer.emplace_back(std::move(enemy));
     // enemy.release();
 
 #if __cplusplus <= 201402L
@@ -287,50 +290,55 @@ void Game::renderingThread(sf::RenderWindow *window)
         float framerate = 1 / (frameTime.asMilliseconds() * 0.001);
         this->speed = 120.0 / framerate;
 #ifdef DNDEBUG
-        std::cout << framerate << std::endl;
+        std::cout << "FPS:" << framerate << std::endl;
 #endif
         window->clear(DEFAULT_BACKGROUND);
 
-        if (!this->drawSprite[0]->getGlobalBounds().intersects(this->drawSprite[1]->getGlobalBounds())) {
-
-            auto Sprite = this->drawSprite[1].get();
-            const auto &&diffx = Sprite->distanceX(this->drawSprite[0]);
-            const auto &&diffy = Sprite->distanceY(this->drawSprite[0]);
-
-            if (Sprite->getPosition().x + 35.0 > this->drawSprite[0]->getPosition().x) {
+        if (!this->drawPlayer[0]->getGlobalBounds().intersects(this->drawSprite[0]->getGlobalBounds())) {
+#if __cplusplus <= 201402L
+            auto Sprite = this->drawSprite[0];
+#elif __cplusplus >= 201703L
+            auto Sprite = this->drawSprite[0].get();
+            const auto &&diffx = Sprite->distanceX(this->drawPlayer[0]);
+            const auto &&diffy = Sprite->distanceY(this->drawPlayer[0]);
+#else
+#endif
+            if (Sprite->getPosition().x + 35.0 > this->drawPlayer[0]->getPosition().x) {
                 Sprite->move(-1.0 * diffx * 0.025, 0.0);
             } else {
                 Sprite->move(1.0 * diffx * 0.025, 0.0);
             }
-            if (Sprite->getPosition().y + 35.0 > this->drawSprite[0]->getPosition().y) {
+            if (Sprite->getPosition().y + 35.0 > this->drawPlayer[0]->getPosition().y) {
                 Sprite->move(0.0, -1.0 * diffy * 0.020);
             } else {
                 Sprite->move(0.0, 1.0 * diffy * 0.020);
             }
         }
-
-        if (this->drawSprite[0]->getGlobalBounds().intersects(this->drawBlock[0]->getGlobalBounds())) {
-            std::cout << "Boom" << std::endl;
+        for (auto &elem : this->drawPlayer) {
+            if (elem->getGlobalBounds().intersects(this->drawBlock[0]->getGlobalBounds())) {
+#ifdef DNDEBUG
+                std::cout << "Boom" << std::endl;
+#endif
 #if __cplusplus <= 201402L
-            Entity *ent = this->drawBlock[0];
+                auto = this->drawBlock[0];
 #elif __cplusplus >= 201703L
-            Entity *ent;
-            ent = this->drawBlock[0].get();
+                auto *ent = this->drawBlock[0].get();
 #else
 #endif
-            ent->setFillColor(sf::Color(255, 255, 255));
-            ent->setSize(sf::Vector2f(100, 100));
-            // ent->setRadius(40);
-        } else {
+                ent->setFillColor(sf::Color(255, 255, 255));
+                ent->setSize(sf::Vector2f(100, 100));
+                // ent->setRadius(40);
+            } else {
 #if __cplusplus <= 201402L
-            Entity *ent = this->drawBlock[0];
+                Entity *ent = this->drawBlock[0];
 #elif __cplusplus >= 201703L
-            Entity *ent;
-            ent = this->drawBlock[0].get();
+                Entity *ent;
+                ent = this->drawBlock[0].get();
 #else
 #endif
-            ent->setFillColor(sf::Color(0, 255, 0));
-            ent->setSize(sf::Vector2f(100, 100));
+                ent->setFillColor(sf::Color(0, 255, 0));
+                ent->setSize(sf::Vector2f(100, 100));
+            }
         }
 
         // Draw all Entities/Items ect...
@@ -339,6 +347,8 @@ void Game::renderingThread(sf::RenderWindow *window)
         for (auto &&elem : this->drawBlock)
             window->draw(*elem);
         for (auto &&elem : this->drawSprite)
+            window->draw(*elem);
+        for (auto &&elem : this->drawPlayer)
             window->draw(*elem);
 
         sf::Event event;
@@ -355,7 +365,9 @@ void Game::renderingThread(sf::RenderWindow *window)
                 std::cout << "LostFocus" << std::endl;
 
             if (event.type == sf::Event::GainedFocus) {
+#ifdef DNDEBUG
                 std::cout << "wheel movement: " << event.mouseWheel.delta << std::endl;
+#endif
                 sf::View view2(window->getView().getCenter(), sf::Vector2f(1280, 720));
                 if (event.mouseWheel.delta > 0) {
                     view2.zoom(1.0f);
@@ -366,51 +378,67 @@ void Game::renderingThread(sf::RenderWindow *window)
             }
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.mouseButton.button == sf::Mouse::Right) {
+#ifdef DNDEBUG
                     std::cout << "the right button was pressed" << std::endl;
                     std::cout << "mouse x: " << event.mouseButton.x << std::endl;
                     std::cout << "mouse y: " << event.mouseButton.y << std::endl;
+#endif
                 }
                 if (event.mouseButton.button == sf::Mouse::Left) {
+#ifdef DNDEBUG
                     std::cout << "the left button was pressed" << std::endl;
                     std::cout << "mouse x: " << event.mouseButton.x << std::endl;
                     std::cout << "mouse y: " << event.mouseButton.y << std::endl;
+#endif
                 }
             }
             if (event.type == sf::Event::MouseMoved) {
+#ifdef DNDEBUG
                 std::cout << "new mouse x: " << event.mouseMove.x << std::endl;
                 std::cout << "nesf::Soundw mouse y: " << event.mouseMove.y << std::endl;
+#endif
             }
-            if (event.type == sf::Event::MouseEntered)
+            if (event.type == sf::Event::MouseEntered) {
+#ifdef DNDEBUG
                 std::cout << "the mouse cursor has entered the window" << std::endl;
+#endif
+            }
 
-            if (event.type == sf::Event::MouseLeft)
+            if (event.type == sf::Event::MouseLeft) {
+#ifdef DNDEBUG
                 std::cout << "the mouse cursor has left the window" << std::endl;
+#endif
+            }
             if (event.type == sf::Event::JoystickMoved) {
                 if (event.joystickMove.axis == sf::Joystick::X) {
+#ifdef DNDEBUG
                     std::cout << "X axis moved!" << std::endl;
                     std::cout << "joystick id: " << event.joystickMove.joystickId << std::endl;
                     std::cout << "new position: " << event.joystickMove.position << std::endl;
+#endif
                 }
             }
             if (event.joystickMove.axis == sf::Joystick::X || event.joystickMove.axis == sf::Joystick::Y) {
                 const float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
                 const float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
-                this->drawSprite[0]->move((x / 12.0), (y / 12.0));
+                this->drawPlayer[0]->move((x / 7.0) * this->speed, (y / 7.0) * this->speed);
                 sf::View view = window->getView();
-                view.move(x / 12.0, y / 12.0);
+                view.move((x / 7.0) * this->speed, (y / 7.0) * this->speed);
                 window->setView(view);
             }
             if (event.type == sf::Event::JoystickButtonPressed) {
+#ifdef DNDEBUG
                 std::cout << "joystick button pressed!" << std::endl;
                 std::cout << "joystick id: " << event.joystickButton.joystickId << std::endl;
                 std::cout << "button: " << event.joystickButton.button << std::endl;
+#endif
             }
         }
         if (sf::Joystick::isConnected(0)) {
             const float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
             const float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
 
-            this->drawSprite[0]->move((x / 12.0), (y / 12.0));
+            this->drawPlayer[0]->move((x / 12.0), (y / 12.0));
             sf::View view = window->getView();
             view.move(x / 12.0, y / 12.0);
             window->setView(view);
@@ -431,21 +459,25 @@ void Game::renderingThread(sf::RenderWindow *window)
         }
         if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right))) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+#ifdef DNDEBUG
                 std::cout << "Left" << std::endl;
+#endif
                 // riseFactor *= 2.f;
-                this->drawSprite[0]->move(-7.0 * this->speed, 0.0);
-                this->drawSprite[0]->setTexture(&texture);
-                this->drawSprite[0]->setTextureRect(sf::IntRect(0, 32, 32, 32));
+                this->drawPlayer[0]->move(-7.0 * this->speed, 0.0);
+                this->drawPlayer[0]->setTexture(&texture);
+                this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 32, 32, 32));
                 sf::View view = window->getView();
                 view.move(-7.0 * this->speed, 0.0);
                 window->setView(view);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+#ifdef DNDEBUG
                 std::cout << "Right " << std::endl;
+#endif
                 // riseFactor /= 2.f;
-                this->drawSprite[0]->move(7.0 * this->speed, 0.0);
-                this->drawSprite[0]->setTexture(&texture);
-                this->drawSprite[0]->setTextureRect(sf::IntRect(0, 64, 32, 32));
+                this->drawPlayer[0]->move(7.0 * this->speed, 0.0);
+                this->drawPlayer[0]->setTexture(&texture);
+                this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 64, 32, 32));
                 sf::View view = window->getView();
                 view.move(7.0 * this->speed, 0.0);
                 window->setView(view);
@@ -453,22 +485,26 @@ void Game::renderingThread(sf::RenderWindow *window)
         }
         if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::Down))) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+#ifdef DNDEBUG
                 std::cout << "Up" << std::endl;
+#endif
                 // distortionFactor *= 2.f;
-                this->drawSprite[0]->move(0.0, -7.0 * this->speed);
-                this->drawSprite[0]->setTexture(&texture);
-                this->drawSprite[0]->setTextureRect(sf::IntRect(0, 96, 32, 32));
+                this->drawPlayer[0]->move(0.0, -7.0 * this->speed);
+                this->drawPlayer[0]->setTexture(&texture);
+                this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 96, 32, 32));
                 sf::View view = window->getView();
                 view.move(0.0, -7.0 * this->speed);
                 window->setView(view);
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+#ifdef DNDEBUG
                 std::cout << "Down" << std::endl;
+#endif
                 // distortionFactor /= 2.f;
-                this->drawSprite[0]->move(0.0, 7.0 * this->speed);
-                this->drawSprite[0]->setTexture(&texture);
-                this->drawSprite[0]->setTextureRect(sf::IntRect(0, 0, 32, 32));
+                this->drawPlayer[0]->move(0.0, 7.0 * this->speed);
+                this->drawPlayer[0]->setTexture(&texture);
+                this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 0, 32, 32));
                 sf::View view = window->getView();
                 view.move(0.0, 7.0 * this->speed);
                 window->setView(view);

@@ -6,16 +6,17 @@
 */
 // https://stackoverflow.com/questions/1505582/determining-32-vs-64-bit-in-c
 // Check windows
-
-#if _MSC_FULL_VER
-#    if _WIN32 || _WIN64
-#        if _WIN64
-#            define ENV64BIT
-#        else
-#            define ENV32BIT
+#ifdef _MSC_FULL_VER
+#    if _MSC_FULL_VER
+#        if _WIN32 || _WIN64
+#            if _WIN64
+#                define ENV64BIT
+#            else
+#                define ENV32BIT
+#            endif
 #        endif
 #    endif
-#endif
+#endif // _MSC_FULL_VER
 
 // Check GCC
 #if (__GNUC__ || __clang__)
