@@ -35,8 +35,8 @@ class Weapon : public virtual Item {
 
     bool isTwoHand = false;
 #    pragma GCC diagnostic ignored "-Wpadded"
-    int64_t attack_count = 0;
-    int64_t def_count = 0;
+    uint64_t attack_count = 0;
+    uint64_t def_count = 0;
 
   protected:
 };

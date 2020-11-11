@@ -13,7 +13,7 @@ Game::Game()
 
 void Game::Launch()
 {
-    
+
     /*
     this->buffer.emplace_back(sf::SoundBuffer());
      if (!buffer.loadFromFile("../music/Supertask_Orchestra_version.ogg"))
@@ -51,16 +51,18 @@ void Game::Launch()
     settings.majorVersion = 3;
     settings.minorVersion = 0;
 
-    /*
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
-
-    sf::RenderWindow window(sf::VideoMode(  desktopMode.width/4,
+    /*
+    sf::RenderWindow window(sf::VideoMode(desktopMode.width/4,
                                             desktopMode.height/4,
                                             desktopMode.bitsPerPixel),
                             "SFML part 5",
                             sf::Style::Fullscreen);
     */
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML Benoit", sf::Style::Default, settings);
+   /*
+    sf::RenderWindow window(
+        sf::VideoMode(desktopMode.width / 2, desktopMode.height / 2, desktopMode.bitsPerPixel), "SFML part 5", sf::Style::Default, settings);*/
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML Benoit", sf::Style::Default, settings);
 
     window.setVerticalSyncEnabled(true);
     glEnable(GL_TEXTURE_2D);
@@ -111,12 +113,15 @@ Game::~Game()
     textureUMap.clear();
 #endif
 }
-
-void Game::drawTitle_fn()
+#if __cplusplus <= 201402L
+void Game::drawTitle_fn(std::vector<Title*> &_titleList, std::vector<std::vector<size_t>> &_title_map, std::unordered_map<std::string, std::unique_ptr<sf::Texture>> & _textureUMap, std::unordered_map<int, std::string> &_textureumap, const size_t &_texture_size)
+#elif __cplusplus >= 201703L
+void Game::drawTitle_fn(std::vector<std::unique_ptr<Title>> &_titleList, std::vector<std::vector<size_t>> &_title_map, std::unordered_map<std::string, std::unique_ptr<sf::Texture>> & _textureUMap, std::unordered_map<int, std::string> &_textureumap, const size_t &_texture_size)
+#else
+#endif
 {
-    const size_t &texture_size = 64;
-    for (size_t x = 0; x < this->title_map.size(); x++) {
-        for (size_t y = 0; y < this->title_map[x].size(); y++) {
+    for (size_t x = 0; x < _title_map.size(); x++) {
+        for (size_t y = 0; y < _title_map[x].size(); y++) {
             try {
 #if __cplusplus <= 201402L
                 Title *title = new Title();
@@ -124,10 +129,10 @@ void Game::drawTitle_fn()
                 std::unique_ptr<Title> title = std::make_unique<Title>();
 #else
 #endif
-                auto &&its = this->textureumap.find(title_map[x][y]);
-                if (its != this->textureumap.end()) {
-                    auto &&it = this->textureUMap.find(its->second);
-                    if (it == this->textureUMap.end()) {
+                auto &&its = _textureumap.find(_title_map[x][y]);
+                if (its != _textureumap.end()) {
+                    auto &&it = _textureUMap.find(its->second);
+                    if (it == _textureUMap.end()) {
                         std::cout << "Key-value pair not present in map" << std::endl;
                     } else {
 #if __cplusplus <= 201402L
@@ -152,19 +157,16 @@ void Game::drawTitle_fn()
                             return t.first == Y;
                         });
                     if (it == this->textureList.end()) {
-                        std::cout << "Key-value pair not present in map:" << Y << std::endl;
-                    } else {
-                        title->setTexture(it->second);
-                    }
+                        std::cout << "Key-value pair not present in map:" << Y << s_title_map
                 }
                 */
-                title->setPosition(static_cast<float>(texture_size * y), static_cast<float>(texture_size * x));
-                title->setSize(sf::Vector2f(static_cast<float>(texture_size), static_cast<float>(texture_size)));
-                // title->setTextureRect(sf::IntRect(0, 0, (int)texture->getSize().x, (int)texture->getSize().y);
+                title->setPosition(static_cast<float>(_texture_size * y), static_cast<float>(_texture_size * x));
+                title->setSize(sf::Vector2f(static_cast<float>(_texture_size), static_cast<float>(_texture_size)));
+                //title->setTextureRect(sf::IntRect(0, 0, (int)it->second.getSize().x, (int)it->second.getSize().y);
 #if __cplusplus <= 201402L
-                this->drawTitle.emplace_back(title);
+                _titleList.emplace_back(title);
 #elif __cplusplus >= 201703L
-                this->drawTitle.emplace_back(std::move(title));
+                _titleList.emplace_back(std::move(title));
 #else
 #endif
             }
@@ -178,8 +180,7 @@ void Game::drawTitle_fn()
 void Game::renderingThread(sf::RenderWindow *window)
 {
     sf::Music music;
-    if (music.openFromFile("../music/Supertask_Orchestra_version.ogg"))
-    {
+    if (music.openFromFile("../music/Supertask_Orchestra_version.ogg")) {
         std::cout << "Music: OK" << std::endl;
         music.play();
         music.setLoop(true);
@@ -235,9 +236,9 @@ void Game::renderingThread(sf::RenderWindow *window)
     sf::Font font;
     font.loadFromFile("../font/Almond_Caramel.ttf");
     // Create a text
-   
+
 #if __cplusplus <= 201402L
-    sf::Text  *text = new sf::Text("hello", font);
+    sf::Text *text = new sf::Text("hello", font);
 #elif __cplusplus >= 201703L
     std::unique_ptr<sf::Text> text = std::make_unique<sf::Text>("hello", font);
 #else
@@ -246,8 +247,12 @@ void Game::renderingThread(sf::RenderWindow *window)
     text->setCharacterSize(30);
     text->setStyle(sf::Text::Bold | sf::Text::Underlined);
     text->setFillColor(sf::Color::Blue);
+#if __cplusplus <= 201402L
+    this->drawGUI.emplace_back(text);
+#elif __cplusplus >= 201703L
     this->drawGUI.emplace_back(std::move(text));
-
+#else
+#endif
     this->FPS.setFont(font);
     this->FPS.setPosition(-400.0, -200.0);
     this->FPS.setColor(sf::Color::Red);
@@ -266,9 +271,8 @@ void Game::renderingThread(sf::RenderWindow *window)
         std::cout << "Texture not found !" << std::endl;
     }
     texture2.setSmooth(true);
-
-
-    this->drawTitle_fn();
+    const size_t &texture_size = 64;
+    this->drawTitle_fn(this->drawTitle, this->title_map, this->textureUMap, this->textureumap, texture_size);
 
 #if __cplusplus <= 201402L
     Entity *player = new Entity();
@@ -330,7 +334,7 @@ void Game::renderingThread(sf::RenderWindow *window)
         std::cout << "FPS:" << framerate << std::endl;
 #endif
         std::ostringstream ss;
-        ss << framerate << " FPS";
+        ss << framerate * 1.001 << " FPS";
         this->FPS.setString(ss.str());
 
         if (!this->drawPlayer[0]->getGlobalBounds().intersects(this->drawSprite[0]->getGlobalBounds())) {
@@ -452,8 +456,8 @@ void Game::renderingThread(sf::RenderWindow *window)
             if (event.joystickMove.axis == sf::Joystick::X || event.joystickMove.axis == sf::Joystick::Y) {
                 const float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
                 const float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
-                this->drawPlayer[0]->move((x / 12.0) * this->speed/1.25, (y / 12.0) * this->speed/1.25);
-                standard.move((x / 12.0) * this->speed / 1.25, (y / 12.0) * this->speed/1.25);
+                this->drawPlayer[0]->move((x / 12.0) * this->speed / 1.25, (y / 12.0) * this->speed / 1.25);
+                standard.move((x / 12.0) * this->speed / 1.25, (y / 12.0) * this->speed / 1.25);
             }
             if (event.type == sf::Event::JoystickButtonPressed) {
 #ifdef DNDEBUG
@@ -463,8 +467,7 @@ void Game::renderingThread(sf::RenderWindow *window)
 #endif
             }
         }
-        for (size_t i = 0; i < this->drawPlayer.size(); i++)
-        {
+        for (size_t i = 0; i < this->drawPlayer.size(); i++) {
             if (sf::Joystick::isConnected(i)) {
                 const float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
                 const float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
@@ -481,7 +484,7 @@ void Game::renderingThread(sf::RenderWindow *window)
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::F10)) {
             // sf::View view3(sf::Vector2f(300, 300), sf::Vector2f(1920, 1080));
-            //sf::View view3(window->getView().getCenter(), sf::Vector2f(1280, 720));
+            // sf::View view3(window->getView().getCenter(), sf::Vector2f(1280, 720));
             standard.rotate(5);
         }
         if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right))) {
@@ -540,7 +543,7 @@ void Game::renderingThread(sf::RenderWindow *window)
             window->draw(*elem);
         for (auto &elem : this->drawPlayer)
             window->draw(*elem);
-        //Gui
+        // Gui
         window->setView(gui);
         for (auto &elem : this->drawGUI)
             window->draw(*elem);

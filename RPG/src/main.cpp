@@ -41,7 +41,7 @@
 
 int main(int argc, char *argv[], char *envp[])
 {
-    //std::cout << CMAKE_CXX_COMPILER_VERSION << std::endl;
+    // std::cout << CMAKE_CXX_COMPILER_VERSION << std::endl;
     /*
     #if defined(ENV64BIT)
         if (sizeof(void *) != 8) {
@@ -67,7 +67,7 @@ int main(int argc, char *argv[], char *envp[])
     #    error "Must define either ENV32BIT or ENV64BIT"
     #endif
     */
-   
+
     Game game = Game();
     game.Launch();
     return 0;
