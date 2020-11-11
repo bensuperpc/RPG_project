@@ -228,7 +228,7 @@ void Game::renderingThread(sf::RenderWindow *window)
     float riseFactor = .3f;
 
     window->setActive(true);
-    sf::View view1(sf::Vector2f(150, 150), sf::Vector2f(1920, 1080));
+    sf::View view1(sf::Vector2f(200, 200), sf::Vector2f(1920, 1080));
     view1.zoom(DEFAULT_ZOOM);
     window->setView(view1);
 
@@ -247,6 +247,11 @@ void Game::renderingThread(sf::RenderWindow *window)
     text->setStyle(sf::Text::Bold | sf::Text::Underlined);
     text->setFillColor(sf::Color::Blue);
     this->drawGUI.emplace_back(std::move(text));
+
+    this->FPS.setFont(font);
+    this->FPS.setPosition(-400.0, -200.0);
+    this->FPS.setColor(sf::Color::Red);
+    this->FPS.setCharacterSize(30);
     //
     //  LoadTectures
     //
@@ -271,7 +276,7 @@ void Game::renderingThread(sf::RenderWindow *window)
     std::unique_ptr<Entity> player = std::make_unique<Entity>();
 #else
 #endif
-    player->setPosition(125.0, 125.0);
+    player->setPosition(100.0, 100.0);
     player->setSize(sf::Vector2f(32, 32));
     // sf::RectangleShape rectangle(sf::Vector2f(50, 50));
     player->setTexture(&playerTexture);
@@ -309,13 +314,13 @@ void Game::renderingThread(sf::RenderWindow *window)
     shape2->setFillColor(sf::Color(0, 255, 0));
     this->drawBlock.emplace_back(std::move(shape2));
     // shape2.release();
-    // this->drawSprite.emplace_back(std::make_unique(player));
+    // this->drawSprite.ewindow.draw(text);mplace_back(std::make_unique(player));
     sf::View gui = window->getView();
 
     sf::Clock clock;
     // the rendering loop
     while (window->isOpen()) {
-
+        window->clear(DEFAULT_BACKGROUND);
         sf::View standard = window->getView();
 
         sf::Time frameTime = clock.restart();
@@ -324,7 +329,9 @@ void Game::renderingThread(sf::RenderWindow *window)
 #ifdef DNDEBUG
         std::cout << "FPS:" << framerate << std::endl;
 #endif
-        window->clear(DEFAULT_BACKGROUND);
+        std::ostringstream ss;
+        ss << framerate << " FPS";
+        this->FPS.setString(ss.str());
 
         if (!this->drawPlayer[0]->getGlobalBounds().intersects(this->drawSprite[0]->getGlobalBounds())) {
 #if __cplusplus <= 201402L
@@ -537,6 +544,7 @@ void Game::renderingThread(sf::RenderWindow *window)
         window->setView(gui);
         for (auto &elem : this->drawGUI)
             window->draw(*elem);
+        window->draw(this->FPS);
         window->setView(standard);
         // this->screen_save.add_frame(window);
         //

@@ -78,7 +78,7 @@ class Game {
 
 #else
 #endif
-
+    sf::Text FPS;
     std::vector<std::vector<size_t>> title_map {};
     std::vector<std::vector<size_t>> myNumbers {};
 
