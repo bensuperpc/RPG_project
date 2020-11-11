@@ -56,25 +56,25 @@ class Game {
     unsigned int windowSizeX = sf::VideoMode::getDesktopMode().width;
     unsigned int windowSizeY = sf::VideoMode::getDesktopMode().height;
 #if __cplusplus <= 201402L
-    std::vector<sf::Drawable *> drawGUI {};
-    std::vector<Entity *> drawPlayer {};
-    std::vector<Entity *> drawSprite {};
-    std::vector<Entity *> drawBlock {};
-    std::vector<Title *> drawTitle {};
+    std::vector<sf::Drawable *> drawGUI = {};
+    std::vector<Entity *> drawPlayer = {};
+    std::vector<Entity *> drawSprite = {};
+    std::vector<Entity *> drawBlock = {};
+    std::vector<Title *> drawTitle = {};
 
-    std::vector<std::pair<const std::string, sf::Texture *>> textureList {};
-    std::map<const std::string, sf::Texture *> textureMap {};
-    std::unordered_map<std::string, sf::Texture *> textureUMap {};
+    std::vector<std::pair<const std::string, sf::Texture *>> textureList = {};
+    std::map<const std::string, sf::Texture *> textureMap = {};
+    std::unordered_map<std::string, sf::Texture *> textureUMap = {};
 
 #elif __cplusplus >= 201703L
-    std::vector<std::unique_ptr<sf::Drawable>> drawGUI {};
-    std::vector<std::unique_ptr<Entity>> drawPlayer {};
-    std::vector<std::unique_ptr<Entity>> drawSprite {};
-    std::vector<std::unique_ptr<Entity>> drawBlock {};
-    std::vector<std::unique_ptr<Title>> drawTitle {};
-    std::vector<std::pair<const std::string, std::unique_ptr<sf::Texture>>> textureList {};
-    std::map<const std::string, std::unique_ptr<sf::Texture>> textureMap {};
-    std::unordered_map<std::string, std::unique_ptr<sf::Texture>> textureUMap {};
+    std::vector<std::unique_ptr<sf::Drawable>> drawGUI = {};
+    std::vector<std::unique_ptr<Entity>> drawPlayer = {};
+    std::vector<std::unique_ptr<Entity>> drawSprite = {};
+    std::vector<std::unique_ptr<Entity>> drawBlock = {};
+    std::vector<std::unique_ptr<Title>> drawTitle = {};
+    std::vector<std::pair<const std::string, std::unique_ptr<sf::Texture>>> textureList = {};
+    std::map<const std::string, std::unique_ptr<sf::Texture>> textureMap = {};
+    std::unordered_map<std::string, std::unique_ptr<sf::Texture>> textureUMap = {};
 
 #else
 #endif

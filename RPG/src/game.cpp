@@ -246,8 +246,12 @@ void Game::renderingThread(sf::RenderWindow *window)
     text->setCharacterSize(30);
     text->setStyle(sf::Text::Bold | sf::Text::Underlined);
     text->setFillColor(sf::Color::Blue);
+#if __cplusplus <= 201402L
+    this->drawGUI.emplace_back(text);
+#elif __cplusplus >= 201703L
     this->drawGUI.emplace_back(std::move(text));
-
+#else
+#endif
     this->FPS.setFont(font);
     this->FPS.setPosition(-400.0, -200.0);
     this->FPS.setColor(sf::Color::Red);
