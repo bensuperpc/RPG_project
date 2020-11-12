@@ -25,18 +25,18 @@ void Game::Launch()
     const std::string path = "../texture/rpg-pack/tiles/";
 
     my::texture::load_texture(this->textureUMap, path);
-    // my::texture::load_texture(this->textureMap, path);
-    // my::texture::load_texture(this->textureList, path);
+    my::texture::load_texture(this->textureMap, path);
+    my::texture::load_texture(this->textureList, path);
 
 #if __cplusplus <= 201402L
     my::texture::load_texturemap(this->textureumap, "../texture_map/texture_map_0.csv");
-    // my::texture::load_texturemap(this->texturemap, "../texture_map/texture_map_0.csv");
-    // my::texture::load_texturemap(this->texturelist, "../texture_map/texture_map_0.csv");
+    my::texture::load_texturemap(this->texturemap, "../texture_map/texture_map_0.csv");
+    my::texture::load_texturemap(this->texturelist, "../texture_map/texture_map_0.csv");
 
 #elif __cplusplus >= 201703L
     my::texture::load_texturemap<std::string>(this->textureumap, "../texture_map/texture_map_0.csv");
-    // my::texture::load_texturemap<std::string>(this->texturemap, "../texture_map/texture_map_0.csv");
-    // my::texture::load_texturemap<std::string>(this->texturelist, "../texture_map/texture_map_0.csv");
+    my::texture::load_texturemap<std::string>(this->texturemap, "../texture_map/texture_map_0.csv");
+    my::texture::load_texturemap<std::string>(this->texturelist, "../texture_map/texture_map_0.csv");
 #else
 #endif
 
@@ -59,9 +59,9 @@ void Game::Launch()
                             "SFML part 5",
                             sf::Style::Fullscreen);
     */
-   /*
-    sf::RenderWindow window(
-        sf::VideoMode(desktopMode.width / 2, desktopMode.height / 2, desktopMode.bitsPerPixel), "SFML part 5", sf::Style::Default, settings);*/
+    /*
+     sf::RenderWindow window(
+         sf::VideoMode(desktopMode.width / 2, desktopMode.height / 2, desktopMode.bitsPerPixel), "SFML part 5", sf::Style::Default, settings);*/
     sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML Benoit", sf::Style::Default, settings);
 
     window.setVerticalSyncEnabled(true);
@@ -100,6 +100,9 @@ Game::~Game()
     for (auto &&elem : this->textureList) {
         delete elem.second;
     }
+    for (auto &&elem : this->drawGUI) {
+        delete elem;
+    }
     textureList.clear();
     textureList.shrink_to_fit();
     for (const auto &element : textureMap) {
@@ -112,69 +115,6 @@ Game::~Game()
     }
     textureUMap.clear();
 #endif
-}
-#if __cplusplus <= 201402L
-void Game::drawTitle_fn(std::vector<Title*> &_titleList, std::vector<std::vector<size_t>> &_title_map, std::unordered_map<std::string, std::unique_ptr<sf::Texture>> & _textureUMap, std::unordered_map<int, std::string> &_textureumap, const size_t &_texture_size)
-#elif __cplusplus >= 201703L
-void Game::drawTitle_fn(std::vector<std::unique_ptr<Title>> &_titleList, std::vector<std::vector<size_t>> &_title_map, std::unordered_map<std::string, std::unique_ptr<sf::Texture>> & _textureUMap, std::unordered_map<int, std::string> &_textureumap, const size_t &_texture_size)
-#else
-#endif
-{
-    for (size_t x = 0; x < _title_map.size(); x++) {
-        for (size_t y = 0; y < _title_map[x].size(); y++) {
-            try {
-#if __cplusplus <= 201402L
-                Title *title = new Title();
-#elif __cplusplus >= 201703L
-                std::unique_ptr<Title> title = std::make_unique<Title>();
-#else
-#endif
-                auto &&its = _textureumap.find(_title_map[x][y]);
-                if (its != _textureumap.end()) {
-                    auto &&it = _textureUMap.find(its->second);
-                    if (it == _textureUMap.end()) {
-                        std::cout << "Key-value pair not present in map" << std::endl;
-                    } else {
-#if __cplusplus <= 201402L
-                        title->setTexture(it->second);
-#elif __cplusplus >= 201703L
-                        title->setTexture(it->second.get());
-#else
-#endif
-                    }
-                }
-                /*
-                const int &&X = title_map[x][y];
-                auto its = std::find_if(this->texturelist.begin(), this->texturelist.end(), [&X](const std::pair<const int, const std::string &> &p)
-                {
-                    return p.first == X;
-                    });
-                if (its != this->texturelist.end()) {
-                    const std::string Y = its->second;
-                    auto &&it
-                        = std::find_if(this->textureList.begin(), this->textureList.end(), [&Y](const std::pair<const std::string, sf::Texture *> &t)
-                        {
-                            return t.first == Y;
-                        });
-                    if (it == this->textureList.end()) {
-                        std::cout << "Key-value pair not present in map:" << Y << s_title_map
-                }
-                */
-                title->setPosition(static_cast<float>(_texture_size * y), static_cast<float>(_texture_size * x));
-                title->setSize(sf::Vector2f(static_cast<float>(_texture_size), static_cast<float>(_texture_size)));
-                //title->setTextureRect(sf::IntRect(0, 0, (int)it->second.getSize().x, (int)it->second.getSize().y);
-#if __cplusplus <= 201402L
-                _titleList.emplace_back(title);
-#elif __cplusplus >= 201703L
-                _titleList.emplace_back(std::move(title));
-#else
-#endif
-            }
-            catch (...) {
-                std::cout << "failed to load texture, wrong texture ID !" << std::endl;
-            }
-        }
-    }
 }
 
 void Game::renderingThread(sf::RenderWindow *window)
@@ -272,8 +212,10 @@ void Game::renderingThread(sf::RenderWindow *window)
     }
     texture2.setSmooth(true);
     const size_t &texture_size = 64;
-    this->drawTitle_fn(this->drawTitle, this->title_map, this->textureUMap, this->textureumap, texture_size);
-
+    //my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureUMap, this->textureumap, texture_size);
+    //my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureMap, this->texturemap, texture_size);
+    my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureList, this->texturelist, texture_size);
+    std::cout << drawTitle.size() << std::endl;
 #if __cplusplus <= 201402L
     Entity *player = new Entity();
 #elif __cplusplus >= 201703L

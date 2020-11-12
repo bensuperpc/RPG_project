@@ -24,6 +24,7 @@
 #include "entities/player.hpp"
 #include "texture/load_texture.hpp"
 #include "texture/load_texturemap.hpp"
+#include "texture/load_title.hpp"
 #include "texture/load_titlemap.hpp"
 #include "texture/sfml_screenshot.hpp"
 #include "texture/title.hpp"
@@ -51,12 +52,6 @@ class Game {
 
   private:
     void load_texture(std::vector<sf::Texture> &, std::string &);
-#if __cplusplus <= 201402L
-    void drawTitle_fn(std::vector<Title*> &, std::vector<std::vector<size_t>> &, std::unordered_map<std::string, std::unique_ptr<sf::Texture>> &, std::unordered_map<int, std::string>&, const size_t &);
-#elif __cplusplus >= 201703L
-    void drawTitle_fn(std::vector<std::unique_ptr<Title>> &, std::vector<std::vector<size_t>> &, std::unordered_map<std::string, std::unique_ptr<sf::Texture>> &, std::unordered_map<int, std::string>&, const size_t &);
-#else
-#endif
     void renderingThread(sf::RenderWindow *);
     unsigned int windowSizeX = sf::VideoMode::getDesktopMode().width;
     unsigned int windowSizeY = sf::VideoMode::getDesktopMode().height;
@@ -65,7 +60,7 @@ class Game {
     std::vector<Entity *> drawPlayer = {};
     std::vector<Entity *> drawSprite = {};
     std::vector<Entity *> drawBlock = {};
-    std::vector<Title *> drawTitle = {};
+    std::vector<sf::RectangleShape *> drawTitle = {};
 
     std::vector<std::pair<const std::string, sf::Texture *>> textureList = {};
     std::map<const std::string, sf::Texture *> textureMap = {};
@@ -76,9 +71,9 @@ class Game {
     std::vector<std::unique_ptr<Entity>> drawPlayer = {};
     std::vector<std::unique_ptr<Entity>> drawSprite = {};
     std::vector<std::unique_ptr<Entity>> drawBlock = {};
-    std::vector<std::unique_ptr<Title>> drawTitle = {};
-    std::vector<std::pair<const std::string, std::unique_ptr<sf::Texture>>> textureList = {};
-    std::map<const std::string, std::unique_ptr<sf::Texture>> textureMap = {};
+    std::vector<std::unique_ptr<sf::RectangleShape>> drawTitle = {};
+    std::vector<std::pair<std::string, std::unique_ptr<sf::Texture>>> textureList = {};
+    std::map<std::string, std::unique_ptr<sf::Texture>> textureMap = {};
     std::unordered_map<std::string, std::unique_ptr<sf::Texture>> textureUMap = {};
 
 #else
@@ -90,9 +85,9 @@ class Game {
     std::vector<sf::SoundBuffer> buffer {};
     sf::Sound sound = sf::Sound();
 
-    std::map<const int, std::string> texturemap {};
+    std::map<int, std::string> texturemap {};
     std::unordered_map<int, std::string> textureumap {};
-    std::vector<std::pair<const int, const std::string>> texturelist {};
+    std::vector<std::pair<int, std::string>> texturelist {};
 
   protected:
 };
