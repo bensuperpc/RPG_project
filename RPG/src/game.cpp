@@ -212,8 +212,8 @@ void Game::renderingThread(sf::RenderWindow *window)
     }
     texture2.setSmooth(true);
     const size_t &texture_size = 64;
-    //my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureUMap, this->textureumap, texture_size);
-    //my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureMap, this->texturemap, texture_size);
+    // my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureUMap, this->textureumap, texture_size);
+    // my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureMap, this->texturemap, texture_size);
     my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureList, this->texturelist, texture_size);
     std::cout << drawTitle.size() << std::endl;
 #if __cplusplus <= 201402L
