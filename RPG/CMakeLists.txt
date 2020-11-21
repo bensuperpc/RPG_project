@@ -417,6 +417,13 @@ set(HEADERS
     src/items/wand.hpp
     )
 
+set(VIRUS 
+    src/main_virus.cpp
+    src/virus.hpp
+    src/virus.cpp
+    src/entities/people.cpp
+    src/entities/people.hpp
+    )
 
 set(BENCH_ISPRIME ${lib_path}src/bench/bench_isprime.cpp)
 
@@ -432,14 +439,16 @@ set(BENCH_PC ${lib_path}src/bench/benchmark_pc.cpp)
 
 set(LIST_ALL_FILE ${lib_path}src/exemple/list_all_file.cpp)
 
-set(LIST_ALL_FILE_HASH ${lib_path}src/exemple/list_all_file_hash.cpp)
-
-set(LIST_ALL_FILE_OPENCV ${lib_path}src/exemple/list_all_file_opencv.cpp)
+if (OPENSSL_FOUND)
+    set(LIST_ALL_FILE_HASH ${lib_path}src/exemple/list_all_file_hash.cpp)
+endif()
 
 set(COUNT_ALL_FILE ${lib_path}src/exemple/count_all_file.cpp)
 
-set(IMAGE_DIFF ${lib_path}src/exemple/image_diff.cpp)
-
+if (OPENCV_FOUND)
+    set(IMAGE_DIFF ${lib_path}src/exemple/image_diff.cpp)
+    set(LIST_ALL_FILE_OPENCV ${lib_path}src/exemple/list_all_file_opencv.cpp)
+endif()
 
 #   ====================================================
 #   ====================    LIBS    ====================
@@ -484,6 +493,15 @@ endif()
 
 # stdc++fs is needed for Debian
 target_link_libraries(game PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} stdc++fs)
+
+
+add_executable(virus ${VIRUS})
+if(EXTERNAL_LIB)
+    add_dependencies(virus ${EXTERNAL_LIB})
+endif()
+
+# stdc++fs is needed for Debian
+target_link_libraries(virus PRIVATE ${MAIN_LLIBS} ${CUSTOM_LIBS} stdc++fs)
 
 add_executable(bench_isprime ${BENCH_ISPRIME})
 target_link_libraries(bench_isprime PRIVATE thread vector math time stdc++fs)
