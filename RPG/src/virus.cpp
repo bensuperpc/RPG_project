@@ -140,10 +140,10 @@ void Virus::renderingThread(sf::RenderWindow *window)
 #else
 #endif
         people->setPosition(dist(rng), dist(rng));
-        if(distb(rng) > 999.0) {
+        if (distb(rng) > 999.0) {
             people->is_contaminated = true;
             people->setFillColor(sf::Color(255, 0, 0));
-            
+
         } else {
             people->setFillColor(sf::Color(0, 250, 0));
         }
@@ -152,8 +152,8 @@ void Virus::renderingThread(sf::RenderWindow *window)
         // people->setTexture(&texture2);
         // people->setTextureRect(sf::IntRect(0, 0, 32, 32));
 
-        //people->setOutlineThickness(1);
-        //people->setOutlineColor(sf::Color(255, 0, 0));
+        // people->setOutlineThickness(1);
+        // people->setOutlineColor(sf::Color(255, 0, 0));
 #if __cplusplus <= 201402L
         this->drawSprite.emplace_back(people);
 #elif __cplusplus >= 201703L
@@ -178,15 +178,14 @@ void Virus::renderingThread(sf::RenderWindow *window)
         std::ostringstream ss;
         ss << framerate * 1.001 << " FPS";
         this->FPS.setString(ss.str());
-        
+
         for (auto &elemx : this->drawSprite) {
             for (auto &elemy : this->drawSprite) {
                 if (elemx != elemy) {
                     if (elemx->getGlobalBounds().intersects(elemy->getGlobalBounds())) {
                         elemy->move(distm(rng), distm(rng));
-                        if (elemy->is_contaminated == true || elemx->is_contaminated == true)
-                        {
-                            if(distb(rng) < 900.0) {
+                        if (elemy->is_contaminated == true || elemx->is_contaminated == true) {
+                            if (distb(rng) < 900.0) {
                                 elemy->is_contaminated = true;
                                 elemx->is_contaminated = true;
                                 elemx->setFillColor(sf::Color(255, 0, 0));
@@ -194,170 +193,170 @@ void Virus::renderingThread(sf::RenderWindow *window)
                             }
                         }
                     } else {
-                        elemy->move(distm(rng)/5.0, distm(rng)/5.0);
+                        elemy->move(distm(rng) / 5.0, distm(rng) / 5.0);
                     }
                 }
             }
         }
-            sf::Event event;
-            while (window->pollEvent(event)) {
-                if (event.type == sf::Event::Closed)
-                    window->close();
-                if (event.type == sf::Event::Resized) {
-                    this->windowSizeX = sf::VideoMode::getDesktopMode().width;
-                    this->windowSizeY = sf::VideoMode::getDesktopMode().height;
-                    glViewport(0, 0, (int)event.size.width, (int)event.size.height);
-                }
+        sf::Event event;
+        while (window->pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window->close();
+            if (event.type == sf::Event::Resized) {
+                this->windowSizeX = sf::VideoMode::getDesktopMode().width;
+                this->windowSizeY = sf::VideoMode::getDesktopMode().height;
+                glViewport(0, 0, (int)event.size.width, (int)event.size.height);
+            }
 
-                if (event.type == sf::Event::LostFocus) {
+            if (event.type == sf::Event::LostFocus) {
 #ifdef DNDEBUG
-                    std::cout << "LostFocus" << std::endl;
+                std::cout << "LostFocus" << std::endl;
 #endif
-                }
+            }
 
-                if (event.type == sf::Event::GainedFocus) {
+            if (event.type == sf::Event::GainedFocus) {
 #ifdef DNDEBUG
-                    std::cout << "wheel movement: " << event.mouseWheel.delta << std::endl;
+                std::cout << "wheel movement: " << event.mouseWheel.delta << std::endl;
 #endif
-                    /*drawGUI
-                        view2.zoom(1.0f);
-                    } else {
-                        view2.zoom(0.25f);
-                    }
-                    window->setView(view2);
-                    */
+                /*drawGUI
+                    view2.zoom(1.0f);
+                } else {
+                    view2.zoom(0.25f);
                 }
-                if (event.type == sf::Event::MouseButtonPressed) {
-                    if (event.mouseButton.button == sf::Mouse::Right) {
+                window->setView(view2);
+                */
+            }
+            if (event.type == sf::Event::MouseButtonPressed) {
+                if (event.mouseButton.button == sf::Mouse::Right) {
 #ifdef DNDEBUG
-                        std::cout << "the right button was pressed" << std::endl;
-                        std::cout << "mouse x: " << event.mouseButton.x << std::endl;
-                        std::cout << "mouse y: " << event.mouseButton.y << std::endl;
-#endif
-                    }
-                    if (event.mouseButton.button == sf::Mouse::Left) {
-#ifdef DNDEBUG
-                        std::cout << "the left button was pressed" << std::endl;
-                        std::cout << "mouse x: " << event.mouseButton.x << std::endl;
-                        std::cout << "mouse y: " << event.mouseButton.y << std::endl;
-#endif
-                    }
-                }
-                if (event.type == sf::Event::MouseMoved) {
-#ifdef DNDEBUG
-                    std::cout << "new mouse x: " << event.mouseMove.x << std::endl;
-                    std::cout << "nesf::Soundw mouse y: " << event.mouseMove.y << std::endl;
+                    std::cout << "the right button was pressed" << std::endl;
+                    std::cout << "mouse x: " << event.mouseButton.x << std::endl;
+                    std::cout << "mouse y: " << event.mouseButton.y << std::endl;
 #endif
                 }
-                if (event.type == sf::Event::MouseEntered) {
+                if (event.mouseButton.button == sf::Mouse::Left) {
 #ifdef DNDEBUG
-                    std::cout << "the mouse cursor has entered the window" << std::endl;
+                    std::cout << "the left button was pressed" << std::endl;
+                    std::cout << "mouse x: " << event.mouseButton.x << std::endl;
+                    std::cout << "mouse y: " << event.mouseButton.y << std::endl;
 #endif
                 }
+            }
+            if (event.type == sf::Event::MouseMoved) {
+#ifdef DNDEBUG
+                std::cout << "new mouse x: " << event.mouseMove.x << std::endl;
+                std::cout << "nesf::Soundw mouse y: " << event.mouseMove.y << std::endl;
+#endif
+            }
+            if (event.type == sf::Event::MouseEntered) {
+#ifdef DNDEBUG
+                std::cout << "the mouse cursor has entered the window" << std::endl;
+#endif
+            }
 
-                if (event.type == sf::Event::MouseLeft) {
+            if (event.type == sf::Event::MouseLeft) {
 #ifdef DNDEBUG
-                    std::cout << "the mouse cursor has left the window" << std::endl;
+                std::cout << "the mouse cursor has left the window" << std::endl;
 #endif
-                }
-                if (event.type == sf::Event::JoystickMoved) {
-                    if (event.joystickMove.axis == sf::Joystick::X) {
+            }
+            if (event.type == sf::Event::JoystickMoved) {
+                if (event.joystickMove.axis == sf::Joystick::X) {
 #ifdef DNDEBUG
-                        std::cout << "X axis moved!" << std::endl;
-                        std::cout << "joystick id: " << event.joystickMove.joystickId << std::endl;
-                        std::cout << "new position: " << event.joystickMove.position << std::endl;
-#endif
-                    }
-                }
-                if (event.joystickMove.axis == sf::Joystick::X || event.joystickMove.axis == sf::Joystick::Y) {
-                    const float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
-                    const float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
-                    standard.move((x / 12.0) * this->speed / 1.25, (y / 12.0) * this->speed / 1.25);
-                }
-                if (event.type == sf::Event::JoystickButtonPressed) {
-#ifdef DNDEBUG
-                    std::cout << "joystick button pressed!" << std::endl;
-                    std::cout << "joystick id: " << event.joystickButton.joystickId << std::endl;
-                    std::cout << "button: " << event.joystickButton.button << std::endl;
+                    std::cout << "X axis moved!" << std::endl;
+                    std::cout << "joystick id: " << event.joystickMove.joystickId << std::endl;
+                    std::cout << "new position: " << event.joystickMove.position << std::endl;
 #endif
                 }
             }
-            for (size_t i = 0; i < this->drawPlayer.size(); i++) {
-                if (sf::Joystick::isConnected(i)) {
-                    const float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
-                    const float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
-
-                    this->drawPlayer[i]->move((x / 12.0), (y / 12.0));
-                    standard.move(x / 12.0, y / 12.0);
-                }
+            if (event.joystickMove.axis == sf::Joystick::X || event.joystickMove.axis == sf::Joystick::Y) {
+                const float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+                const float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
+                standard.move((x / 12.0) * this->speed / 1.25, (y / 12.0) * this->speed / 1.25);
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::F2)) {
-                //Screen_save_gl::saveScreenshotToFile("../screenshot/screenshot_" + my::date::get_date() + ".png", window->getSize().x, window->getSize().y);
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::F5)) {
-                standard.zoom(DEFAULT_ZOOM);
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::F10)) {
-                // sf::View view3(sf::Vector2f(300, 300), sf::Vector2f(1920, 1080));
-                // sf::View view3(window->getView().getCenter(), sf::Vector2f(1280, 720));
-                standard.rotate(5);
-            }
-            if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right))) {
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            if (event.type == sf::Event::JoystickButtonPressed) {
 #ifdef DNDEBUG
-                    std::cout << "Left" << std::endl;
+                std::cout << "joystick button pressed!" << std::endl;
+                std::cout << "joystick id: " << event.joystickButton.joystickId << std::endl;
+                std::cout << "button: " << event.joystickButton.button << std::endl;
 #endif
-                    // riseFactor *= 2.f;
-                    standard.move(-7.0 * this->speed, 0.0);
-                }
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-#ifdef DNDEBUG
-                    std::cout << "Right " << std::endl;
-#endif
-                    // riseFactor /= 2.f;
-                    standard.move(7.0 * this->speed, 0.0);
-                }
             }
-            if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::Down))) {
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-#ifdef DNDEBUG
-                    std::cout << "Up" << std::endl;
-#endif
-                    // distortionFactor *= 2.f;
-                    standard.move(0.0, -7.0 * this->speed);
-                }
-
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-#ifdef DNDEBUG
-                    std::cout << "Down" << std::endl;
-#endif
-                    // distortionFactor /= 2.f;
-                    standard.move(0.0, 7.0 * this->speed);
-                }
-            }
-            // Set view
-            window->setView(standard);
-            // Draw all Entities/Items ect...
-            for (auto &elem : this->drawTitle)
-                window->draw(*elem);
-            for (auto &elem : this->drawBlock)
-                window->draw(*elem);
-            for (auto &elem : this->drawSprite)
-                window->draw(*elem);
-            for (auto &elem : this->drawPlayer)
-                window->draw(*elem);
-            // Gui
-            window->setView(gui);
-            for (auto &elem : this->drawGUI)
-                window->draw(*elem);
-            window->draw(this->FPS);
-            window->setView(standard);
-            // this->screen_save.add_frame(window);
-            //
-            // window->pushGLStates();
-            // window->resetGLStates();
-            window->display();
-            // window->popGLStates();
-            // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
+        for (size_t i = 0; i < this->drawPlayer.size(); i++) {
+            if (sf::Joystick::isConnected(i)) {
+                const float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+                const float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
+
+                this->drawPlayer[i]->move((x / 12.0), (y / 12.0));
+                standard.move(x / 12.0, y / 12.0);
+            }
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::F2)) {
+            // Screen_save_gl::saveScreenshotToFile("../screenshot/screenshot_" + my::date::get_date() + ".png", window->getSize().x, window->getSize().y);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::F5)) {
+            standard.zoom(DEFAULT_ZOOM);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::F10)) {
+            // sf::View view3(sf::Vector2f(300, 300), sf::Vector2f(1920, 1080));
+            // sf::View view3(window->getView().getCenter(), sf::Vector2f(1280, 720));
+            standard.rotate(5);
+        }
+        if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right))) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+#ifdef DNDEBUG
+                std::cout << "Left" << std::endl;
+#endif
+                // riseFactor *= 2.f;
+                standard.move(-7.0 * this->speed, 0.0);
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+#ifdef DNDEBUG
+                std::cout << "Right " << std::endl;
+#endif
+                // riseFactor /= 2.f;
+                standard.move(7.0 * this->speed, 0.0);
+            }
+        }
+        if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::Down))) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+#ifdef DNDEBUG
+                std::cout << "Up" << std::endl;
+#endif
+                // distortionFactor *= 2.f;
+                standard.move(0.0, -7.0 * this->speed);
+            }
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+#ifdef DNDEBUG
+                std::cout << "Down" << std::endl;
+#endif
+                // distortionFactor /= 2.f;
+                standard.move(0.0, 7.0 * this->speed);
+            }
+        }
+        // Set view
+        window->setView(standard);
+        // Draw all Entities/Items ect...
+        for (auto &elem : this->drawTitle)
+            window->draw(*elem);
+        for (auto &elem : this->drawBlock)
+            window->draw(*elem);
+        for (auto &elem : this->drawSprite)
+            window->draw(*elem);
+        for (auto &elem : this->drawPlayer)
+            window->draw(*elem);
+        // Gui
+        window->setView(gui);
+        for (auto &elem : this->drawGUI)
+            window->draw(*elem);
+        window->draw(this->FPS);
+        window->setView(standard);
+        // this->screen_save.add_frame(window);
+        //
+        // window->pushGLStates();
+        // window->resetGLStates();
+        window->display();
+        // window->popGLStates();
+        // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
+}

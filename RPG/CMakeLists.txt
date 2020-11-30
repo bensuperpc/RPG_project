@@ -19,6 +19,8 @@ else()
     message(STATUS "CMAKE_UNITY_BUILD : 0")
 endif()
 
+set(CMAKE_DEBUG_POSTFIX "_d")
+
 #set(Var1 "This is variable 1" CACHE INTERNAL "")
 #set(Var1 "This is variable 1" PARENT_SCOPE)
 
@@ -47,10 +49,7 @@ if(NOT CMAKE_CXX_STANDARD)
     if(COMPILER_SUPPORTS_CXX20)
         set(CMAKE_CXX_STANDARD 20)
         message(STATUS "C++20: OK")
-    elseif(COMPILER_SUPPORTS_CXX17)
-        set(CMAKE_CXX_STANDARD 17)
-        message(STATUS "C++17: OK")
-    elseif(COMPILER_SUPPORTS_CXX14)
+    elseif(COMPILER_SUPPOif(UNIX)RTS_CXX14)
         set(CMAKE_CXX_STANDARD 14)
         message(STATUS "C++14: OK")
        # message(FATAL_ERROR "C++14 is old, please use newer compiler.")
@@ -207,9 +206,15 @@ else()
 endif()
 
 #   ================    BOOST    ================
-#set( Boost_USE_STATIC_LIBS 0 )
-#set( Boost_USE_MULTITHREADED 1 )
-#set( Boost_USE_STATIC_RUNTIME 0 )
+if (WIN32)
+    set(Boost_USE_STATIC_LIBS TRUE)
+    set(Boost_USE_MULTITHREADED TRUE)
+    set(Boost_USE_STATIC_RUNTIME FALSE)
+else ()
+    set(Boost_USE_STATIC_LIBS FALSE)
+    set(Boost_USE_MULTITHREADED TRUE)
+    set(Boost_USE_STATIC_RUNTIME FALSE)
+endif (WIN32)
 
 #find_package( Boost 1.72.0 COMPONENTS thread system fiber context program_options filesystem REQUIRED)
 find_package(Boost 1.67.0 COMPONENTS thread filesystem system unit_test_framework QUIET)
@@ -314,6 +319,28 @@ endif()
 if(EXTERNAL_LIB)
     include_directories(${EXTERNAL_INSTALL_LOCATION}/include)
     link_directories(${EXTERNAL_INSTALL_LOCATION}/lib)
+endif()
+
+#   ================    OGRE3D    ================
+if(UNIX)
+    set(CMAKE_MODULE_PATH "/usr/lib/OGRE/cmake;${CMAKE_MODULE_PATH}")
+endif(UNIX)
+
+if(WIN32)
+	set(CMAKE_MODULE_PATH "$ENV{OGRE_HOME}/CMake/;${CMAKE_MODULE_PATH}")
+	set(OGRE_SAMPLES_INCLUDEPATH
+		$ENV{OGRE_HOME}/Samples/include
+	)
+endif(WIN32)
+
+find_package(OGRE QUIET)
+
+if (OGRE_FOUND)
+    include_directories( ${ogre_INCLUDE_DIR})
+    link_directories(${OGRE_LIBRARIES})
+    message(STATUS "OGRE: FOUND")
+else()
+    message(STATUS "OGRE: NOT FOUND")
 endif()
 
 #   =================================================

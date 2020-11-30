@@ -119,19 +119,14 @@ Game::~Game()
 
 void Game::renderingThread(sf::RenderWindow *window)
 {
-    sf::Music music;
-    if (music.openFromFile("../music/Supertask_Orchestra_version.ogg")) {
+
+    if (this->music.openFromFile("../music/Supertask_Orchestra_version.ogg")) {
         std::cout << "Music: OK" << std::endl;
-        music.play();
-        music.setLoop(true);
+        this->music.play();
+        this->music.setLoop(true);
     } else {
         std::cout << "Music: KO" << std::endl;
     }
-    /*
-    //music.setLoop(true);
-    while (music.getStatus() == sf::Music::Playing)
-    {
-    }*/
     sf::Clock timer;
     if (!sf::Shader::isAvailable()) {
         std::cout << "Shader are not available" << std::endl;
@@ -169,18 +164,17 @@ void Game::renderingThread(sf::RenderWindow *window)
     float riseFactor = .3f;
 
     window->setActive(true);
-    sf::View view1(sf::Vector2f(200, 200), sf::Vector2f(1920, 1080));
-    view1.zoom(DEFAULT_ZOOM);
-    window->setView(view1);
+    sf::View view(sf::Vector2f(200, 200), sf::Vector2f(1920, 1080));
+    view.zoom(DEFAULT_ZOOM);
+    window->setView(view);
 
-    sf::Font font;
-    font.loadFromFile("../font/Almond_Caramel.ttf");
+    this->font.loadFromFile("../font/Almond_Caramel.ttf");
     // Create a text
 
 #if __cplusplus <= 201402L
-    sf::Text *text = new sf::Text("hello", font);
+    sf::Text *text = new sf::Text("hello", this->font);
 #elif __cplusplus >= 201703L
-    std::unique_ptr<sf::Text> text = std::make_unique<sf::Text>("hello", font);
+    std::unique_ptr<sf::Text> text = std::make_unique<sf::Text>("hello", this->font);
 #else
 #endif
 
@@ -193,7 +187,7 @@ void Game::renderingThread(sf::RenderWindow *window)
     this->drawGUI.emplace_back(std::move(text));
 #else
 #endif
-    this->FPS.setFont(font);
+    this->FPS.setFont(this->font);
     this->FPS.setPosition(-400.0, -200.0);
     this->FPS.setColor(sf::Color::Red);
     this->FPS.setCharacterSize(30);
@@ -268,6 +262,12 @@ void Game::renderingThread(sf::RenderWindow *window)
     while (window->isOpen()) {
         window->clear(DEFAULT_BACKGROUND);
         sf::View standard = window->getView();
+
+#ifdef DNDEBUG
+        if (this->music.getStatus() == sf::Music::Playing) {
+            std::cout << "Music : Playing" << std::endl;
+        }
+#endif
 
         sf::Time frameTime = clock.restart();
         float framerate = 1 / (frameTime.asMilliseconds() * 0.001);
@@ -345,13 +345,6 @@ void Game::renderingThread(sf::RenderWindow *window)
 #ifdef DNDEBUG
                 std::cout << "wheel movement: " << event.mouseWheel.delta << std::endl;
 #endif
-                /*drawGUI
-                    view2.zoom(1.0f);
-                } else {
-                    view2.zoom(0.25f);
-                }
-                window->setView(view2);
-                */
             }
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.mouseButton.button == sf::Mouse::Right) {
@@ -425,8 +418,6 @@ void Game::renderingThread(sf::RenderWindow *window)
             standard.zoom(DEFAULT_ZOOM);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::F10)) {
-            // sf::View view3(sf::Vector2f(300, 300), sf::Vector2f(1920, 1080));
-            // sf::View view3(window->getView().getCenter(), sf::Vector2f(1280, 720));
             standard.rotate(5);
         }
         if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right))) {
@@ -434,7 +425,6 @@ void Game::renderingThread(sf::RenderWindow *window)
 #ifdef DNDEBUG
                 std::cout << "Left" << std::endl;
 #endif
-                // riseFactor *= 2.f;
                 this->drawPlayer[0]->move(-7.0 * this->speed, 0.0);
                 this->drawPlayer[0]->setTexture(&playerTexture);
                 this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 32, 32, 32));
@@ -444,7 +434,6 @@ void Game::renderingThread(sf::RenderWindow *window)
 #ifdef DNDEBUG
                 std::cout << "Right " << std::endl;
 #endif
-                // riseFactor /= 2.f;
                 this->drawPlayer[0]->move(7.0 * this->speed, 0.0);
                 this->drawPlayer[0]->setTexture(&playerTexture);
                 this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 64, 32, 32));
@@ -456,7 +445,6 @@ void Game::renderingThread(sf::RenderWindow *window)
 #ifdef DNDEBUG
                 std::cout << "Up" << std::endl;
 #endif
-                // distortionFactor *= 2.f;
                 this->drawPlayer[0]->move(0.0, -7.0 * this->speed);
                 this->drawPlayer[0]->setTexture(&playerTexture);
                 this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 96, 32, 32));
@@ -467,7 +455,6 @@ void Game::renderingThread(sf::RenderWindow *window)
 #ifdef DNDEBUG
                 std::cout << "Down" << std::endl;
 #endif
-                // distortionFactor /= 2.f;
                 this->drawPlayer[0]->move(0.0, 7.0 * this->speed);
                 this->drawPlayer[0]->setTexture(&playerTexture);
                 this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 0, 32, 32));

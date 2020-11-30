@@ -37,7 +37,7 @@
 #endif
 
 // Default settings
-#define DEFAULT_ZOOM 0.75f
+#define DEFAULT_ZOOM 1.0f
 
 #define DEFAULT_BACKGROUND sf::Color::Black
 
@@ -55,6 +55,9 @@ class Game {
     void renderingThread(sf::RenderWindow *);
     unsigned int windowSizeX = sf::VideoMode::getDesktopMode().width;
     unsigned int windowSizeY = sf::VideoMode::getDesktopMode().height;
+    sf::Font font;
+    sf::Music music;
+
 #if __cplusplus <= 201402L
     std::vector<sf::Drawable *> drawGUI = {};
     std::vector<Entity *> drawPlayer = {};
