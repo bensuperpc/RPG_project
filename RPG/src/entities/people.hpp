@@ -15,8 +15,8 @@ class People : public virtual sf::RectangleShape {
   public:
     People();
     ~People();
-  bool is_contaminated = false;
-  
+    bool is_contaminated = false;
+
   private:
   protected:
 };

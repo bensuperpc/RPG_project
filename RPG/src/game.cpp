@@ -28,17 +28,9 @@ void Game::Launch()
     my::texture::load_texture(this->textureMap, path);
     my::texture::load_texture(this->textureList, path);
 
-#if __cplusplus <= 201402L
-    my::texture::load_texturemap(this->textureumap, "../texture_map/texture_map_0.csv");
-    my::texture::load_texturemap(this->texturemap, "../texture_map/texture_map_0.csv");
-    my::texture::load_texturemap(this->texturelist, "../texture_map/texture_map_0.csv");
-
-#elif __cplusplus >= 201703L
     my::texture::load_texturemap<std::string>(this->textureumap, "../texture_map/texture_map_0.csv");
     my::texture::load_texturemap<std::string>(this->texturemap, "../texture_map/texture_map_0.csv");
     my::texture::load_texturemap<std::string>(this->texturelist, "../texture_map/texture_map_0.csv");
-#else
-#endif
 
     // this->sound.setBuffer(buffer);
     // this->sound.play();
@@ -78,43 +70,6 @@ void Game::Launch()
 
 Game::~Game()
 {
-#if __cplusplus >= 201703L
-    /*
-    for (auto &&elem : this->drawSprite) {
-        elem.release();
-        elem.reset();
-    }*/
-#else
-    for (auto &&elem : this->drawPlayer) {
-        delete elem;
-    }
-    for (auto &&elem : this->drawSprite) {
-        delete elem;
-    }
-    for (auto &&elem : this->drawTitle) {
-        delete elem;
-    }
-    for (auto &&elem : this->drawBlock) {
-        delete elem;
-    }
-    for (auto &&elem : this->textureList) {
-        delete elem.second;
-    }
-    for (auto &&elem : this->drawGUI) {
-        delete elem;
-    }
-    textureList.clear();
-    textureList.shrink_to_fit();
-    for (const auto &element : textureMap) {
-        delete element.second;
-    }
-    textureMap.clear();
-
-    for (const auto &element : textureUMap) {
-        delete element.second;
-    }
-    textureUMap.clear();
-#endif
 }
 
 void Game::renderingThread(sf::RenderWindow *window)
@@ -171,22 +126,12 @@ void Game::renderingThread(sf::RenderWindow *window)
     this->font.loadFromFile("../font/Almond_Caramel.ttf");
     // Create a text
 
-#if __cplusplus <= 201402L
-    sf::Text *text = new sf::Text("hello", this->font);
-#elif __cplusplus >= 201703L
     std::unique_ptr<sf::Text> text = std::make_unique<sf::Text>("hello", this->font);
-#else
-#endif
 
     text->setCharacterSize(30);
     text->setStyle(sf::Text::Bold | sf::Text::Underlined);
     text->setFillColor(sf::Color::Blue);
-#if __cplusplus <= 201402L
-    this->drawGUI.emplace_back(text);
-#elif __cplusplus >= 201703L
     this->drawGUI.emplace_back(std::move(text));
-#else
-#endif
     this->FPS.setFont(this->font);
     this->FPS.setPosition(-400.0, -200.0);
     this->FPS.setColor(sf::Color::Red);
@@ -210,12 +155,7 @@ void Game::renderingThread(sf::RenderWindow *window)
     // my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureMap, this->texturemap, texture_size);
     my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureList, this->texturelist, texture_size);
     std::cout << drawTitle.size() << std::endl;
-#if __cplusplus <= 201402L
-    Entity *player = new Entity();
-#elif __cplusplus >= 201703L
     std::unique_ptr<Entity> player = std::make_unique<Entity>();
-#else
-#endif
     player->setPosition(100.0, 100.0);
     player->setSize(sf::Vector2f(32, 32));
     // sf::RectangleShape rectangle(sf::Vector2f(50, 50));
@@ -227,12 +167,8 @@ void Game::renderingThread(sf::RenderWindow *window)
     this->drawPlayer.emplace_back(std::move(player));
     // player.release();
 
-#if __cplusplus <= 201402L
-    Entity *enemy = new Entity();
-#elif __cplusplus >= 201703L
     std::unique_ptr<Entity> enemy = std::make_unique<Entity>();
-#else
-#endif
+
     enemy->setPosition(0.0, 0.0);
     enemy->setSize(sf::Vector2f(100, 100));
     // sf::RectangleShape rectangle(sf::Vector2f(50, 50));
@@ -243,12 +179,8 @@ void Game::renderingThread(sf::RenderWindow *window)
     this->drawSprite.emplace_back(std::move(enemy));
     // enemy.release();
 
-#if __cplusplus <= 201402L
-    Entity *shape2 = new Entity();
-#elif __cplusplus >= 201703L
     std::unique_ptr<Entity> shape2 = std::make_unique<Entity>();
-#else
-#endif
+
     shape2->setSize(sf::Vector2f(100, 100));
     shape2->setPosition(-10.0, -10.0);
     shape2->setFillColor(sf::Color(0, 255, 0));
@@ -280,12 +212,7 @@ void Game::renderingThread(sf::RenderWindow *window)
         this->FPS.setString(ss.str());
 
         if (!this->drawPlayer[0]->getGlobalBounds().intersects(this->drawSprite[0]->getGlobalBounds())) {
-#if __cplusplus <= 201402L
-            auto Sprite = this->drawSprite[0];
-#elif __cplusplus >= 201703L
             auto Sprite = this->drawSprite[0].get();
-#else
-#endif
             const auto &&diffx = Sprite->distanceX(this->drawPlayer[0]);
             const auto &&diffy = Sprite->distanceY(this->drawPlayer[0]);
             if (Sprite->getPosition().x + 35.0 > this->drawPlayer[0]->getPosition().x) {
@@ -304,23 +231,13 @@ void Game::renderingThread(sf::RenderWindow *window)
 #ifdef DNDEBUG
                 std::cout << "Boom" << std::endl;
 #endif
-#if __cplusplus <= 201402L
-                auto ent = this->drawBlock[0];
-#elif __cplusplus >= 201703L
                 auto ent = this->drawBlock[0].get();
-#else
-#endif
                 ent->setFillColor(sf::Color(255, 255, 255));
                 ent->setSize(sf::Vector2f(100, 100));
                 // ent->setRadius(40);
             } else {
-#if __cplusplus <= 201402L
-                Entity *ent = this->drawBlock[0];
-#elif __cplusplus >= 201703L
                 Entity *ent;
                 ent = this->drawBlock[0].get();
-#else
-#endif
                 ent->setFillColor(sf::Color(0, 255, 0));
                 ent->setSize(sf::Vector2f(100, 100));
             }

@@ -60,18 +60,6 @@ class Game {
     sf::Font font;
     sf::Music music;
 
-#if __cplusplus <= 201402L
-    std::vector<sf::Drawable *> drawGUI = {};
-    std::vector<Entity *> drawPlayer = {};
-    std::vector<Entity *> drawSprite = {};
-    std::vector<Entity *> drawBlock = {};
-    std::vector<sf::RectangleShape *> drawTitle = {};
-
-    std::vector<std::pair<const std::string, sf::Texture *>> textureList = {};
-    std::map<const std::string, sf::Texture *> textureMap = {};
-    std::unordered_map<std::string, sf::Texture *> textureUMap = {};
-
-#elif __cplusplus >= 201703L
     std::vector<std::unique_ptr<sf::Drawable>> drawGUI = {};
     std::vector<std::unique_ptr<Entity>> drawPlayer = {};
     std::vector<std::unique_ptr<Entity>> drawSprite = {};
@@ -80,9 +68,7 @@ class Game {
     std::vector<std::pair<std::string, std::unique_ptr<sf::Texture>>> textureList = {};
     std::map<std::string, std::unique_ptr<sf::Texture>> textureMap = {};
     std::unordered_map<std::string, std::unique_ptr<sf::Texture>> textureUMap = {};
-
-#else
-#endif
+    
     sf::Text FPS;
     std::vector<std::vector<size_t>> title_map {};
     std::vector<std::vector<size_t>> myNumbers {};
