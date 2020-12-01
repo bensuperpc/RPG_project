@@ -142,13 +142,19 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 #set(CTEST_BINARY_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+
 #   ================    COMPILER DEF    ================
 
-
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
+add_definitions(-DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}")
+
 add_definitions(-DCMAKE_CXX_EXTENSIONS=${CMAKE_CXX_EXTENSIONS})
+add_definitions(-DCMAKE_C_EXTENSIONS=${CMAKE_C_EXTENSIONS})
 add_definitions(-DCMAKE_CXX_COMPILER_ID="${CMAKE_CXX_COMPILER_ID}")
+add_definitions(-DCMAKE_C_COMPILER_ID="${CMAKE_C_COMPILER_ID}")
 add_definitions(-DCMAKE_CXX_COMPILER_VERSION="${CMAKE_CXX_COMPILER_VERSION}")
+add_definitions(-DCMAKE_C_COMPILER_VERSION="${CMAKE_C_COMPILER_VERSION}")
+
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 2)
     message(STATUS "16 bit mode")
@@ -292,11 +298,11 @@ set(CMAKE_AUTORCC ON)
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick Multimedia)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick Multimedia)
-
-#find_package(Qt5 COMPONENTS Quick Widgets Core Gui Multimedia Network REQUIRED)
-#find_package(Qt5QuickCompiler)
+find_package(Qt${QT_VERSION_MAJOR}QuickCompiler)
 #qtquick_compiler_add_resources(RESOURCES example.qrc)
 #qt5_use_modules(myapp Quick Widgets Core Gui Multimedia Network)
+
+#find_package(Qt5 COMPONENTS Quick Widgets Core Gui Multimedia Network REQUIRED)
 
 if (QT_FOUND)
     message(STATUS "QT: FOUND")
@@ -305,43 +311,29 @@ else()
     message(STATUS "QT: NOT FOUND")
 endif()
 
-#   ================    DOCTEST    ================
-find_package(doctest QUIET)
-
-if (DOCTEST_FOUND)
-    include_directories( ${doctest_INCLUDE_DIR})
-    link_directories(${doctest_LIBRARY})
-    message(STATUS "DOCTEST: FOUND")
-else()
-    message(STATUS "DOCTEST: NOT FOUND")
-endif()
-
-if(EXTERNAL_LIB)
-    include_directories(${EXTERNAL_INSTALL_LOCATION}/include)
-    link_directories(${EXTERNAL_INSTALL_LOCATION}/lib)
-endif()
-
 #   ================    OGRE3D    ================
-if(UNIX)
-    set(CMAKE_MODULE_PATH "/usr/lib/OGRE/cmake;${CMAKE_MODULE_PATH}")
-endif(UNIX)
+#if(UNIX)
+#    set(CMAKE_MODULE_PATH "/usr/lib/OGRE/cmake;${CMAKE_MODULE_PATH}")
+#endif(UNIX)
 
-if(WIN32)
-	set(CMAKE_MODULE_PATH "$ENV{OGRE_HOME}/CMake/;${CMAKE_MODULE_PATH}")
-	set(OGRE_SAMPLES_INCLUDEPATH
-		$ENV{OGRE_HOME}/Samples/include
-	)
-endif(WIN32)
+#if(WIN32)
+#	set(CMAKE_MODULE_PATH "$ENV{OGRE_HOME}/CMake/;${CMAKE_MODULE_PATH}")
+#	set(OGRE_SAMPLES_INCLUDEPATH
+#		$ENV{OGRE_HOME}/Samples/include
+#	)
+#endif(WIN32)
 
-find_package(OGRE QUIET)
+#find_package(OGRE QUIET)
 
-if (OGRE_FOUND)
-    include_directories( ${ogre_INCLUDE_DIR})
-    link_directories(${OGRE_LIBRARIES})
-    message(STATUS "OGRE: FOUND")
-else()
-    message(STATUS "OGRE: NOT FOUND")
-endif()
+#if (OGRE_FOUND)
+#    include_directories( ${ogre_INCLUDE_DIR})
+#    link_directories(${OGRE_LIBRARIES})
+#    message(STATUS "OGRE: FOUND")
+#else()
+#    message(STATUS "OGRE: NOT FOUND")
+#endif()
+
+#   ================    OIS    ================
 
 #   =================================================
 #   =============    INTERNAL LIBS    ===============
@@ -393,6 +385,8 @@ add_subdirectory(${lib_path}lib/string_lib "src/lib/lib/string_lib")
 
 add_subdirectory(${lib_path}lib/crypto "src/lib/lib/crypto")
 
+add_subdirectory(${lib_path}lib/std "src/lib/lib/std")
+
 if(EXTERNAL_LIB)
     add_dependencies(hello ${EXTERNAL_LIB})
     add_dependencies(convert_utils ${EXTERNAL_LIB})
@@ -407,6 +401,7 @@ if(EXTERNAL_LIB)
     add_dependencies(thread ${EXTERNAL_LIB})
     add_dependencies(filesystem ${EXTERNAL_LIB})
     add_dependencies(my_crypto ${EXTERNAL_LIB})
+    add_dependencies(std ${EXTERNAL_LIB})
 endif()
 
 #   =================================================
@@ -506,7 +501,7 @@ if (QT_FOUND)
     set(MAIN_LLIBS ${MAIN_LLIBS} Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Multimedia)
 endif()
 
-set(CUSTOM_LIBS texture convert_utils math utils_opencv utils_opengl time cpu vector thread filesystem my_crypto)
+set(CUSTOM_LIBS texture convert_utils math utils_opencv utils_opengl time cpu vector thread filesystem my_crypto std)
 
 #   ==================================================
 #   ===============    EXEC FILES    =================

@@ -28,10 +28,12 @@
 #include "texture/load_titlemap.hpp"
 #include "texture/sfml_screenshot.hpp"
 #include "texture/title.hpp"
-#include "time/chrono/chrono.hpp"
 #include "time/date/date.hpp"
 #include "utils/opengl/screen_save.hpp"
 
+#if __cplusplus <= 201402L
+#include "std/std.hpp"
+#endif
 #if __cplusplus >= 201703L
 #    include <string_view>
 #endif
