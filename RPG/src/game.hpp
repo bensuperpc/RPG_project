@@ -60,25 +60,31 @@ class Game {
     sf::Font font;
     sf::Music music;
 
+    //Drawing elements lists
     std::vector<std::unique_ptr<sf::Drawable>> drawGUI = {};
     std::vector<std::unique_ptr<Entity>> drawPlayer = {};
     std::vector<std::unique_ptr<Entity>> drawSprite = {};
     std::vector<std::unique_ptr<Entity>> drawBlock = {};
     std::vector<std::unique_ptr<sf::RectangleShape>> drawTitle = {};
-    std::vector<std::pair<std::string, std::unique_ptr<sf::Texture>>> textureList = {};
-    std::map<std::string, std::unique_ptr<sf::Texture>> textureMap = {};
-    std::unordered_map<std::string, std::unique_ptr<sf::Texture>> textureUMap = {};
-    
+
+    //Current fps counter
     sf::Text FPS;
-    std::vector<std::vector<size_t>> title_map {};
-    std::vector<std::vector<size_t>> myNumbers {};
 
     std::vector<sf::SoundBuffer> buffer {};
     sf::Sound sound = sf::Sound();
 
+    //List of position map texture
+    std::vector<std::vector<size_t>> title_map {};
+
+    //Associated int from title_map to texture path
     std::map<int, std::string> texturemap {};
     std::unordered_map<int, std::string> textureumap {};
     std::vector<std::pair<int, std::string>> texturelist {};
+
+        //List Associated texture path to texture
+    std::vector<std::pair<std::string, std::unique_ptr<sf::Texture>>> textureList = {};
+    std::map<std::string, std::unique_ptr<sf::Texture>> textureMap = {};
+    std::unordered_map<std::string, std::unique_ptr<sf::Texture>> textureUMap = {};
 
   protected:
 };
