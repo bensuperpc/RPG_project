@@ -242,80 +242,80 @@ void Game::renderingThread(sf::RenderWindow *window)
                 ent->setSize(sf::Vector2f(100, 100));
             }
         }
-        sf::Event event;
-        while (window->pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+
+        while (window->pollEvent(this->event)) {
+            if (this->event.type == sf::Event::Closed)
                 window->close();
-            if (event.type == sf::Event::Resized) {
+            if (this->event.type == sf::Event::Resized) {
                 this->windowSizeX = sf::VideoMode::getDesktopMode().width;
                 this->windowSizeY = sf::VideoMode::getDesktopMode().height;
-                glViewport(0, 0, (int)event.size.width, (int)event.size.height);
+                glViewport(0, 0, (int)this->event.size.width, (int)this->event.size.height);
             }
 
-            if (event.type == sf::Event::LostFocus) {
+            if (this->event.type == sf::Event::LostFocus) {
 #ifdef DNDEBUG
                 std::cout << "LostFocus" << std::endl;
 #endif
             }
 
-            if (event.type == sf::Event::GainedFocus) {
+            if (this->event.type == sf::Event::GainedFocus) {
 #ifdef DNDEBUG
-                std::cout << "wheel movement: " << event.mouseWheel.delta << std::endl;
+                std::cout << "wheel movement: " << this->event.mouseWheel.delta << std::endl;
 #endif
             }
-            if (event.type == sf::Event::MouseButtonPressed) {
-                if (event.mouseButton.button == sf::Mouse::Right) {
+            if (this->event.type == sf::Event::MouseButtonPressed) {
+                if (this->event.mouseButton.button == sf::Mouse::Right) {
 #ifdef DNDEBUG
                     std::cout << "the right button was pressed" << std::endl;
-                    std::cout << "mouse x: " << event.mouseButton.x << std::endl;
-                    std::cout << "mouse y: " << event.mouseButton.y << std::endl;
+                    std::cout << "mouse x: " << this->event.mouseButton.x << std::endl;
+                    std::cout << "mouse y: " << this->event.mouseButton.y << std::endl;
 #endif
                 }
-                if (event.mouseButton.button == sf::Mouse::Left) {
+                if (this->event.mouseButton.button == sf::Mouse::Left) {
 #ifdef DNDEBUG
                     std::cout << "the left button was pressed" << std::endl;
-                    std::cout << "mouse x: " << event.mouseButton.x << std::endl;
-                    std::cout << "mouse y: " << event.mouseButton.y << std::endl;
+                    std::cout << "mouse x: " << this->event.mouseButton.x << std::endl;
+                    std::cout << "mouse y: " << this->event.mouseButton.y << std::endl;
 #endif
                 }
             }
-            if (event.type == sf::Event::MouseMoved) {
+            if (this->event.type == sf::Event::MouseMoved) {
 #ifdef DNDEBUG
-                std::cout << "new mouse x: " << event.mouseMove.x << std::endl;
-                std::cout << "nesf::Soundw mouse y: " << event.mouseMove.y << std::endl;
+                std::cout << "new mouse x: " << this->event.mouseMove.x << std::endl;
+                std::cout << "nesf::Soundw mouse y: " << this->event.mouseMove.y << std::endl;
 #endif
             }
-            if (event.type == sf::Event::MouseEntered) {
+            if (this->event.type == sf::Event::MouseEntered) {
 #ifdef DNDEBUG
                 std::cout << "the mouse cursor has entered the window" << std::endl;
 #endif
             }
 
-            if (event.type == sf::Event::MouseLeft) {
+            if (this->event.type == sf::Event::MouseLeft) {
 #ifdef DNDEBUG
                 std::cout << "the mouse cursor has left the window" << std::endl;
 #endif
             }
-            if (event.type == sf::Event::JoystickMoved) {
-                if (event.joystickMove.axis == sf::Joystick::X) {
+            if (this->event.type == sf::Event::JoystickMoved) {
+                if (this->event.joystickMove.axis == sf::Joystick::X) {
 #ifdef DNDEBUG
                     std::cout << "X axis moved!" << std::endl;
-                    std::cout << "joystick id: " << event.joystickMove.joystickId << std::endl;
-                    std::cout << "new position: " << event.joystickMove.position << std::endl;
+                    std::cout << "joystick id: " << this->event.joystickMove.joystickId << std::endl;
+                    std::cout << "new position: " << this->event.joystickMove.position << std::endl;
 #endif
                 }
             }
-            if (event.joystickMove.axis == sf::Joystick::X || event.joystickMove.axis == sf::Joystick::Y) {
+            if (this->event.joystickMove.axis == sf::Joystick::X || this->event.joystickMove.axis == sf::Joystick::Y) {
                 const float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
                 const float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
                 this->drawPlayer[0]->move((x / 12.0) * this->speed / 1.25, (y / 12.0) * this->speed / 1.25);
                 standard.move((x / 12.0) * this->speed / 1.25, (y / 12.0) * this->speed / 1.25);
             }
-            if (event.type == sf::Event::JoystickButtonPressed) {
+            if (this->event.type == sf::Event::JoystickButtonPressed) {
 #ifdef DNDEBUG
                 std::cout << "joystick button pressed!" << std::endl;
-                std::cout << "joystick id: " << event.joystickButton.joystickId << std::endl;
-                std::cout << "button: " << event.joystickButton.button << std::endl;
+                std::cout << "joystick id: " << this->event.joystickButton.joystickId << std::endl;
+                std::cout << "button: " << this->event.joystickButton.button << std::endl;
 #endif
             }
         }

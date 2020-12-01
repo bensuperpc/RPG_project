@@ -73,6 +73,9 @@ class Game {
     std::vector<sf::SoundBuffer> buffer {};
     sf::Sound sound = sf::Sound();
 
+    //Event
+    sf::Event event;
+
     //List of position map texture
     std::vector<std::vector<size_t>> title_map {};
 
@@ -81,7 +84,7 @@ class Game {
     std::unordered_map<int, std::string> textureumap {};
     std::vector<std::pair<int, std::string>> texturelist {};
 
-        //List Associated texture path to texture
+    //List Associated texture path to texture
     std::vector<std::pair<std::string, std::unique_ptr<sf::Texture>>> textureList = {};
     std::map<std::string, std::unique_ptr<sf::Texture>> textureMap = {};
     std::unordered_map<std::string, std::unique_ptr<sf::Texture>> textureUMap = {};
