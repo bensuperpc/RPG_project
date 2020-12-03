@@ -55,11 +55,14 @@ class Game {
     const size_t texture_size = 64;
     sf::ContextSettings settings;
 
-    //Shaders
+    //Shaders 1
     sf::Texture distortionMap;
     sf::Shader shader;
     float distortionFactor = .05f;
     float riseFactor = .3f;
+
+    std::vector<sf::Texture> playerTexture = {};
+    std::vector<sf::Texture> bossTexture = {};
 
   private:
     void load_texture(std::vector<sf::Texture> &, std::string &);

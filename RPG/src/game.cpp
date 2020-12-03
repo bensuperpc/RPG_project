@@ -25,17 +25,17 @@ void Game::init()
     my::texture::load_texture(this->textureUMap, path);
     my::texture::load_texture(this->textureMap, path);
     my::texture::load_texture(this->textureList, path);
-
+    
     //  Link texture path and title map
     my::texture::load_texturemap<std::string>(this->textureumap, "../texture_map/texture_map_0.csv");
     my::texture::load_texturemap<std::string>(this->texturemap, "../texture_map/texture_map_0.csv");
     my::texture::load_texturemap<std::string>(this->texturelist, "../texture_map/texture_map_0.csv");
-
+    
     //  Emplace texture
     // my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureUMap, this->textureumap, this->texture_size);
     // my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureMap, this->texturemap, this->texture_size);
     my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureList, this->texturelist, this->texture_size);
-
+    
     //  Windows settings
     this->settings.antialiasingLevel = 8;
     this->settings.depthBits = 24;
@@ -148,23 +148,23 @@ void Game::renderingThread(sf::RenderWindow *window)
     //
     //  LoadTectures
     //
-    sf::Texture playerTexture;
-    if (!playerTexture.loadFromFile("../texture/PIPOYA FREE RPG Character Sprites 32x32/Female/Female 01-1.png")) {
+    this->playerTexture.emplace_back(sf::Texture());
+    if (!this->playerTexture[0].loadFromFile("../texture/PIPOYA FREE RPG Character Sprites 32x32/Female/Female 01-1.png")) {
         std::cout << "Texture not found !" << std::endl;
     }
-    playerTexture.setSmooth(true);
+    this->playerTexture[0].setSmooth(true);
 
-    sf::Texture texture2;
-    if (!texture2.loadFromFile("../texture/rpg-pack/mobs/boss_bee.png")) {
+
+    this->bossTexture.emplace_back(sf::Texture());
+    if (!this->bossTexture[0].loadFromFile("../texture/rpg-pack/mobs/boss_bee.png")) {
         std::cout << "Texture not found !" << std::endl;
     }
-    texture2.setSmooth(true);
+    this->bossTexture[0].setSmooth(true);
     
     std::unique_ptr<Entity> player = std::make_unique<Entity>();
     player->setPosition(100.0, 100.0);
     player->setSize(sf::Vector2f(32, 32));
-    // sf::RectangleShape rectangle(sf::Vector2f(50, 50));
-    player->setTexture(&playerTexture);
+    player->setTexture(&this->playerTexture[0]);
     player->setTextureRect(sf::IntRect(0, 0, 32, 32));
     player->setMeleeAttack(1.0f);
     player->setOutlineThickness(1);
@@ -176,8 +176,7 @@ void Game::renderingThread(sf::RenderWindow *window)
 
     enemy->setPosition(0.0, 0.0);
     enemy->setSize(sf::Vector2f(100, 100));
-    // sf::RectangleShape rectangle(sf::Vector2f(50, 50));
-    enemy->setTexture(&texture2);
+    enemy->setTexture(&this->bossTexture[0]);
     // enemy->setTextureRect(sf::IntRect(0, 0, 32, 32));
     enemy->setOutlineThickness(1);
     enemy->setOutlineColor(sf::Color(255, 0, 0));
@@ -190,8 +189,6 @@ void Game::renderingThread(sf::RenderWindow *window)
     shape2->setPosition(-10.0, -10.0);
     shape2->setFillColor(sf::Color(0, 255, 0));
     this->drawBlock.emplace_back(std::move(shape2));
-    // shape2.release();
-    // this->drawSprite.ewindow.draw(text);mplace_back(std::make_unique(player));
     sf::View gui = window->getView();
 
     sf::Clock clock;
@@ -199,8 +196,6 @@ void Game::renderingThread(sf::RenderWindow *window)
     // the rendering loop
     while (window->isOpen()) {
         window->clear(DEFAULT_BACKGROUND);
-        
-
 #ifdef DNDEBUG
         if (this->music.getStatus() == sf::Music::Playing) {
             std::cout << "Music : Playing" << std::endl;
@@ -223,14 +218,14 @@ void Game::renderingThread(sf::RenderWindow *window)
             const auto &&diffx = Sprite->distanceX(this->drawPlayer[0]);
             const auto &&diffy = Sprite->distanceY(this->drawPlayer[0]);
             if (Sprite->getPosition().x + 35.0 > this->drawPlayer[0]->getPosition().x) {
-                Sprite->move(-1.0 * diffx * 0.025 * this->speed, 0.0);
+                Sprite->move(-1.0 * diffx * 0.015 * this->speed, 0.0);
             } else {
-                Sprite->move(1.0 * diffx * 0.025 * this->speed, 0.0);
-            }
+                Sprite->move(1.0 * diffx * 0.015 * this->speed, 0.0);
+            }    // sf::RectangleShape rectangle(sf::Vector2f(50, 50));
             if (Sprite->getPosition().y + 35.0 > this->drawPlayer[0]->getPosition().y) {
-                Sprite->move(0.0, -1.0 * diffy * 0.025 * this->speed);
+                Sprite->move(0.0, -1.0 * diffy * 0.015 * this->speed);
             } else {
-                Sprite->move(0.0, 1.0 * diffy * 0.025 * this->speed);
+                Sprite->move(0.0, 1.0 * diffy * 0.015 * this->speed);
             }
         }
         for (auto &elem : this->drawPlayer) {
@@ -350,7 +345,7 @@ void Game::renderingThread(sf::RenderWindow *window)
                 std::cout << "Left" << std::endl;
 #endif
                 this->drawPlayer[0]->move(-7.0 * this->speed, 0.0);
-                this->drawPlayer[0]->setTexture(&playerTexture);
+                this->drawPlayer[0]->setTexture(&this->playerTexture[0]);
                 this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 32, 32, 32));
                 playerOneView.move(-7.0 * this->speed, 0.0);
             }
@@ -359,7 +354,7 @@ void Game::renderingThread(sf::RenderWindow *window)
                 std::cout << "Right " << std::endl;
 #endif
                 this->drawPlayer[0]->move(7.0 * this->speed, 0.0);
-                this->drawPlayer[0]->setTexture(&playerTexture);
+                this->drawPlayer[0]->setTexture(&this->playerTexture[0]);
                 this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 64, 32, 32));
                 playerOneView.move(7.0 * this->speed, 0.0);
             }
@@ -370,7 +365,7 @@ void Game::renderingThread(sf::RenderWindow *window)
                 std::cout << "Up" << std::endl;
 #endif
                 this->drawPlayer[0]->move(0.0, -7.0 * this->speed);
-                this->drawPlayer[0]->setTexture(&playerTexture);
+                this->drawPlayer[0]->setTexture(&this->playerTexture[0]);
                 this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 96, 32, 32));
                 playerOneView.move(0.0, -7.0 * this->speed);
             }
@@ -380,7 +375,7 @@ void Game::renderingThread(sf::RenderWindow *window)
                 std::cout << "Down" << std::endl;
 #endif
                 this->drawPlayer[0]->move(0.0, 7.0 * this->speed);
-                this->drawPlayer[0]->setTexture(&playerTexture);
+                this->drawPlayer[0]->setTexture(&this->playerTexture[0]);
                 this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 0, 32, 32));
                 playerOneView.move(0.0, 7.0 * this->speed);
             }
@@ -399,6 +394,7 @@ void Game::renderingThread(sf::RenderWindow *window)
             window->draw(*elem);
         for (auto &elem : this->drawPlayer)
             window->draw(*elem);
+        
         auto minimap = playerOneView;
         minimap.setViewport(sf::FloatRect(0.75f, 0.f, 0.25f, 0.25f));
         window->setView(minimap);
