@@ -195,10 +195,11 @@ void Game::renderingThread(sf::RenderWindow *window)
     sf::View gui = window->getView();
 
     sf::Clock clock;
+    sf::View playerOneView = window->getView();
     // the rendering loop
     while (window->isOpen()) {
         window->clear(DEFAULT_BACKGROUND);
-        sf::View standard = window->getView();
+        
 
 #ifdef DNDEBUG
         if (this->music.getStatus() == sf::Music::Playing) {
@@ -298,7 +299,7 @@ void Game::renderingThread(sf::RenderWindow *window)
             }
 
             if (this->event.type == sf::Event::MouseLeft) {
-#ifdef DNDEBUG
+#ifdef DNDEBUG0
                 std::cout << "the mouse cursor has left the window" << std::endl;
 #endif
             }
@@ -315,7 +316,7 @@ void Game::renderingThread(sf::RenderWindow *window)
                 const float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
                 const float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
                 this->drawPlayer[0]->move((x / 12.0) * this->speed / 1.25, (y / 12.0) * this->speed / 1.25);
-                standard.move((x / 12.0) * this->speed / 1.25, (y / 12.0) * this->speed / 1.25);
+                playerOneView.move((x / 12.0) * this->speed / 1.25, (y / 12.0) * this->speed / 1.25);
             }
             if (this->event.type == sf::Event::JoystickButtonPressed) {
 #ifdef DNDEBUG
@@ -331,17 +332,17 @@ void Game::renderingThread(sf::RenderWindow *window)
                 const float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
 
                 this->drawPlayer[i]->move((x / 12.0), (y / 12.0));
-                standard.move(x / 12.0, y / 12.0);
+                playerOneView.move(x / 12.0, y / 12.0);
             }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::F2)) {
             Screen_save_gl::saveScreenshotToFile("../screenshot/screenshot_" + my::date::get_date() + ".png", window->getSize().x, window->getSize().y);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::F5)) {
-            standard.zoom(DEFAULT_ZOOM);
+            playerOneView.zoom(DEFAULT_ZOOM);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::F10)) {
-            standard.rotate(5);
+            playerOneView.rotate(5);
         }
         if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right))) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
@@ -351,7 +352,7 @@ void Game::renderingThread(sf::RenderWindow *window)
                 this->drawPlayer[0]->move(-7.0 * this->speed, 0.0);
                 this->drawPlayer[0]->setTexture(&playerTexture);
                 this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 32, 32, 32));
-                standard.move(-7.0 * this->speed, 0.0);
+                playerOneView.move(-7.0 * this->speed, 0.0);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
 #ifdef DNDEBUG
@@ -360,7 +361,7 @@ void Game::renderingThread(sf::RenderWindow *window)
                 this->drawPlayer[0]->move(7.0 * this->speed, 0.0);
                 this->drawPlayer[0]->setTexture(&playerTexture);
                 this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 64, 32, 32));
-                standard.move(7.0 * this->speed, 0.0);
+                playerOneView.move(7.0 * this->speed, 0.0);
             }
         }
         if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::Down))) {
@@ -371,7 +372,7 @@ void Game::renderingThread(sf::RenderWindow *window)
                 this->drawPlayer[0]->move(0.0, -7.0 * this->speed);
                 this->drawPlayer[0]->setTexture(&playerTexture);
                 this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 96, 32, 32));
-                standard.move(0.0, -7.0 * this->speed);
+                playerOneView.move(0.0, -7.0 * this->speed);
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
@@ -381,12 +382,14 @@ void Game::renderingThread(sf::RenderWindow *window)
                 this->drawPlayer[0]->move(0.0, 7.0 * this->speed);
                 this->drawPlayer[0]->setTexture(&playerTexture);
                 this->drawPlayer[0]->setTextureRect(sf::IntRect(0, 0, 32, 32));
-                standard.move(0.0, 7.0 * this->speed);
+                playerOneView.move(0.0, 7.0 * this->speed);
             }
         }
 
         // Set view
-        window->setView(standard);
+        //playerOneView.setViewport(sf::FloatRect(0.f, 0.f, 0.5f, 1.f));
+        playerOneView.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
+        window->setView(playerOneView);
         // Draw all Entities/Items ect...
         for (auto &elem : this->drawTitle)
             window->draw(*elem, &this->shader);
@@ -396,13 +399,28 @@ void Game::renderingThread(sf::RenderWindow *window)
             window->draw(*elem);
         for (auto &elem : this->drawPlayer)
             window->draw(*elem);
+        auto minimap = playerOneView;
+        minimap.setViewport(sf::FloatRect(0.75f, 0.f, 0.25f, 0.25f));
+        window->setView(minimap);
+        for (auto &elem : this->drawTitle)
+            window->draw(*elem, &this->shader);
+        for (auto &elem : this->drawBlock)
+            window->draw(*elem);
+        for (auto &elem : this->drawSprite)
+            window->draw(*elem);
+        for (auto &elem : this->drawPlayer)
+            window->draw(*elem);
+        /*
+        playerOneView.setViewport(sf::FloatRect(0.5f, 0.f, 0.5f, 1.f));
+        window->setView(playerOneView);
+                for (auto &elem : this->drawTitle)
+        window->draw(*elem, &this->shader);*/
         // Gui
         window->setView(gui);
         for (auto &elem : this->drawGUI_unique)
             window->draw(*elem);
         for (auto &elem : this->drawGUI_shared)
             window->draw(*elem);        
-        window->setView(standard);
         // this->screen_save.add_frame(window);
         //
         // window->pushGLStates();
