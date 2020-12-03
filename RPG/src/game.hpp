@@ -48,27 +48,38 @@
 class Game {
   public:
     Game();
-    void Launch();
+    void init();
+    void run();
     ~Game();
     float speed = 1.0;
+    const size_t texture_size = 64;
+    sf::ContextSettings settings;
+
+    //Shaders
+    sf::Texture distortionMap;
+    sf::Shader shader;
+    float distortionFactor = .05f;
+    float riseFactor = .3f;
 
   private:
     void load_texture(std::vector<sf::Texture> &, std::string &);
     void renderingThread(sf::RenderWindow *);
     unsigned int windowSizeX = sf::VideoMode::getDesktopMode().width;
     unsigned int windowSizeY = sf::VideoMode::getDesktopMode().height;
+    //sf::RenderWindow window;
     sf::Font font;
     sf::Music music;
 
     //Drawing elements lists
-    std::vector<std::unique_ptr<sf::Drawable>> drawGUI = {};
+    std::vector<std::unique_ptr<sf::Drawable>> drawGUI_unique = {};
+    std::vector<std::shared_ptr<sf::Drawable>> drawGUI_shared = {};
     std::vector<std::unique_ptr<Entity>> drawPlayer = {};
     std::vector<std::unique_ptr<Entity>> drawSprite = {};
     std::vector<std::unique_ptr<Entity>> drawBlock = {};
     std::vector<std::unique_ptr<sf::RectangleShape>> drawTitle = {};
 
     //Current fps counter
-    sf::Text FPS;
+    std::shared_ptr<sf::Text> FPS = std::make_shared<sf::Text>();
 
     std::vector<sf::SoundBuffer> buffer {};
     sf::Sound sound = sf::Sound();

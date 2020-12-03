@@ -31,32 +31,26 @@
 #define maX(a, b) ((a) > (b) ? (a) : (b))
 #define miN(a, b) ((a) < (b) ? (a) : (b))
 
-#include <boost/math/special_functions/prime.hpp>
 #include <iostream>
-#include <tuple>
-#include <vector>
 #include "game.hpp"
-#include "math/prime.hpp"
-#include "time/chrono/chrono.hpp"
 
 int main(int argc, char *argv[], char *envp[])
 {
     // std::cout << CMAKE_CXX_COMPILER_VERSION << std::endl;
-    /*
     #if defined(ENV64BIT)
         if (sizeof(void *) != 8) {
-            wprintf(L"ENV64BIT: Error: pointer should be 8 bytes. Exiting.");
+            std::cout << "ENV64BIT: Error: pointer should be 8 bytes. Exiting." << std::endl;
             exit(0);
         }
-        wprintf(L"Diagnostics: we are running in 64-bit mode.\n");
+        std::cout << "Diagnostics: we are running in 64-bit mode." << std::endl;
     #elif defined(ENV32BIT)
         if (sizeof(void *) != 4) {
-            wprintf(L"ENV32BIT: Error: pointer should be 4 bytes. Exiting.");
+            std::cout << "ENV32BIT: Error: pointer should be 4 bytes. Exiting." << std::endl;
             exit(0);
         }
-        wprintf(L"Diagnostics: we are running in 32-bit mode.\n");
+        std::cout <<  "Diagnostics: we are running in 32-bit mode." << std::endl;
     #else
-    #    error "Must define either ENV32BIT or ENV64BIT".
+    #    warning "Must define either ENV32BIT or ENV64BIT".
     #endif
 
     #if defined(ENV64BIT)
@@ -64,11 +58,11 @@ int main(int argc, char *argv[], char *envp[])
     #elif defined(ENV32BIT)
         // 32-bit code here.
     #else
-    #    error "Must define either ENV32BIT or ENV64BIT"
+    #    warning "Must define either ENV32BIT or ENV64BIT"
     #endif
-    */
 
     Game game = Game();
-    game.Launch();
+    game.init();
+    game.run();
     return 0;
 }

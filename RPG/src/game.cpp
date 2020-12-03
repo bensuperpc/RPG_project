@@ -11,7 +11,58 @@ Game::Game()
 {
 }
 
-void Game::Launch()
+void Game::init()
+{
+    //  Load default font
+    this->font.loadFromFile("../font/Almond_Caramel.ttf");
+
+    //  Load title map
+    title::load_titlemap(this->title_map, "../title_map/title_map_1.txt");
+
+    //  Load texture
+    const std::string path = "../texture/rpg-pack/tiles/";
+
+    my::texture::load_texture(this->textureUMap, path);
+    my::texture::load_texture(this->textureMap, path);
+    my::texture::load_texture(this->textureList, path);
+
+    //  Link texture path and title map
+    my::texture::load_texturemap<std::string>(this->textureumap, "../texture_map/texture_map_0.csv");
+    my::texture::load_texturemap<std::string>(this->texturemap, "../texture_map/texture_map_0.csv");
+    my::texture::load_texturemap<std::string>(this->texturelist, "../texture_map/texture_map_0.csv");
+
+    //  Emplace texture
+    // my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureUMap, this->textureumap, this->texture_size);
+    // my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureMap, this->texturemap, this->texture_size);
+    my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureList, this->texturelist, this->texture_size);
+
+    //  Windows settings
+    this->settings.antialiasingLevel = 8;
+    this->settings.depthBits = 24;
+    this->settings.stencilBits = 8;
+    this->settings.majorVersion = 3;
+    this->settings.minorVersion = 0;
+
+    //  Shaders
+        if (!this->shader.loadFromFile("../shaders/example_001.frag", sf::Shader::Fragment)) {
+        std::cout << "Error while shaders" << std::endl;
+        return;
+    }
+
+    if (!this->distortionMap.loadFromFile("../shaders/distortion_map.png")) {
+        sf::err() << "Error while loading distortion map" << std::endl;
+        return;
+    }
+
+    this->distortionMap.setRepeated(true);
+    this->distortionMap.setSmooth(true);
+
+    this->shader.setUniform("currentTexture", sf::Shader::CurrentTexture);
+    this->shader.setUniform("distortionMapTexture", this->distortionMap);
+
+}
+
+void Game::run()
 {
 
     /*
@@ -20,28 +71,9 @@ void Game::Launch()
         return;
     */
 
-    title::load_titlemap(this->title_map, "../title_map/title_map_1.txt");
-
-    const std::string path = "../texture/rpg-pack/tiles/";
-
-    my::texture::load_texture(this->textureUMap, path);
-    my::texture::load_texture(this->textureMap, path);
-    my::texture::load_texture(this->textureList, path);
-
-    my::texture::load_texturemap<std::string>(this->textureumap, "../texture_map/texture_map_0.csv");
-    my::texture::load_texturemap<std::string>(this->texturemap, "../texture_map/texture_map_0.csv");
-    my::texture::load_texturemap<std::string>(this->texturelist, "../texture_map/texture_map_0.csv");
-
     // this->sound.setBuffer(buffer);
     // this->sound.play();
     // this->sound.setLoop(true);
-
-    sf::ContextSettings settings;
-    settings.antialiasingLevel = 8;
-    settings.depthBits = 24;
-    settings.stencilBits = 8;
-    settings.majorVersion = 3;
-    settings.minorVersion = 0;
 
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     /*
@@ -54,7 +86,7 @@ void Game::Launch()
     /*
      sf::RenderWindow window(
          sf::VideoMode(desktopMode.width / 2, desktopMode.height / 2, desktopMode.bitsPerPixel), "SFML part 5", sf::Style::Default, settings);*/
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML Benoit", sf::Style::Default, settings);
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML Benoit", sf::Style::Default, this->settings);
 
     window.setVerticalSyncEnabled(true);
     glEnable(GL_TEXTURE_2D);
@@ -82,48 +114,24 @@ void Game::renderingThread(sf::RenderWindow *window)
     } else {
         std::cout << "Music: KO" << std::endl;
     }
+    
     sf::Clock timer;
     if (!sf::Shader::isAvailable()) {
         std::cout << "Shader are not available" << std::endl;
     }
-    sf::Shader shader;
-    if (!shader.loadFromFile("../shaders/example_001.frag", sf::Shader::Fragment)) {
-        std::cout << "Error while shaders" << std::endl;
-        return;
-    }
-    /*
-    sf::Shader shader2;
-    if (!shader2.loadFromFile("../shaders/example_002.frag", sf::Shader::Fragment)) {
-        std::cout << "Error while shaders" << std::endl;
-        return;
-    }*/
 
-    sf::Texture distortionMap;
-
-    if (!distortionMap.loadFromFile("../shaders/distortion_map.png")) {
-        sf::err() << "Error while loading distortion map" << std::endl;
-        return;
-    }
-
-    distortionMap.setRepeated(true);
-    distortionMap.setSmooth(true);
-
-    shader.setUniform("currentTexture", sf::Shader::CurrentTexture);
-    shader.setUniform("distortionMapTexture", distortionMap);
 
     // sf::Vector2<float> res = sf::Vector2<float>(1280, 720);
     // shader2.setUniform("resolution", res);
     // shader2.setUniform("currentTexture", sf::Shader::CurrentTexture);
 
-    float distortionFactor = .05f;
-    float riseFactor = .3f;
+
 
     window->setActive(true);
-    sf::View view(sf::Vector2f(200, 200), sf::Vector2f(1920, 1080));
+    sf::View view(sf::Vector2f(300, 300), sf::Vector2f(1920, 1080));
     view.zoom(DEFAULT_ZOOM);
     window->setView(view);
 
-    this->font.loadFromFile("../font/Almond_Caramel.ttf");
     // Create a text
 
     std::unique_ptr<sf::Text> text = std::make_unique<sf::Text>("hello", this->font);
@@ -131,11 +139,12 @@ void Game::renderingThread(sf::RenderWindow *window)
     text->setCharacterSize(30);
     text->setStyle(sf::Text::Bold | sf::Text::Underlined);
     text->setFillColor(sf::Color::Blue);
-    this->drawGUI.emplace_back(std::move(text));
-    this->FPS.setFont(this->font);
-    this->FPS.setPosition(-400.0, -200.0);
-    this->FPS.setColor(sf::Color::Red);
-    this->FPS.setCharacterSize(30);
+    this->drawGUI_unique.emplace_back(std::move(text));
+    this->FPS->setFont(this->font);
+    this->FPS->setPosition(-400.0, -200.0);
+    this->FPS->setColor(sf::Color::Red);
+    this->FPS->setCharacterSize(30);
+    this->drawGUI_shared.emplace_back(this->FPS);
     //
     //  LoadTectures
     //
@@ -150,11 +159,7 @@ void Game::renderingThread(sf::RenderWindow *window)
         std::cout << "Texture not found !" << std::endl;
     }
     texture2.setSmooth(true);
-    const size_t &texture_size = 64;
-    // my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureUMap, this->textureumap, texture_size);
-    // my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureMap, this->texturemap, texture_size);
-    my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureList, this->texturelist, texture_size);
-    std::cout << drawTitle.size() << std::endl;
+    
     std::unique_ptr<Entity> player = std::make_unique<Entity>();
     player->setPosition(100.0, 100.0);
     player->setSize(sf::Vector2f(32, 32));
@@ -200,7 +205,7 @@ void Game::renderingThread(sf::RenderWindow *window)
             std::cout << "Music : Playing" << std::endl;
         }
 #endif
-
+        // FPS counter
         sf::Time frameTime = clock.restart();
         float framerate = 1 / (frameTime.asMilliseconds() * 0.001);
         this->speed = 120.0 / framerate;
@@ -209,8 +214,9 @@ void Game::renderingThread(sf::RenderWindow *window)
 #endif
         std::ostringstream ss;
         ss << framerate * 1.001 << " FPS";
-        this->FPS.setString(ss.str());
+        this->FPS->setString(ss.str());
 
+        // Move boss
         if (!this->drawPlayer[0]->getGlobalBounds().intersects(this->drawSprite[0]->getGlobalBounds())) {
             auto Sprite = this->drawSprite[0].get();
             const auto &&diffx = Sprite->distanceX(this->drawPlayer[0]);
@@ -378,11 +384,12 @@ void Game::renderingThread(sf::RenderWindow *window)
                 standard.move(0.0, 7.0 * this->speed);
             }
         }
+
         // Set view
         window->setView(standard);
         // Draw all Entities/Items ect...
         for (auto &elem : this->drawTitle)
-            window->draw(*elem, &shader);
+            window->draw(*elem, &this->shader);
         for (auto &elem : this->drawBlock)
             window->draw(*elem);
         for (auto &elem : this->drawSprite)
@@ -391,18 +398,19 @@ void Game::renderingThread(sf::RenderWindow *window)
             window->draw(*elem);
         // Gui
         window->setView(gui);
-        for (auto &elem : this->drawGUI)
+        for (auto &elem : this->drawGUI_unique)
             window->draw(*elem);
-        window->draw(this->FPS);
+        for (auto &elem : this->drawGUI_shared)
+            window->draw(*elem);        
         window->setView(standard);
         // this->screen_save.add_frame(window);
         //
         // window->pushGLStates();
         // window->resetGLStates();
-        shader.setUniform("time", timer.getElapsedTime().asSeconds());
+        this->shader.setUniform("time", timer.getElapsedTime().asSeconds());
         // shader2.setUniform("time", timer.getElapsedTime().asSeconds());
-        shader.setUniform("distortionFactor", distortionFactor);
-        shader.setUniform("riseFactor", riseFactor);
+        this->shader.setUniform("distortionFactor", this->distortionFactor);
+        this->shader.setUniform("riseFactor", this->riseFactor);
         window->display();
         // window->popGLStates();
         // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

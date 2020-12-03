@@ -20,7 +20,7 @@ class PNJ : public virtual Entity {
     PNJ operator<<(const PNJ &);
 
   private:
-    std::vector<std::string *> speech {};
+    std::vector<std::string> speech {};
 
   protected:
 };
