@@ -143,7 +143,7 @@ void Game::renderingThread(sf::RenderWindow *window)
 
 
     this->FPS->setFont(this->font);
-    this->FPS->setPosition(-400.0, -200.0);
+    this->FPS->setPosition(-650.0, -240.0);
     this->FPS->setColor(sf::Color::Red);
     this->FPS->setCharacterSize(30);
     this->drawGUI_shared.emplace_back(this->FPS);
@@ -171,6 +171,24 @@ void Game::renderingThread(sf::RenderWindow *window)
     sf::Texture life1 = sf::Texture();
     if (!life1.loadFromFile("../texture/rpg-pack/props n decorations/generic-rpg-flower01.png")) {
         std::cout << "Texture not found !" << std::endl;
+    }
+
+    for(size_t x = 0; x < 10; x++)
+    {
+        std::unique_ptr<Entity> _life = std::make_unique<Entity>();
+        _life->setPosition(-650.0 + (float)x * 45, -200.0);
+        _life->setSize(sf::Vector2f(40, 35));
+        _life->setTexture(&life0);
+        this->drawGUI_shared.emplace_back(std::move(_life));
+    }
+
+    for(size_t x = 0; x < 10; x++)
+    {
+        std::unique_ptr<Entity> _life = std::make_unique<Entity>();
+        _life->setPosition(-650.0 + (float)x * 45, -160.0);
+        _life->setSize(sf::Vector2f(40, 35));
+        _life->setTexture(&life1);
+        this->drawGUI_shared.emplace_back(std::move(_life));
     }
 
     
