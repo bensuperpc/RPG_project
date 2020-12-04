@@ -173,6 +173,7 @@ void Game::renderingThread(sf::RenderWindow *window)
         std::cout << "Texture not found !" << std::endl;
     }
 
+    //Life
     for(size_t x = 0; x < 10; x++)
     {
         std::unique_ptr<Entity> _life = std::make_unique<Entity>();
@@ -181,7 +182,7 @@ void Game::renderingThread(sf::RenderWindow *window)
         _life->setTexture(&life0);
         this->drawGUI_shared.emplace_back(std::move(_life));
     }
-
+    //Mana
     for(size_t x = 0; x < 10; x++)
     {
         std::unique_ptr<Entity> _life = std::make_unique<Entity>();
