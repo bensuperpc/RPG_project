@@ -20,8 +20,6 @@
 #include <thread>
 #include <vector>
 #include "convert_utils/sfml_utils.hpp"
-#include "entities/entity.hpp"
-#include "entities/player.hpp"
 #include "texture/load_texture.hpp"
 #include "texture/load_texturemap.hpp"
 #include "texture/load_title.hpp"
@@ -30,6 +28,11 @@
 #include "texture/title.hpp"
 #include "time/date/date.hpp"
 #include "utils/opengl/screen_save.hpp"
+
+//Entities
+#include "entities/entity.hpp"
+#include "entities/player.hpp"
+#include "entities/boss.hpp"
 
 #if __cplusplus <= 201402L
 #include "std/std.hpp"
@@ -77,7 +80,7 @@ class Game {
     std::vector<std::unique_ptr<sf::Drawable>> drawGUI_unique = {};
     std::vector<std::shared_ptr<sf::Drawable>> drawGUI_shared = {};
     std::vector<std::unique_ptr<Entity>> drawPlayer = {};
-    std::vector<std::unique_ptr<Entity>> drawSprite = {};
+    std::vector<std::unique_ptr<Entity>> drawEntity = {};
     std::vector<std::unique_ptr<Entity>> drawBlock = {};
     std::vector<std::unique_ptr<sf::RectangleShape>> drawTitle = {};
 

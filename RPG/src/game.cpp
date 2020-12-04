@@ -140,6 +140,8 @@ void Game::renderingThread(sf::RenderWindow *window)
     text->setStyle(sf::Text::Bold | sf::Text::Underlined);
     text->setFillColor(sf::Color::Blue);
     this->drawGUI_unique.emplace_back(std::move(text));
+
+
     this->FPS->setFont(this->font);
     this->FPS->setPosition(-400.0, -200.0);
     this->FPS->setColor(sf::Color::Red);
@@ -160,8 +162,19 @@ void Game::renderingThread(sf::RenderWindow *window)
         std::cout << "Texture not found !" << std::endl;
     }
     this->bossTexture[0].setSmooth(true);
+
+    sf::Texture life0 = sf::Texture();
+    if (!life0.loadFromFile("../texture/rpg-pack/props n decorations/generic-rpg-flower02.png")) {
+        std::cout << "Texture not found !" << std::endl;
+    }
+
+    sf::Texture life1 = sf::Texture();
+    if (!life1.loadFromFile("../texture/rpg-pack/props n decorations/generic-rpg-flower01.png")) {
+        std::cout << "Texture not found !" << std::endl;
+    }
+
     
-    std::unique_ptr<Entity> player = std::make_unique<Entity>();
+    std::unique_ptr<Player> player = std::make_unique<Player>();
     player->setPosition(100.0, 100.0);
     player->setSize(sf::Vector2f(32, 32));
     player->setTexture(&this->playerTexture[0]);
@@ -170,9 +183,8 @@ void Game::renderingThread(sf::RenderWindow *window)
     player->setOutlineThickness(1);
     player->setOutlineColor(sf::Color(255, 0, 0));
     this->drawPlayer.emplace_back(std::move(player));
-    // player.release();
 
-    std::unique_ptr<Entity> enemy = std::make_unique<Entity>();
+    std::unique_ptr<Boss> enemy = std::make_unique<Boss>();
 
     enemy->setPosition(0.0, 0.0);
     enemy->setSize(sf::Vector2f(100, 100));
@@ -180,9 +192,27 @@ void Game::renderingThread(sf::RenderWindow *window)
     // enemy->setTextureRect(sf::IntRect(0, 0, 32, 32));
     enemy->setOutlineThickness(1);
     enemy->setOutlineColor(sf::Color(255, 0, 0));
-    this->drawSprite.emplace_back(std::move(enemy));
-    // enemy.release();
+    this->drawEntity.emplace_back(std::move(enemy));
+    
+    std::unique_ptr<Boss> enemy2 = std::make_unique<Boss>();
+    enemy2->setPosition(10.3, 10.0);
+    enemy2->setSize(sf::Vector2f(100, 100));
+    enemy2->setTexture(&this->bossTexture[0]);
+    // enemy->setTextureRect(sf::IntRect(0, 0, 32, 32));
+    enemy2->setOutlineThickness(1);
+    enemy2->setOutlineColor(sf::Color(255, 0, 0));
+    this->drawEntity.emplace_back(std::move(enemy2));
 
+    std::unique_ptr<Boss> enemy3 = std::make_unique<Boss>();
+    enemy3->setPosition(20.3, 20.0);
+    enemy3->setSize(sf::Vector2f(100, 100));
+    enemy3->setTexture(&this->bossTexture[0]);
+    // enemy->setTextureRect(sf::IntRect(0, 0, 32, 32));
+    enemy3->setOutlineThickness(1);
+    enemy3->setOutlineColor(sf::Color(255, 0, 0));
+    this->drawEntity.emplace_back(std::move(enemy3));
+    // enemy.release();
+    
     std::unique_ptr<Entity> shape2 = std::make_unique<Entity>();
 
     shape2->setSize(sf::Vector2f(100, 100));
@@ -190,7 +220,7 @@ void Game::renderingThread(sf::RenderWindow *window)
     shape2->setFillColor(sf::Color(0, 255, 0));
     this->drawBlock.emplace_back(std::move(shape2));
     sf::View gui = window->getView();
-
+    
     sf::Clock clock;
     sf::View playerOneView = window->getView();
     // the rendering loop
@@ -213,19 +243,21 @@ void Game::renderingThread(sf::RenderWindow *window)
         this->FPS->setString(ss.str());
 
         // Move boss
-        if (!this->drawPlayer[0]->getGlobalBounds().intersects(this->drawSprite[0]->getGlobalBounds())) {
-            auto Sprite = this->drawSprite[0].get();
-            const auto &&diffx = Sprite->distanceX(this->drawPlayer[0]);
-            const auto &&diffy = Sprite->distanceY(this->drawPlayer[0]);
-            if (Sprite->getPosition().x + 35.0 > this->drawPlayer[0]->getPosition().x) {
-                Sprite->move(-1.0 * diffx * 0.015 * this->speed, 0.0);
-            } else {
-                Sprite->move(1.0 * diffx * 0.015 * this->speed, 0.0);
-            }    // sf::RectangleShape rectangle(sf::Vector2f(50, 50));
-            if (Sprite->getPosition().y + 35.0 > this->drawPlayer[0]->getPosition().y) {
-                Sprite->move(0.0, -1.0 * diffy * 0.015 * this->speed);
-            } else {
-                Sprite->move(0.0, 1.0 * diffy * 0.015 * this->speed);
+        for(size_t x = 0; x < this->drawEntity.size(); x++)
+        {
+            if (!this->drawPlayer[0]->getGlobalBounds().intersects(this->drawEntity[x]->getGlobalBounds())) {
+                const auto &&diffx = this->drawEntity[x]->distanceX(this->drawPlayer[0]);
+                const auto &&diffy = this->drawEntity[x]->distanceY(this->drawPlayer[0]);
+                if (this->drawEntity[x]->getPosition().x + 35.0 > this->drawPlayer[0]->getPosition().x) {
+                    this->drawEntity[x]->move(-1.0 * diffx * 0.015 * this->speed * (x + 1) * 0.6, 0.0);
+                } else {
+                    this->drawEntity[x]->move(1.0 * diffx * 0.015 * this->speed * (x + 1)  * 0.6, 0.0);
+                }    // sf::RectangleShape rectangle(sf::Vector2f(50, 50));
+                if (this->drawEntity[x]->getPosition().y + 35.0 > this->drawPlayer[0]->getPosition().y) {
+                    this->drawEntity[x]->move(0.0, -1.0 * diffy * 0.015 * this->speed * (x + 1)  * 0.6);
+                } else {
+                    this->drawEntity[x]->move(0.0, 1.0 * diffy * 0.015 * this->speed * (x + 1)  * 0.6);
+                }
             }
         }
         for (auto &elem : this->drawPlayer) {
@@ -238,8 +270,7 @@ void Game::renderingThread(sf::RenderWindow *window)
                 ent->setSize(sf::Vector2f(100, 100));
                 // ent->setRadius(40);
             } else {
-                Entity *ent;
-                ent = this->drawBlock[0].get();
+                auto ent = this->drawBlock[0].get();
                 ent->setFillColor(sf::Color(0, 255, 0));
                 ent->setSize(sf::Vector2f(100, 100));
             }
@@ -390,7 +421,7 @@ void Game::renderingThread(sf::RenderWindow *window)
             window->draw(*elem, &this->shader);
         for (auto &elem : this->drawBlock)
             window->draw(*elem);
-        for (auto &elem : this->drawSprite)
+        for (auto &elem : this->drawEntity)
             window->draw(*elem);
         for (auto &elem : this->drawPlayer)
             window->draw(*elem);
@@ -402,7 +433,7 @@ void Game::renderingThread(sf::RenderWindow *window)
             window->draw(*elem, &this->shader);
         for (auto &elem : this->drawBlock)
             window->draw(*elem);
-        for (auto &elem : this->drawSprite)
+        for (auto &elem : this->drawEntity)
             window->draw(*elem);
         for (auto &elem : this->drawPlayer)
             window->draw(*elem);
