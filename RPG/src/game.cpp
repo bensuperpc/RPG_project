@@ -22,13 +22,13 @@ void Game::init()
     //  Load texture
     const std::string path = "../texture/rpg-pack/tiles/";
 
-    my::texture::load_texture(this->textureUMap, path);
-    my::texture::load_texture(this->textureMap, path);
+    //my::texture::load_texture(this->textureUMap, path);
+    //my::texture::load_texture(this->textureMap, path);
     my::texture::load_texture(this->textureList, path);
     
     //  Link texture path and title map
-    my::texture::load_texturemap<std::string>(this->textureumap, "../texture_map/texture_map_0.csv");
-    my::texture::load_texturemap<std::string>(this->texturemap, "../texture_map/texture_map_0.csv");
+    //my::texture::load_texturemap<std::string>(this->textureumap, "../texture_map/texture_map_0.csv");
+    //my::texture::load_texturemap<std::string>(this->texturemap, "../texture_map/texture_map_0.csv");
     my::texture::load_texturemap<std::string>(this->texturelist, "../texture_map/texture_map_0.csv");
     
     //  Emplace texture
@@ -74,8 +74,6 @@ void Game::run()
     // this->sound.setBuffer(buffer);
     // this->sound.play();
     // this->sound.setLoop(true);
-
-    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     /*
     sf::RenderWindow window(sf::VideoMode(desktopMode.width/4,
                                             desktopMode.height/4,
@@ -106,21 +104,16 @@ Game::~Game()
 
 void Game::renderingThread(sf::RenderWindow *window)
 {
-
+    /*
     if (this->music.openFromFile("../music/Supertask_Orchestra_version.ogg")) {
         std::cout << "Music: OK" << std::endl;
         this->music.play();
         this->music.setLoop(true);
     } else {
         std::cout << "Music: KO" << std::endl;
-    }
+    }*/
     
     sf::Clock timer;
-    if (!sf::Shader::isAvailable()) {
-        std::cout << "Shader are not available" << std::endl;
-    }
-
-
     // sf::Vector2<float> res = sf::Vector2<float>(1280, 720);
     // shader2.setUniform("resolution", res);
     // shader2.setUniform("currentTexture", sf::Shader::CurrentTexture);
@@ -176,7 +169,7 @@ void Game::renderingThread(sf::RenderWindow *window)
     //Life
     for(size_t x = 0; x < 10; x++)
     {
-        std::unique_ptr<Entity> _life = std::make_unique<Entity>();
+        std::unique_ptr<sf::RectangleShape> _life = std::make_unique<sf::RectangleShape>();
         _life->setPosition(-650.0 + (float)x * 45, -200.0);
         _life->setSize(sf::Vector2f(40, 35));
         _life->setTexture(&life0);
@@ -185,13 +178,14 @@ void Game::renderingThread(sf::RenderWindow *window)
     //Mana
     for(size_t x = 0; x < 10; x++)
     {
-        std::unique_ptr<Entity> _life = std::make_unique<Entity>();
+        std::unique_ptr<sf::RectangleShape> _life = std::make_unique<sf::RectangleShape>();
         _life->setPosition(-650.0 + (float)x * 45, -160.0);
         _life->setSize(sf::Vector2f(40, 35));
         _life->setTexture(&life1);
         this->drawGUI_shared.emplace_back(std::move(_life));
     }
 
+    //Player
     
     std::unique_ptr<Player> player = std::make_unique<Player>();
     player->setPosition(100.0, 100.0);
@@ -203,36 +197,20 @@ void Game::renderingThread(sf::RenderWindow *window)
     player->setOutlineColor(sf::Color(255, 0, 0));
     this->drawPlayer.emplace_back(std::move(player));
 
-    std::unique_ptr<Boss> enemy = std::make_unique<Boss>();
 
-    enemy->setPosition(0.0, 0.0);
-    enemy->setSize(sf::Vector2f(100, 100));
-    enemy->setTexture(&this->bossTexture[0]);
-    // enemy->setTextureRect(sf::IntRect(0, 0, 32, 32));
-    enemy->setOutlineThickness(1);
-    enemy->setOutlineColor(sf::Color(255, 0, 0));
-    this->drawEntity.emplace_back(std::move(enemy));
-    
-    std::unique_ptr<Boss> enemy2 = std::make_unique<Boss>();
-    enemy2->setPosition(10.3, 10.0);
-    enemy2->setSize(sf::Vector2f(100, 100));
-    enemy2->setTexture(&this->bossTexture[0]);
-    // enemy->setTextureRect(sf::IntRect(0, 0, 32, 32));
-    enemy2->setOutlineThickness(1);
-    enemy2->setOutlineColor(sf::Color(255, 0, 0));
-    this->drawEntity.emplace_back(std::move(enemy2));
+    for(auto i = 0; i < 10; i++) {
+        std::unique_ptr<Boss> enemy = std::make_unique<Boss>();
 
-    std::unique_ptr<Boss> enemy3 = std::make_unique<Boss>();
-    enemy3->setPosition(20.3, 20.0);
-    enemy3->setSize(sf::Vector2f(100, 100));
-    enemy3->setTexture(&this->bossTexture[0]);
-    // enemy->setTextureRect(sf::IntRect(0, 0, 32, 32));
-    enemy3->setOutlineThickness(1);
-    enemy3->setOutlineColor(sf::Color(255, 0, 0));
-    this->drawEntity.emplace_back(std::move(enemy3));
-    // enemy.release();
+        enemy->setPosition(0.0, 0.0);
+        enemy->setSize(sf::Vector2f(100, 100));
+        enemy->setTexture(&this->bossTexture[0]);
+        // enemy->setTextureRect(sf::IntRect(0, 0, 32, 32));
+        enemy->setOutlineThickness(1);
+        enemy->setOutlineColor(sf::Color(255, 0, 0));
+        this->drawEntity.emplace_back(std::move(enemy));
+    }
     
-    std::unique_ptr<Entity> shape2 = std::make_unique<Entity>();
+    std::unique_ptr<sf::RectangleShape> shape2 = std::make_unique<sf::RectangleShape>();
 
     shape2->setSize(sf::Vector2f(100, 100));
     shape2->setPosition(-10.0, -10.0);
@@ -261,17 +239,19 @@ void Game::renderingThread(sf::RenderWindow *window)
         ss << framerate * 1.001 << " FPS";
         this->FPS->setString(ss.str());
 
-        // Move boss
+        // Move bosses
         for(size_t x = 0; x < this->drawEntity.size(); x++)
         {
             if (!this->drawPlayer[0]->getGlobalBounds().intersects(this->drawEntity[x]->getGlobalBounds())) {
                 const auto &&diffx = this->drawEntity[x]->distanceX(this->drawPlayer[0]);
                 const auto &&diffy = this->drawEntity[x]->distanceY(this->drawPlayer[0]);
+                //X axis
                 if (this->drawEntity[x]->getPosition().x + 35.0 > this->drawPlayer[0]->getPosition().x) {
                     this->drawEntity[x]->move(-1.0 * diffx * 0.015 * this->speed * (x + 1) * 0.6, 0.0);
                 } else {
                     this->drawEntity[x]->move(1.0 * diffx * 0.015 * this->speed * (x + 1)  * 0.6, 0.0);
-                }    // sf::RectangleShape rectangle(sf::Vector2f(50, 50));
+                }
+                //Y axis
                 if (this->drawEntity[x]->getPosition().y + 35.0 > this->drawPlayer[0]->getPosition().y) {
                     this->drawEntity[x]->move(0.0, -1.0 * diffy * 0.015 * this->speed * (x + 1)  * 0.6);
                 } else {
@@ -298,6 +278,7 @@ void Game::renderingThread(sf::RenderWindow *window)
         while (window->pollEvent(this->event)) {
             if (this->event.type == sf::Event::Closed)
                 window->close();
+            // If
             if (this->event.type == sf::Event::Resized) {
                 this->windowSizeX = sf::VideoMode::getDesktopMode().width;
                 this->windowSizeY = sf::VideoMode::getDesktopMode().height;

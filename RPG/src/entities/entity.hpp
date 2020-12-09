@@ -15,7 +15,7 @@ class Entity : public virtual sf::RectangleShape {
   public:
     Entity();
     ~Entity();
-    // virtual bool canMove() = 0;
+    void ai();
     // virtual bool canMove() = 0;
     // sf::Texture *texture = nullptr;
 

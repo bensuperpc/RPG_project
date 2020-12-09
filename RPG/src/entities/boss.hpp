@@ -16,6 +16,7 @@ class Boss : public virtual Entity {
   public:
     Boss();
     ~Boss();
+    void ai();
     Boss operator<<(const Boss &);
 
   private:

@@ -81,7 +81,7 @@ class Game {
     std::vector<std::shared_ptr<sf::Drawable>> drawGUI_shared = {};
     std::vector<std::unique_ptr<Entity>> drawPlayer = {};
     std::vector<std::unique_ptr<Entity>> drawEntity = {};
-    std::vector<std::unique_ptr<Entity>> drawBlock = {};
+    std::vector<std::unique_ptr<sf::RectangleShape>> drawBlock = {};
     std::vector<std::unique_ptr<sf::RectangleShape>> drawTitle = {};
 
     //Current fps counter

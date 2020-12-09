@@ -17,6 +17,7 @@ class PNJ : public virtual Entity {
   public:
     PNJ();
     ~PNJ();
+    void ai();
     PNJ operator<<(const PNJ &);
 
   private:
