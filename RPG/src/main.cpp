@@ -36,30 +36,30 @@
 
 int main(int argc, char *argv[], char *envp[])
 {
-    // std::cout << CMAKE_CXX_COMPILER_VERSION << std::endl;
-    #if defined(ENV64BIT)
-        if (sizeof(void *) != 8) {
-            std::cout << "ENV64BIT: Error: pointer should be 8 bytes. Exiting." << std::endl;
-            exit(0);
-        }
-        std::cout << "Diagnostics: we are running in 64-bit mode." << std::endl;
-    #elif defined(ENV32BIT)
-        if (sizeof(void *) != 4) {
-            std::cout << "ENV32BIT: Error: pointer should be 4 bytes. Exiting." << std::endl;
-            exit(0);
-        }
-        std::cout <<  "Diagnostics: we are running in 32-bit mode." << std::endl;
-    #else
-    #    warning "Must define either ENV32BIT or ENV64BIT".
-    #endif
+// std::cout << CMAKE_CXX_COMPILER_VERSION << std::endl;
+#if defined(ENV64BIT)
+    if (sizeof(void *) != 8) {
+        std::cout << "ENV64BIT: Error: pointer should be 8 bytes. Exiting." << std::endl;
+        exit(0);
+    }
+    std::cout << "Diagnostics: we are running in 64-bit mode." << std::endl;
+#elif defined(ENV32BIT)
+    if (sizeof(void *) != 4) {
+        std::cout << "ENV32BIT: Error: pointer should be 4 bytes. Exiting." << std::endl;
+        exit(0);
+    }
+    std::cout << "Diagnostics: we are running in 32-bit mode." << std::endl;
+#else
+#    warning "Must define either ENV32BIT or ENV64BIT".
+#endif
 
-    #if defined(ENV64BIT)
-        // 64-bit code here.
-    #elif defined(ENV32BIT)
-        // 32-bit code here.
-    #else
-    #    warning "Must define either ENV32BIT or ENV64BIT"
-    #endif
+#if defined(ENV64BIT)
+    // 64-bit code here.
+#elif defined(ENV32BIT)
+    // 32-bit code here.
+#else
+#    warning "Must define either ENV32BIT or ENV64BIT"
+#endif
 
     Game game = Game();
     game.init();

@@ -22,20 +22,20 @@ void Game::init()
     //  Load texture
     const std::string path = "../texture/rpg-pack/tiles/";
 
-    //my::texture::load_texture(this->textureUMap, path);
-    //my::texture::load_texture(this->textureMap, path);
+    // my::texture::load_texture(this->textureUMap, path);
+    // my::texture::load_texture(this->textureMap, path);
     my::texture::load_texture(this->textureList, path);
-    
+
     //  Link texture path and title map
-    //my::texture::load_texturemap<std::string>(this->textureumap, "../texture_map/texture_map_0.csv");
-    //my::texture::load_texturemap<std::string>(this->texturemap, "../texture_map/texture_map_0.csv");
+    // my::texture::load_texturemap<std::string>(this->textureumap, "../texture_map/texture_map_0.csv");
+    // my::texture::load_texturemap<std::string>(this->texturemap, "../texture_map/texture_map_0.csv");
     my::texture::load_texturemap<std::string>(this->texturelist, "../texture_map/texture_map_0.csv");
-    
+
     //  Emplace texture
     // my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureUMap, this->textureumap, this->texture_size);
     // my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureMap, this->texturemap, this->texture_size);
     my::title::emplaceTitle(this->drawTitle, this->title_map, this->textureList, this->texturelist, this->texture_size);
-    
+
     //  Windows settings
     this->settings.antialiasingLevel = 8;
     this->settings.depthBits = 24;
@@ -44,7 +44,7 @@ void Game::init()
     this->settings.minorVersion = 0;
 
     //  Shaders
-        if (!this->shader.loadFromFile("../shaders/example_001.frag", sf::Shader::Fragment)) {
+    if (!this->shader.loadFromFile("../shaders/example_001.frag", sf::Shader::Fragment)) {
         std::cout << "Error while shaders" << std::endl;
         return;
     }
@@ -59,7 +59,6 @@ void Game::init()
 
     this->shader.setUniform("currentTexture", sf::Shader::CurrentTexture);
     this->shader.setUniform("distortionMapTexture", this->distortionMap);
-
 }
 
 void Game::run()
@@ -112,29 +111,37 @@ void Game::renderingThread(sf::RenderWindow *window)
     } else {
         std::cout << "Music: KO" << std::endl;
     }*/
-    
+
     sf::Clock timer;
     // sf::Vector2<float> res = sf::Vector2<float>(1280, 720);
     // shader2.setUniform("resolution", res);
     // shader2.setUniform("currentTexture", sf::Shader::CurrentTexture);
-
-
 
     window->setActive(true);
     sf::View view(sf::Vector2f(300, 300), sf::Vector2f(1920, 1080));
     view.zoom(DEFAULT_ZOOM);
     window->setView(view);
 
-    // Create a text
-
-    std::unique_ptr<sf::Text> text = std::make_unique<sf::Text>("hello", this->font);
-
+    // MAP
+    /*
+    std::unique_ptr<sf::Text> text = std::make_unique<sf::Text>("Map", this->font);
     text->setCharacterSize(30);
     text->setStyle(sf::Text::Bold | sf::Text::Underlined);
+    text->setPosition(950.0, -240.0);
     text->setFillColor(sf::Color::Blue);
     this->drawGUI_unique.emplace_back(std::move(text));
+    */
+    
+    std::unique_ptr<sf::RectangleShape> map = std::make_unique<sf::RectangleShape>();
+    map->setPosition(780.0, -235.0);
+    map->setSize(sf::Vector2f(475, 267));
+    map->setOutlineThickness(1);
+    map->setOutlineColor(sf::Color(255, 0, 0));
+    map->setFillColor(sf::Color(0, 0, 128));
+    this->drawGUI_unique.emplace_back(std::move(map));
 
 
+    // FPS
     this->FPS->setFont(this->font);
     this->FPS->setPosition(-650.0, -240.0);
     this->FPS->setColor(sf::Color::Red);
@@ -148,7 +155,6 @@ void Game::renderingThread(sf::RenderWindow *window)
         std::cout << "Texture not found !" << std::endl;
     }
     this->playerTexture[0].setSmooth(true);
-
 
     this->bossTexture.emplace_back(sf::Texture());
     if (!this->bossTexture[0].loadFromFile("../texture/rpg-pack/mobs/boss_bee.png")) {
@@ -166,18 +172,16 @@ void Game::renderingThread(sf::RenderWindow *window)
         std::cout << "Texture not found !" << std::endl;
     }
 
-    //Life
-    for(size_t x = 0; x < 10; x++)
-    {
+    // Life
+    for (size_t x = 0; x < 10; x++) {
         std::unique_ptr<sf::RectangleShape> _life = std::make_unique<sf::RectangleShape>();
         _life->setPosition(-650.0 + (float)x * 45, -200.0);
         _life->setSize(sf::Vector2f(40, 35));
         _life->setTexture(&life0);
         this->drawGUI_shared.emplace_back(std::move(_life));
     }
-    //Mana
-    for(size_t x = 0; x < 10; x++)
-    {
+    // Mana
+    for (size_t x = 0; x < 10; x++) {
         std::unique_ptr<sf::RectangleShape> _life = std::make_unique<sf::RectangleShape>();
         _life->setPosition(-650.0 + (float)x * 45, -160.0);
         _life->setSize(sf::Vector2f(40, 35));
@@ -185,8 +189,8 @@ void Game::renderingThread(sf::RenderWindow *window)
         this->drawGUI_shared.emplace_back(std::move(_life));
     }
 
-    //Player
-    
+    // Player
+
     std::unique_ptr<Player> player = std::make_unique<Player>();
     player->setPosition(100.0, 100.0);
     player->setSize(sf::Vector2f(32, 32));
@@ -197,10 +201,9 @@ void Game::renderingThread(sf::RenderWindow *window)
     player->setOutlineColor(sf::Color(255, 0, 0));
     this->drawPlayer.emplace_back(std::move(player));
 
-
-    for(auto i = 0; i < 10; i++) {
+    for (auto i = 0; i < 10; i++) {
         std::unique_ptr<Boss> enemy = std::make_unique<Boss>();
-
+        enemy->IsBoss = true;
         enemy->setPosition(0.0, 0.0);
         enemy->setSize(sf::Vector2f(100, 100));
         enemy->setTexture(&this->bossTexture[0]);
@@ -209,15 +212,16 @@ void Game::renderingThread(sf::RenderWindow *window)
         enemy->setOutlineColor(sf::Color(255, 0, 0));
         this->drawEntity.emplace_back(std::move(enemy));
     }
-    
+
     std::unique_ptr<sf::RectangleShape> shape2 = std::make_unique<sf::RectangleShape>();
 
     shape2->setSize(sf::Vector2f(100, 100));
     shape2->setPosition(-10.0, -10.0);
     shape2->setFillColor(sf::Color(0, 255, 0));
     this->drawBlock.emplace_back(std::move(shape2));
+
     sf::View gui = window->getView();
-    
+
     sf::Clock clock;
     sf::View playerOneView = window->getView();
     // the rendering loop
@@ -240,22 +244,23 @@ void Game::renderingThread(sf::RenderWindow *window)
         this->FPS->setString(ss.str());
 
         // Move bosses
-        for(size_t x = 0; x < this->drawEntity.size(); x++)
-        {
-            if (!this->drawPlayer[0]->getGlobalBounds().intersects(this->drawEntity[x]->getGlobalBounds())) {
-                const auto &&diffx = this->drawEntity[x]->distanceX(this->drawPlayer[0]);
-                const auto &&diffy = this->drawEntity[x]->distanceY(this->drawPlayer[0]);
-                //X axis
-                if (this->drawEntity[x]->getPosition().x + 35.0 > this->drawPlayer[0]->getPosition().x) {
-                    this->drawEntity[x]->move(-1.0 * diffx * 0.015 * this->speed * (x + 1) * 0.6, 0.0);
-                } else {
-                    this->drawEntity[x]->move(1.0 * diffx * 0.015 * this->speed * (x + 1)  * 0.6, 0.0);
-                }
-                //Y axis
-                if (this->drawEntity[x]->getPosition().y + 35.0 > this->drawPlayer[0]->getPosition().y) {
-                    this->drawEntity[x]->move(0.0, -1.0 * diffy * 0.015 * this->speed * (x + 1)  * 0.6);
-                } else {
-                    this->drawEntity[x]->move(0.0, 1.0 * diffy * 0.015 * this->speed * (x + 1)  * 0.6);
+        for (size_t x = 0; x < this->drawEntity.size(); x++) {
+            if (this->drawEntity[x]->IsBoss == true) {
+                if (!this->drawPlayer[0]->getGlobalBounds().intersects(this->drawEntity[x]->getGlobalBounds())) {
+                    const auto &&diffx = this->drawEntity[x]->distanceX(this->drawPlayer[0]);
+                    const auto &&diffy = this->drawEntity[x]->distanceY(this->drawPlayer[0]);
+                    // X axis
+                    if (this->drawEntity[x]->getPosition().x + 35.0 > this->drawPlayer[0]->getPosition().x) {
+                        this->drawEntity[x]->move(-1.0 * diffx * 0.015 * this->speed * (x + 1) * 0.6, 0.0);
+                    } else {
+                        this->drawEntity[x]->move(1.0 * diffx * 0.015 * this->speed * (x + 1) * 0.6, 0.0);
+                    }
+                    // Y axis
+                    if (this->drawEntity[x]->getPosition().y + 35.0 > this->drawPlayer[0]->getPosition().y) {
+                        this->drawEntity[x]->move(0.0, -1.0 * diffy * 0.015 * this->speed * (x + 1) * 0.6);
+                    } else {
+                        this->drawEntity[x]->move(0.0, 1.0 * diffy * 0.015 * this->speed * (x + 1) * 0.6);
+                    }
                 }
             }
         }
@@ -413,7 +418,7 @@ void Game::renderingThread(sf::RenderWindow *window)
         }
 
         // Set view
-        //playerOneView.setViewport(sf::FloatRect(0.f, 0.f, 0.5f, 1.f));
+        // playerOneView.setViewport(sf::FloatRect(0.f, 0.f, 0.5f, 1.f));
         playerOneView.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
         window->setView(playerOneView);
         // Draw all Entities/Items ect...
@@ -425,7 +430,14 @@ void Game::renderingThread(sf::RenderWindow *window)
             window->draw(*elem);
         for (auto &elem : this->drawPlayer)
             window->draw(*elem);
-        
+
+        // Gui
+        window->setView(gui);
+        for (auto &elem : this->drawGUI_unique)
+            window->draw(*elem);
+        for (auto &elem : this->drawGUI_shared)
+            window->draw(*elem);
+
         auto minimap = playerOneView;
         minimap.setViewport(sf::FloatRect(0.75f, 0.f, 0.25f, 0.25f));
         window->setView(minimap);
@@ -442,12 +454,6 @@ void Game::renderingThread(sf::RenderWindow *window)
         window->setView(playerOneView);
                 for (auto &elem : this->drawTitle)
         window->draw(*elem, &this->shader);*/
-        // Gui
-        window->setView(gui);
-        for (auto &elem : this->drawGUI_unique)
-            window->draw(*elem);
-        for (auto &elem : this->drawGUI_shared)
-            window->draw(*elem);        
         // this->screen_save.add_frame(window);
         //
         // window->pushGLStates();

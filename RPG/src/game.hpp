@@ -29,13 +29,13 @@
 #include "time/date/date.hpp"
 #include "utils/opengl/screen_save.hpp"
 
-//Entities
+// Entities
+#include "entities/boss.hpp"
 #include "entities/entity.hpp"
 #include "entities/player.hpp"
-#include "entities/boss.hpp"
 
 #if __cplusplus <= 201402L
-#include "std/std.hpp"
+#    include "std/std.hpp"
 #endif
 #if __cplusplus >= 201703L
 #    include <string_view>
@@ -58,7 +58,7 @@ class Game {
     const size_t texture_size = 64;
     sf::ContextSettings settings;
 
-    //Shaders 1
+    // Shaders 1
     sf::Texture distortionMap;
     sf::Shader shader;
     float distortionFactor = .05f;
@@ -72,11 +72,11 @@ class Game {
     void renderingThread(sf::RenderWindow *);
     unsigned int windowSizeX = sf::VideoMode::getDesktopMode().width;
     unsigned int windowSizeY = sf::VideoMode::getDesktopMode().height;
-    //sf::RenderWindow window;
+    // sf::RenderWindow window;
     sf::Font font;
     sf::Music music;
 
-    //Drawing elements lists
+    // Drawing elements lists
     std::vector<std::unique_ptr<sf::Drawable>> drawGUI_unique = {};
     std::vector<std::shared_ptr<sf::Drawable>> drawGUI_shared = {};
     std::vector<std::unique_ptr<Entity>> drawPlayer = {};
@@ -84,24 +84,24 @@ class Game {
     std::vector<std::unique_ptr<sf::RectangleShape>> drawBlock = {};
     std::vector<std::unique_ptr<sf::RectangleShape>> drawTitle = {};
 
-    //Current fps counter
+    // Current fps counter
     std::shared_ptr<sf::Text> FPS = std::make_shared<sf::Text>();
 
     std::vector<sf::SoundBuffer> buffer {};
     sf::Sound sound = sf::Sound();
 
-    //Event
+    // Event
     sf::Event event;
 
-    //List of position map texture
+    // List of position map texture
     std::vector<std::vector<size_t>> title_map {};
 
-    //Associated int from title_map to texture path
+    // Associated int from title_map to texture path
     std::map<int, std::string> texturemap {};
     std::unordered_map<int, std::string> textureumap {};
     std::vector<std::pair<int, std::string>> texturelist {};
 
-    //List Associated texture path to texture
+    // List Associated texture path to texture
     std::vector<std::pair<std::string, std::unique_ptr<sf::Texture>>> textureList = {};
     std::map<std::string, std::unique_ptr<sf::Texture>> textureMap = {};
     std::unordered_map<std::string, std::unique_ptr<sf::Texture>> textureUMap = {};

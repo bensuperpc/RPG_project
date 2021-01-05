@@ -13,6 +13,7 @@
 
 class Entity : public virtual sf::RectangleShape {
   public:
+    bool IsBoss = false;
     Entity();
     ~Entity();
     void ai();
